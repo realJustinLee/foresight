@@ -31,6 +31,7 @@ const MyResponsiveBar = ({color, listKeys, scenerio, setdashboardSub, selectedGu
                 valueScale={{ type: 'linear' }}
                 indexScale={{ type: 'band', round: true }}
                 colors={color.length === 0 ? { scheme: 'spectral' } : color}
+                //colorBy="key"
                 borderColor={{
                     from: 'color',
                     modifiers: [

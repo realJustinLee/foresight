@@ -2,111 +2,53 @@
 // in a dataset without the specified param. Two inputs are given,
 // the dataset to modify and the param to filter by. The modified
 // dataset is returned.
-export const getParam = (data, param) => {
-    let reducedData = [];
-    for(let i = 0; i < data.length; i++) {
-        if(data.at(i).param === param) {
-            reducedData.push(data.at(i));
-        }
-    }
-    return reducedData;
-}
+export const getParam = (data, param) => data.filter(item => item.param === param);
 
 // getSubcat filters a dataset by subcategory. Two inputs are given,
 // the dataset to modify and the subcat to filter by. The modified
 // dataset is returned.
 
-export const getSubcat = (data, subcat) => {
-    let reducedData = [];
-    for(let i = 0; i < data.length; i++) {
-        if(data.at(i).class === subcat) {
-            reducedData.push(data.at(i));
-        }
-    }
-    return reducedData;
-}
+export const getSubcat = (data, subcat) => data.filter(item => item.class === subcat);
 
 // getRegion filters a dataset by region. Two inputs are given,
 // the dataset to modify and the region to filter by. The modified
 // dataset is returned.
-export const getRegion = (data, region) => {
-    let reducedData = [];
-    for(let i = 0; i < data.length; i++) {
-        if(data.at(i).region === region) {
-            reducedData.push(data.at(i));
-        }
-    }
-    return reducedData;
-}
+
+export const getRegion = (data, region) => data.filter(item => item.region === region);
 
 // getRegion filters a dataset by scenerio. Two inputs are given,
 // the dataset to modify and the scenerio to filter by. The modified
 // dataset is returned.
-export const getScenerio = (data, scenario) => {
-    let reducedData = [];
-    for(let i = 0; i < data.length; i++) {
-        if(data.at(i).scenario === scenario) {
-            reducedData.push(data.at(i));
-        }
-    }
-    return reducedData;
-}
+
+export const getScenerio = (data, scenario) => data.filter(item => item.scenario === scenario);
 
 //Gets the units of a parameter for dashboard display
 export const getUnits = (data, param) => {
-    for(let i = 0; i < data.length; i++) {
-        if(data.at(i).param === param) {
-            return data.at(i).units;
-        }
+    const item = data.find(item => item.param === param);
+    if(item) {
+        return item.units;
     }
     return "";
 }
+
 // filterDateRange filters a dataset between two provided dates. Three inputs
 // are given, the dataset to modify and the dates to filter by. This is used for guages.
-export const filterDateRange = (data, start, end) => {
-    let reducedData = [];
-    for(let i = 0; i < data.length; i++) {
-        if(data.at(i).x >= start && data.at(i).x <= end) {
-            reducedData.push(data.at(i));
-        }
-    }
-    return reducedData;
-}
+export const filterDateRange = (data, start, end) => data.filter(item => item.x >= start && item.x <= end);
 
 // isValidDate takes in a year and determines if it is a valid date for the parameter in the dataset.
 // This is uesed in DashboardDate to grey out dates not available in the dataset.
 
-export const isValidDate = (data, date) => {
-    for(let i = 0; i < data.length; i++) {
-        if(data.at(i).x === date)
-            return true;
-    }
-    return false;
-}
+export const isValidDate = (data, date) => data.some(item => item.x === date);
 
 //Returns the first date in the Dataset. Used for default dateranges in the dashboard.
-export const getFirstDate = (data) => {
-    for(let i = 0; i < data.length; i++) {
-        return new Date(data.at(i).x);
-    }
-    return new Date(0);
-}
+export const getFirstDate = (data) => new Date(data[0]?.x || 0);
 
 //Returns the last date in the Dataset. Used for default dateranges in the dashboard.
-export const getLastDate = (data) => {
-    for(let i = data.length - 1; i >= 0; i--) {
-        return new Date(data.at(i).x);
-    }
-    return new Date(0);
-}
+export const getLastDate = (data) => new Date(data[data.length - 1]?.x || 0);
 
-export const getDataDate = (data, scenerio, param, date) => {
-    for(let i = 0; i < data.length; i++) {
-        let row = data.at(i);
-        if(row.x === parseInt(date) && row.scenario === scenerio && row.param === param)
-            return row.value;
-    }
-    return 0;
+export const getDataDate = (data, scenario, param, date) => {
+    const item = data.find(row => row.x === parseInt(date) && row.scenario === scenario && row.param === param);
+    return item ? item.value : 0;
 }
 
 // Gets the percentage for guages
