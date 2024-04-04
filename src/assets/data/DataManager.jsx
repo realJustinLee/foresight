@@ -7,19 +7,16 @@ export const getParam = (data, param) => data.filter(item => item.param === para
 // getSubcat filters a dataset by subcategory. Two inputs are given,
 // the dataset to modify and the subcat to filter by. The modified
 // dataset is returned.
-
 export const getSubcat = (data, subcat) => data.filter(item => item.class === subcat);
 
 // getRegion filters a dataset by region. Two inputs are given,
 // the dataset to modify and the region to filter by. The modified
 // dataset is returned.
-
 export const getRegion = (data, region) => data.filter(item => item.region === region);
 
 // getRegion filters a dataset by scenerio. Two inputs are given,
 // the dataset to modify and the scenerio to filter by. The modified
 // dataset is returned.
-
 export const getScenerio = (data, scenario) => data.filter(item => item.scenario === scenario);
 
 //Gets the units of a parameter for dashboard display
@@ -37,7 +34,6 @@ export const filterDateRange = (data, start, end) => data.filter(item => item.x 
 
 // isValidDate takes in a year and determines if it is a valid date for the parameter in the dataset.
 // This is uesed in DashboardDate to grey out dates not available in the dataset.
-
 export const isValidDate = (data, date) => data.some(item => item.x === date);
 
 //Returns the first date in the Dataset. Used for default dateranges in the dashboard.
@@ -54,32 +50,21 @@ export const getDataDate = (data, scenario, param, date) => {
 // Gets the percentage for guages
 export const getGuage = (data, scenerio, param, start, end) => {
     let initial = getDataDate(data, scenerio, param, start);
-    if(initial !== 0)
-        return Math.round((getDataDate(data, scenerio, param, end) - initial)/initial);
-    return 0; 
+    return initial !== 0 ? Math.round((getDataDate(data, scenerio, param, end) - initial)/initial) : 0;
 }
 
-// Gets value selected for display\
+// Gets value selected for display
 export const getDataset = (data, dataaggr, dataaggs, dataaggrs, date, region, subcat) => {
-    if(subcat === ""){
-        if(region === "")
-            return dataaggrs;
-        return dataaggs;
-    }
-    if(region === "")
-        return dataaggr;
-    return data;
+    return subcat === "" ? (region === "" ? dataaggrs : dataaggs) : (region === "" ? dataaggr : data);
 }
 
+// Gets the individual value from the dtat given the date, region, subcat, and scenerio.
 export const getDataPoint = (datad, dataaggr, dataaggs, dataaggrs, date, region, subcat, scenario) => {
     let data = getDataset(datad, dataaggr, dataaggs, dataaggrs, date, region, subcat);
-    for(let i = 0; i < data.length; i++) {
-        let row = data.at(i);
-        if(row.x === date && row.scenario === scenario && (region === "" || row.region === region) && (subcat === "" || row.subcat === subcat))
-            return row.value;
-    }
-    return "0"
+    let item = data.find(row => row.x === date && row.scenario === scenario && (region === "" || row.region === region) && (subcat === "" || row.subcat === subcat));
+    return item ? item.value : "0";
 }
+
 // getLargestChoropleth gets the largest value from a dataset to calculate the shading
 // for the Choropleth map. Takes in an already choropleth formated dataset.
 export const getLargestChoropleth = (data) => {
@@ -116,14 +101,7 @@ export const getChoroplethValue = (data, id) => {
 }
 
 export const reduceRegion = (data, region) => {
-    let reducedData = [];
-    for(let i = 0; i < data.length; i++) {
-        if(data.at(i).region === region) {
-            reducedData.push(data.at(i));
-        }   
-    }
-    reducedData.sort((a,b) => a.x - b.x);
-    return reducedData;
+    data.filter(item => item.region === region).sort((a,b) => a.x - b.x);
 }
 
 // getDates aggregates data by summing all data with the same region.
@@ -141,6 +119,7 @@ export const getDates = (data, year) => {
     }
     return reducedData;
 }
+
 
 // filterSubcat creates a list of all subcategories for the
 // data given. This data should be in the form of an already
@@ -161,6 +140,7 @@ export const filterSubcat = (data) => {
         if(flag === 0)
             reducedData.push(data.at(i).class);
     }
+    reducedData.sort();
     return reducedData;
 }
 
@@ -228,7 +208,6 @@ export const getBarTotal = (data, param, scenarios) => {
 }
 
 export const getBarHorizontal = (countries, data, dataAgg, scenerio, param, year) => {
-    console.log()
     let output = [];
     let barData = getDates(getScenerio(data, scenerio), year);
     let aggregates = getDates(getScenerio(dataAgg, scenerio), year);
