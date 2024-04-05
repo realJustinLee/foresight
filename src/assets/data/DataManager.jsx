@@ -67,37 +67,16 @@ export const getDataPoint = (datad, dataaggr, dataaggs, dataaggrs, date, region,
 
 // getLargestChoropleth gets the largest value from a dataset to calculate the shading
 // for the Choropleth map. Takes in an already choropleth formated dataset.
-export const getLargestChoropleth = (data) => {
-    let ans = 0;
-    for(let i = 0; i < data.length; i++) {
-        if(ans < data.at(i).value)
-            ans = data.at(i).value;
-    }
-    return ans;
-}
+export const getLargestChoropleth = (data) => data.reduce((max, item) => Math.max(max, item.value), 0);
 
 // getSmallestChoropleth gets the smallest value from a dataset to calculate the shading
 // for the Choropleth map. Takes in an already choropleth formated dataset.
-export const getSmallestChoropleth = (data) => {
-    let ans = 0;
-    if(data.length !== 0) {
-        ans = data.at(0).value;
-        for(let i = 0; i < data.length; i++) {
-            if(ans > data.at(i).value)
-                ans = data.at(i).value;
-        }
-    }
-    return ans;
-}
+export const getSmallestChoropleth = (data) => data.reduce((min, item) => Math.min(min, item.value), data[0].value);
 
 // getChoroplethValue gets the value for a choropleth region with the id given by id.
 export const getChoroplethValue = (data, id) => {
-    let ans = 0;
-    for(let i = 0; i < data.length; i++) {
-        if(id === data.at(i).id)
-            ans = data.at(i).value;
-    }
-    return ans;
+    const item = data.find(item => item.id === id);
+    return item ? item.value : 0;
 }
 
 export const reduceRegion = (data, region) => {
@@ -110,16 +89,7 @@ export const reduceRegion = (data, region) => {
 // dates are disregarded. 
 //
 // NOTE: Expect this function to change as date range functionality is added.
-export const getDates = (data, year) => {
-    let reducedData = [];
-    for(let i = 0; i < data.length; i++) {
-        if(data.at(i).x.toString() === year.toString() ) {
-            reducedData.push(data.at(i));
-        }   
-    }
-    return reducedData;
-}
-
+export const getDates = (data, year) => data.filter(item => item.x.toString() === year.toString());
 
 // filterSubcat creates a list of all subcategories for the
 // data given. This data should be in the form of an already
@@ -128,29 +98,13 @@ export const getDates = (data, year) => {
 // NOTE: This function may have unexpected results if params
 // have not been previously filtered.
 export const filterSubcat = (data) => {
-    let reducedData = [];
-    let flag;
-    for(let i = 0; i < data.length; i++) {
-        flag = 0;
-        for(let j = 0; j < reducedData.length; j++) {
-            if(data.at(i).class === reducedData[j]) {
-                flag = 1;
-            }
-        }
-        if(flag === 0)
-            reducedData.push(data.at(i).class);
-    }
+    const reducedData = [...new Set(data.map(item => item.class))];
     reducedData.sort();
     return reducedData;
 }
 
 export const reduceSubcat = (data, subcat) => {
-    let reducedData = [];
-    for(let i = 0; i < data.length; i++) {
-        if(data.at(i).class === subcat) {
-            reducedData.push(data.at(i));
-        }   
-    }
+    const reducedData = data.filter(item => item.class === subcat);
     reducedData.sort((a,b) => a.x - b.x);
     return reducedData;
 }
@@ -162,22 +116,10 @@ export const getRegions = (countries, data) => {
 // data given. This data does not be in the form of an already
 // param filtered array.
 export const filterRegion = (data) => {
-    let reducedData = [];
-    let flag;
-    //
     data.sort((a,b) => b.value - a.value);
     data = data.slice(0, 10);
     data.sort((a,b) => a.value - b.value);
-    for(let i = 0; i < data.length; i++) {
-        flag = 0;
-        for(let j = 0; j < reducedData.length; j++) {
-            if(data.at(i).region === reducedData[j]) {
-                flag = 1;
-            }
-        }
-        if(flag === 0)
-            reducedData.push(data.at(i).region);
-    }
+    const reducedData = [...new Set(data.map(item => item.region))];
     return reducedData;
 }
 
@@ -196,7 +138,7 @@ export const getNoSubcatChoropleth = (data) => {
     return reducedData;
 }
 
-export const getBarTotal = (data, param, scenarios) => {
+export const getBarTotal = (data, param, scenarios) => { 
     let ans = [];
     for(let i = 0; i < scenarios.length; i++) {
         ans.push({
@@ -231,28 +173,17 @@ export const getBarHorizontal = (countries, data, dataAgg, scenerio, param, year
     return output
 }
 
-export const lineGraphReduce = (data, param, scenerios, region, subcat, start, end) => {
-    let output = []
-    for (let i = 0; i < scenerios.length; i++) {
-        let obj = {
-            "id": scenerios.at(i).title,
-            "data": getLineGraphReduce(getScenerio(data, scenerios.at(i).title)),
-        }
-        output.push(obj);
-    }
-    return output
-}
+export const lineGraphReduce = (data, param, scenarios, region, subcat, start, end) => 
+    scenarios.map(scenario => ({
+        id: scenario.title,
+        data: getLineGraphReduce(getScenerio(data, scenario.title))
+    }))
 
-export const getLineGraphReduce = (data) => {
-    let reducedData = [];
-    for(let i = 0; i < data.length; i++) {
-        reducedData.push({
-            "x": parseFloat(data.at(i).x),
-            "y": data.at(i).value,
-        });
-    }
-    return reducedData;
-}
+export const getLineGraphReduce = (data) =>
+    data.map(item => ({
+        x: parseFloat(item.x),
+        y: item.value
+    }));
 
 export const choroplethReduce = (data, scenario, param, year) => {
     let final = getDates(getScenerio(data, scenario), year);
