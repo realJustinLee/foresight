@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import "leaflet.sync";
-import landcells from "./maps/data/landcells.json"
+import landcells from "./data/landcells.json"
 import {
   ReactCompareSlider
 } from "react-compare-slider";
-import { getChoroplethValue, getSmallestChoropleth, getLargestChoropleth } from '../assets/data/DataManager';
+import { getChoroplethValue, getSmallestChoropleth, getLargestChoropleth } from '../../assets/data/DataManager';
 
 import { connect } from 'react-redux';
-import { setDashReg } from './Store';
-import ChoroplethControl from './dropdowns/ChoroplethControl';
+import { setDashReg } from '../Store';
+import ChoroplethControl from '../dropdowns/ChoroplethControl';
 
 const LeafletSync = ({ data, data2, uniqueValue, setdashboardReg, color, scale }) => {
   //console.log("***", data, data2);

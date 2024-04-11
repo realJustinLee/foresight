@@ -1,21 +1,27 @@
-import { getDates, getScenerio, filterSubcat } from '../assets/data/DataManager';
-import colorData from '../assets/data/gcamColors.json';
+import { getDates, getScenerio, filterSubcat } from './DataManager';
+import colorData from '../../components/GcamColors.json';
 
 export const pal_green = ["#FFFFE5","#F7FCB9","#D9F0A3","#ADDD8E","#78C679","#41AB5D","#238443","#006837","#004529","#003300"]
 
 export const getBarColors = (data, scenerio, year) => {
+    let counter = 0;
     let subcatList = filterSubcat(getDates(getScenerio(data, scenerio), year));
     let colors = [];
-    subcatList.forEach((param) => colors.push(getColor(param)));
+    subcatList.forEach((param) => colors.push(getColorJson(param, counter++)));
     return colors;
 }
 
-const getColorJson = (param) => {
+const getColorJson = (param, counter) => {
+    param = param.toLowerCase().trim();
+    let color = "";
     Object.keys(colorData.colors).forEach((key) => {
-        if( key === param.toLowerCase())
-            return colorData.colors[key];
+        if( key === param)
+            color = colorData.colors[key];
     });
-    return "#b3b3b3";
+    if (color === "") {
+        color = colorData.pal_16[counter%16];
+    }
+    return color ;
 }
 
 const getColor = (param) => {
@@ -153,3 +159,6 @@ const getColor = (param) => {
     }
     return color;
 }
+/*
+
+*/

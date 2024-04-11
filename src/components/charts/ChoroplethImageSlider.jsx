@@ -1,5 +1,5 @@
 import React from "react";
-import LeafletSync from "../LeafletSync";
+import LeafletSync from "../maps/LeafletSync";
 
 //<DashboardChoropleth data={getDashboardData("Scenario X", "spatialComparison")} />
 function ChoroplethImageSlider( {id, scenario_1, scenario_2, dataset, dataset2} ) {

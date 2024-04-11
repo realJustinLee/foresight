@@ -7,7 +7,7 @@ import { choroplethReduce, getDates, getScenerio, filterRegion, filterSubcat, ge
 import Line from './charts/Line';
 import BarCountryControl from './dropdowns/BarCountryControl';
 import { setBarCountries } from './Store';
-import { getBarColors } from './GcamColors';
+import { getBarColors } from '../assets/data/GcamColors';
 
 function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, dataReg, dataSub, dataRegSub, selectedGuage, curYear, region, subcat, countries, setCountries }) {
   const csv = data;
