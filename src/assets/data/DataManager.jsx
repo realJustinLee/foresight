@@ -47,10 +47,24 @@ export const getDataDate = (data, scenario, param, date) => {
     return item ? item.value : 0;
 }
 
+//Finds the closest date to the selected date in the dataset if there is no index with the specified date.
+export const findClosestDate = (data, targetDate) => {
+    const closest = data.reduce((prev, curr) => {
+        return (Math.abs(curr.x - targetDate) < Math.abs(prev.x - targetDate)) ? curr : prev;
+    });
+    return closest ? closest.x : -1
+}
+
 // Gets the percentage for guages
-export const getGuage = (data, scenerio, param, start, end) => {
-    let initial = getDataDate(data, scenerio, param, start);
-    return initial !== 0 ? Math.round((getDataDate(data, scenerio, param, end) - initial)/initial) : 0;
+export const getGuage = (data, scenario, param, start, end) => {
+    const reducedData = data.filter(row => row.scenario === scenario && row.param === param);
+    const startData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, start));
+    const endData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, end));
+    const change = startData !== 0 ? ((endData - startData)/startData)*100 : -1;
+    //console.log("START: " + start, "END: " + end, "REV START: " + findClosestDate(reducedData, start), "REV END: " + findClosestDate(reducedData, end));
+    //console.log("START DATA: " + startData, "END DATA: " + endData);
+    //console.log("MATH DATA: " + change);
+    return Math.round(change);
 }
 
 // Gets value selected for display
