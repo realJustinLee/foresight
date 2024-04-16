@@ -160,7 +160,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setdashboardReg, color, scale }
         mapInstance.panInsideBounds(bounds, { animate: false });
       });
       mapInstance.on('zoomstart', () => {
-        console.log('Zooming1!!!');
+        //console.log('Zooming1!!!');
       });
     }
     if (mapInstance2) {
@@ -169,7 +169,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setdashboardReg, color, scale }
         mapInstance2.panInsideBounds(bounds, { animate: false });
       });
       mapInstance2.on('zoomstart', () => {
-        console.log('Zooming2!!!');
+        //console.log('Zooming2!!!');
       });
     }
     mapInstance.eachLayer(function (layer) {

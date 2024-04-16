@@ -200,6 +200,7 @@ export const getLineGraphReduce = (data) =>
     }));
 
 export const choroplethReduce = (data, scenario, param, year) => {
+    console.log(data, scenario, param, year);
     let final = getDates(getScenerio(data, scenario), year);
     return getNoSubcatChoropleth(final);
 }

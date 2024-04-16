@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
+import { API, graphqlOperation } from "aws-amplify";
+
 import BarHorizontal from "./charts/BarHorizontal";
 import ChoroplethImageSlider from './charts/ChoroplethImageSlider';
 import { connect } from 'react-redux';
@@ -9,7 +11,91 @@ import BarCountryControl from './dropdowns/BarCountryControl';
 import { setBarCountries } from './Store';
 import { getBarColors } from '../assets/data/GcamColors';
 
+//BarHorizontal
+const barQuery = `
+query BarQuery($param: String!, $year: Int!, $scenario: String!, $nextToken: String) {
+  listGcamDataTableAggClass1Regions(
+    filter: {
+      x: {eq: $year}, 
+      param: {eq: $param},
+      scenario: {eq: $scenario}
+    },
+    limit: 100000, 
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      value
+      x
+      scenario
+      param
+      region
+      classLabel
+      class
+    }
+    nextToken
+  }
+}
+`;
+
 function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, dataReg, dataSub, dataRegSub, selectedGuage, curYear, region, subcat, countries, setCountries }) {
+  const Scenerios = openedScenerios ? openedScenerios : ["ERR", "ERR"];
+
+  const [barData, setBarData] = useState("i");
+  const [lineData, setLineData] = useState("i");
+  const fetchLineData = (reg, sub) => {
+    console.log(reg, sub);
+    //subcat === "" ? (region === "" ? dataaggrs : dataaggs) : (region === "" ? dataaggr : data);
+  }
+
+  const fetchBarData = useCallback(async () => {
+    let nextToken = null;
+    let allItems = [];
+    try {
+      do {
+        const response = await API.graphql(
+          graphqlOperation(barQuery, {
+            param: selectedGuage, 
+            year: curYear, 
+            scenario: Scenerios.at(0).title,
+            nextToken
+          })
+        );
+        const items = response.data.listGcamDataTableAggClass1Regions.items;
+        allItems = allItems.concat(items);
+
+        nextToken = response.data.listGcamDataTableAggClass1Regions.nextToken;
+      } while(nextToken);
+      do {
+        const response = await API.graphql(
+          graphqlOperation(barQuery, {
+            param: selectedGuage, 
+            year: curYear, 
+            scenario: Scenerios.at(1).title,
+            nextToken
+          })
+        );
+        const items = response.data.listGcamDataTableAggClass1Regions.items;
+        allItems = allItems.concat(items);
+
+        nextToken = response.data.listGcamDataTableAggClass1Regions.nextToken;
+      } while(nextToken);
+      setBarData(allItems);
+    } catch (error) {
+      console.error(error);
+  }
+  }, [curYear, selectedGuage, Scenerios, barQuery, setBarData]);
+
+  useEffect(() => {
+    fetchBarData();
+    console.log("UPDATE Bar Query:", barData);
+  }, [curYear, selectedGuage, Scenerios, barQuery, setBarData]);
+
+  useEffect(() => {
+    fetchLineData();
+    console.log("UPDATE Line Query:", lineData);
+  }, [selectedGuage, curYear, region, Scenerios, setLineData]);
+
   const csv = data;
   const csv1 = dataReg;
   const csv2 = dataSub;
@@ -22,7 +108,6 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
     subcatDisplay = " " + subcat;
   if (region !== "class1")
     regionDisplay = region;
-  const Scenerios = openedScenerios;
   const [startDate, setStartDate] = useState(start);
   const [endDate, setEndDate] = useState(end);
   useEffect(() => {
@@ -63,7 +148,7 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
             dataset2={choroplethReduce(csv2, Scenerios.at(1).title, selectedGuage, curYear)}
           />
         )}
-        {(csv === 'i' || csv2 === 'i') ? (
+        {(csv === 'i' || csv1 === 'i' || csv2 === 'i') ? (
           "Loading Dataset..."
         ) : (
           <div className='bar-grid grid-border'>

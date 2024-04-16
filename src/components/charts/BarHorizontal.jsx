@@ -17,9 +17,9 @@ const MyResponsiveBar = ({color, listKeys, scenerio, setdashboardSub, selectedGu
     }, [scenerio])
     useEffect(() => {
         setData(getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
-        console.log(getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
+        console.log("BAR DATA", getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
     }, [countries, csv, csv2, curYear, scenerio, selectedGuage])
-    console.log("!!!!", listKeys); 
+    //console.log("!!!!", listKeys); 
     return (
         <div className="nivo-wrapper">
             <div className="double-bar-text-wrapper">  {scenerioName} </div>

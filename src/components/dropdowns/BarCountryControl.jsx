@@ -22,7 +22,7 @@ function BarChartControl({csv, scenerio, year, setCountries, countries}) {
   let aggregates = getDates(getScenerio(csv, scenerio), year);
   const countryList = listRegions(aggregates);
   countryList.sort();
-  console.log("!", countries);
+  //console.log("!", countries);
   let colors = []
   for (let i = 0; i < countryList.length; i++) {
     let country = countryList.at(i);
