@@ -34,7 +34,7 @@ function DashboardScenerioSelector({ curIndex, curOpen, scenerios, current, upda
     //set for a parameter matching the passed in scenerio and guage title.
     //If the vlaue is found it is returned. Otherwise the function returns -1.
     const getDataValue = (fieldTitle) => {
-        const guageData = getGuage(data, value, fieldTitle, start, end) * 100;
+        const guageData = getGuage(data, value, fieldTitle, start, end);
         return guageData
     };
 

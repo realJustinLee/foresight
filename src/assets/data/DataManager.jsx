@@ -60,7 +60,7 @@ export const getGuage = (data, scenario, param, start, end) => {
     const reducedData = data.filter(row => row.scenario === scenario && row.param === param);
     const startData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, start));
     const endData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, end));
-    const change = startData !== 0 ? ((endData - startData)/startData)*100 : -1;
+    const change = startData !== 0 ? (((endData - startData)/startData)*100) : -1;
     //console.log("START: " + start, "END: " + end, "REV START: " + findClosestDate(reducedData, start), "REV END: " + findClosestDate(reducedData, end));
     //console.log("START DATA: " + startData, "END DATA: " + endData);
     //console.log("MATH DATA: " + change);
@@ -200,7 +200,6 @@ export const getLineGraphReduce = (data) =>
     }));
 
 export const choroplethReduce = (data, scenario, param, year) => {
-    console.log(data, scenario, param, year);
     let final = getDates(getScenerio(data, scenario), year);
     return getNoSubcatChoropleth(final);
 }

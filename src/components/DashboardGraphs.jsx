@@ -45,7 +45,7 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
   const [lineData, setLineData] = useState("i");
   const fetchLineData = (reg, sub) => {
     console.log(reg, sub);
-    //subcat === "" ? (region === "" ? dataaggrs : dataaggs) : (region === "" ? dataaggr : data);
+    //subcat === "Aggregate of Subsectors" ? (region === "Global " ? setLineData(csv3) : dataaggs) : (region === "Global " ? dataaggr : data);
   }
 
   const fetchBarData = useCallback(async () => {
@@ -92,9 +92,9 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
   }, [curYear, selectedGuage, Scenerios, barQuery, setBarData]);
 
   useEffect(() => {
-    fetchLineData();
+    fetchLineData(region, subcat);
     console.log("UPDATE Line Query:", lineData);
-  }, [selectedGuage, curYear, region, Scenerios, setLineData]);
+  }, [selectedGuage, subcat, region, Scenerios, setLineData]);
 
   const csv = data;
   const csv1 = dataReg;
