@@ -146,8 +146,8 @@ const Line = ({ data, date, setdashboardDate, unit }) => (
             }}
             axisLeft={{
                 format: (v) => {
-                    return v.toString().length > 2 ? (
-                        v.toString().substring(0, 1) + "." + v.toString().substring(1, 2) + "x10^" + (v.toString().length - 1)
+                    return v.toString().length > 6 ? (
+                        v.toString().substring(0, 1) + "." + v.toString().substring(1, 2) + "x10^" + (Math.round(v).toString().length - 1)
                     ) : (
                         v
                     );

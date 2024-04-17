@@ -3,12 +3,14 @@ import { ResponsiveBar } from '@nivo/bar'
 import { connect } from 'react-redux';
 import { setDashSubs } from "../Store";
 import { getBarHorizontal } from "../../assets/data/DataManager";
+import { BarTooltip } from "./NivoTooltips.tsx";
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
+
 const MyResponsiveBar = ({color, listKeys, scenerio, setdashboardSub, selectedGuage, curYear, csv, csv2, countries }) => {
     const [scenerioName, setScenerio] = useState(scenerio);
     const [barData, setData] = useState(getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
@@ -183,6 +185,7 @@ const MyResponsiveBar = ({color, listKeys, scenerio, setdashboardSub, selectedGu
                         "tableCellValue": {}
                     }
                 }}
+                tooltip={BarTooltip}
                 ariaLabel="Nivo bar chart demo"
                 barAriaLabel={e => e.id + ": " + e.formattedValue + " in country: " + e.indexValue}
             />
