@@ -11,7 +11,8 @@ import { BarTooltip } from "./NivoTooltips.tsx";
 // website examples showcase many properties,
 // you'll often use just a few of them.
 
-const MyResponsiveBar = ({color, listKeys, scenerio, setdashboardSub, selectedGuage, curYear, csv, csv2, countries }) => {
+const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, selectedGuage, curYear, csv2, countries }) => {
+    console.log("!!!!", csv); 
     const [scenerioName, setScenerio] = useState(scenerio);
     const [barData, setData] = useState(getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
     useEffect(() => {
@@ -19,9 +20,8 @@ const MyResponsiveBar = ({color, listKeys, scenerio, setdashboardSub, selectedGu
     }, [scenerio])
     useEffect(() => {
         setData(getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
-        console.log("BAR DATA", getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
+        //console.log("BAR DATA", getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
     }, [countries, csv, csv2, curYear, scenerio, selectedGuage])
-    //console.log("!!!!", listKeys); 
     return (
         <div className="nivo-wrapper">
             <div className="double-bar-text-wrapper">  {scenerioName} </div>
@@ -198,7 +198,6 @@ function mapStateToProps(state) {
         countries: state.barCountries,
         selectedGuage: state.dashboardSelection,
         curYear: state.dashboardYear,
-        csv: state.parsedData,
         csv2: state.parsedDataSub,
     };
 }

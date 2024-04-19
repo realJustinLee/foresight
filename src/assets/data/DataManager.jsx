@@ -19,6 +19,9 @@ export const getRegion = (data, region) => data.filter(item => item.region === r
 // dataset is returned.
 export const getScenerio = (data, scenario) => data.filter(item => item.scenario === scenario);
 
+//Same as above but for two scenerios. Useful for visualizations.
+export const getScenerios = (data, scenario1, scenario2) => data.filter(item => item.scenario === scenario1 || item.scenario === scenario2).sort((a,b) => a.x - b.x);
+
 //Gets the units of a parameter for dashboard display
 export const getUnits = (data, param) => {
     const item = data.find(item => item.param === param);
@@ -191,7 +194,7 @@ export const lineGraphReduce = (data, param, scenarios, region, subcat, start, e
     scenarios.map(scenario => ({
         id: scenario.title,
         data: getLineGraphReduce(getScenerio(data, scenario.title))
-    }))
+    }));
 
 export const getLineGraphReduce = (data) =>
     data.map(item => ({

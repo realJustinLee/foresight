@@ -46,7 +46,8 @@ const initialState = {
   parsedData: "i",
   parsedDataReg: "i",
   parsedDataSub: "i",
-  parsedDataRegSub: "i"
+  parsedDataRegSub: "i",
+  parsedDataLine: "i"
 };
 
 // Define a reducer function to update the state
@@ -74,6 +75,8 @@ function reducer(state = initialState, action) {
       return { ...state, parsedDataSub: action.payload };
     case 'setDataRegSub':
       return { ...state, parsedDataRegSub: action.payload };
+    case 'setDataLine':
+      return { ...state, parsedDataLine: action.payload };
     case 'setDashYear':
       return { ...state, dashboardYear: action.payload };
     case 'setDashRegions':
@@ -138,6 +141,13 @@ export function setParsedSub(dataset) {
 export function setParsedRegSub(dataset) {
   return { type: 'setDataRegSub', payload: dataset };
 }
+
+//Set data for the line chart
+export function setParsedLine(dataset) {
+  console.log("Line Data:", dataset);
+  return { type: 'setDataLine', payload: dataset };
+}
+
 // Change dashboard start date
 export function setStartDate(date) {
   updateHash("start", date);
