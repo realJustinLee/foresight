@@ -193,11 +193,11 @@ export const getBarHorizontal = (countries, data, dataAgg, scenerio, param, year
 export const lineGraphReduce = (data, param, scenarios, region, subcat, start, end) => 
     scenarios.map(scenario => ({
         id: scenario.title,
-        data: getLineGraphReduce(getScenerio(data, scenario.title), param)
+        data: getLineGraphReduce(getScenerio(data, scenario.title), param, subcat)
     }));
 
-export const getLineGraphReduce = (data, param) => {
-    if(param === "landAlloc") {
+export const getLineGraphReduce = (data, param, subcat) => {
+    if(param === "landAlloc" && subcat === "Aggregate of Subsectors") {
         return data.map(item => ({
             x: parseFloat(item.x),
             y: parseInt(item.value)

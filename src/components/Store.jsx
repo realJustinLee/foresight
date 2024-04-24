@@ -144,7 +144,7 @@ export function setParsedRegSub(dataset) {
 
 //Set data for the line chart
 export function setParsedLine(dataset) {
-  console.log("Line Data:", dataset);
+  //console.log("Line Data:", dataset);
   return { type: 'setDataLine', payload: dataset };
 }
 
@@ -175,8 +175,8 @@ export function setChoroplethScale(scale) {
   return { type: 'setChoroplethScale', payload: scale };
 }
 
-export function setBarCountries(scale) {
-  return { type: 'setBarCountries', payload: scale };
+export function setBarCountries(country) {
+  return { type: 'setBarCountries', payload: country };
 }
 
 // Create the Redux store

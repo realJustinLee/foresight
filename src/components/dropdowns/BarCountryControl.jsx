@@ -1,3 +1,5 @@
+import React, { useEffect } from 'react';
+
 import Dropdown from 'react-bootstrap/Dropdown';
 
 import { MdSettings } from "react-icons/md";
@@ -7,10 +9,13 @@ import { getDates, getScenerio, filterRegion, listRegions } from '../../assets/d
 import Form from 'react-bootstrap/Form';
 
 function BarChartControl({csv, scenerio, year, setCountries, countries}) {
-  const changeCountries = (checked, country) => {
+  const changeCountries = (e, checked, country) => {
+    if(countries.length >= 10)
+      return;
     if(checked) {
       countries.push(country);
-      setCountries(countries);
+      let newList = Array.from(countries)
+      setCountries(newList);
     }
     else {
       countries = countries.filter(i => i !== country);
@@ -22,33 +27,20 @@ function BarChartControl({csv, scenerio, year, setCountries, countries}) {
   let aggregates = getDates(getScenerio(csv, scenerio), year);
   const countryList = listRegions(aggregates);
   countryList.sort();
-  //console.log("!", countries);
+  console.log("!", countries);
   let colors = []
   for (let i = 0; i < countryList.length; i++) {
     let country = countryList.at(i);
-    if(countries.includes(country) || countries.includes(country)) {
-      colors.push(
-          <Form.Check
-            defaultChecked
-            type="switch"
-            id={country}
-            label={country}
-            onChange={e => {changeCountries(e.target.checked, country)}}
-            //onClick={setCountries(countries.filter(c => c !== country))}
-          />
-      )
-    }
-    else {
-      colors.push(
-          <Form.Check
-            type="switch"
-            id={country}
-            label={country}
-            onChange={e => {changeCountries(e.target.checked, country)}}
-            //onClick={setCountries(countries.push(country))}
-          />
-      )
-    }
+    colors.push(
+      <Form.Check
+        checked={countries.includes(country)}
+        type="switch"
+        id={country}
+        label={country}
+        onChange={e => {changeCountries(e, e.target.checked, country)}}
+        //onClick={setCountries(countries.filter(c => c !== country))}
+      />
+  )
   }
 
   return (
@@ -66,7 +58,7 @@ function BarChartControl({csv, scenerio, year, setCountries, countries}) {
 
 function mapDispatchToProps(dispatch) {
   return {
-      setCountries: (color) => dispatch(setBarCountries(color)),
+      setCountries: (countryList) => dispatch(setBarCountries(countryList)),
   };
 }
 

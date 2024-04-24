@@ -43,7 +43,7 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
     try {
       if(subcat === "Aggregate of Subsectors" || subcat === "class1") {
         if(region === "Global") {
-          console.log("AGGREGSUB");
+          //console.log("AGGREGSUB");
           do {
             const response = await API.graphql(
               graphqlOperation(lineQueryAggRegSub, {
@@ -58,7 +58,7 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
           setLineData(getScenerios(allItems, Scenerios.at(0).title, Scenerios.at(1).title));
         }
         else {
-          console.log("AGGREG");
+          //console.log("AGGREG");
           do {
             const response = await API.graphql(
               graphqlOperation(lineQueryAggSub, {
@@ -75,7 +75,7 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
         }
       }
       else if(region === "Global") {
-        console.log("AGGSUB");
+        //console.log("AGGSUB");
         do {
           const response = await API.graphql(
             graphqlOperation(lineQueryAggReg, {
@@ -91,7 +91,7 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
         setLineData(getScenerios(allItems, Scenerios.at(0).title, Scenerios.at(1).title));
       }
       else {
-        console.log("NOAGG", subcat);
+        //console.log("NOAGG", subcat);
         do {
           const response = await API.graphql(
             graphqlOperation(lineQuery, {
@@ -135,13 +135,8 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
     setEndDate(end);
   }, [scenerioSpread, start, end]);
   //console.log("!!", csv, csv1, csv2, csv3);
-  if (csv !== "i" && csv1 !== "i" && csv2 !== "i" && csv3 !== "i") {
-    rawData = processData(csv, csv1, csv2, csv3, "GCAM_SSP2", selectedGuage, region, subcat);
-    //console.log("!!!", rawData);
+  if (csv3 !== "i") {
     units = getUnits(csv3, selectedGuage);
-
-    //Generate list of countries for bar chart.
-    
   }
   return (
     <>
