@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import DashboardScenerioSelector from "./DashboardScenerioSelector";
 import { setdashboardSelection } from "../Store";
-import { updateHash } from '../Dashboard';
+import { updateHash } from '../sharing/DashboardUrl';
 
 //Puts together the rows of the dashboard grid. Uses a map to go through every scenerio
 //and generates a row for each. A dashboard row begins with a DashboardScenerioSelector

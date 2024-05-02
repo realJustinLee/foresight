@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import {updateHash, updateListHash} from './Dashboard';
+import {updateHash, updateListHash} from './sharing/DashboardUrl';
 // Define the initial state
 const initialState = {
   open: 1,
