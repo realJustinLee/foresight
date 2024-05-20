@@ -10,8 +10,6 @@ import Form from 'react-bootstrap/Form';
 
 function BarChartControl({csv, scenerio, year, setCountries, countries}) {
   const changeCountries = (e, checked, country) => {
-    if(countries.length >= 10)
-      return;
     if(checked) {
       countries.push(country);
       let newList = Array.from(countries)
@@ -33,6 +31,7 @@ function BarChartControl({csv, scenerio, year, setCountries, countries}) {
     let country = countryList.at(i);
     colors.push(
       <Form.Check
+        disabled={!(countries.includes(country)) && countries.length >= 10}
         checked={countries.includes(country)}
         type="switch"
         id={country}
