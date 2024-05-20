@@ -4,35 +4,12 @@ import { API, graphqlOperation } from "aws-amplify";
 import BarHorizontal from "./charts/BarHorizontal";
 import ChoroplethImageSlider from './charts/ChoroplethImageSlider';
 import { connect } from 'react-redux';
-import { choroplethReduce, getScenerios, filterSubcat, getBarHorizontal, lineGraphReduce, processData, getUnits } from '../assets/data/DataManager';
+import { choroplethReduce, getScenerios, filterSubcat, lineGraphReduce, getUnits } from '../assets/data/DataManager';
 import Line from './charts/Line';
 import BarCountryControl from './dropdowns/BarCountryControl';
 import { setBarCountries, setParsedLine } from './Store';
 import { getBarColors } from '../assets/data/GcamColors';
 import { lineQuery, lineQueryAggReg, lineQueryAggSub, lineQueryAggRegSub } from '../assets/data/DataQuerries';
-
-//BarHorizontal
-const barQuery = `
-query BarQuery($param: String!, $year: Int!, $nextToken: String) {
-  listGcamDataTableAggClass1Regions(
-    filter: {
-      x: {eq: $year}, 
-      param: {eq: $param}
-    },
-    limit: 100000, 
-    nextToken: $nextToken
-  ) {
-    items {
-      value
-      x
-      scenario
-      region
-      class
-    }
-    nextToken
-  }
-}
-`;
 
 function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, dataReg, dataSub, dataRegSub, selectedGuage, curYear, region, subcat, setLineData, dataLine }) {
   const Scenerios = openedScenerios ? openedScenerios : ["ERR", "ERR"];
@@ -134,7 +111,7 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
     setStartDate(start);
     setEndDate(end);
   }, [scenerioSpread, start, end]);
-  //console.log("!!", csv, csv1, csv2, csv3);
+  console.log("!!", csv, csv1, csv2, csv3);
   if (csv3 !== "i") {
     units = getUnits(csv3, selectedGuage);
   }
@@ -168,8 +145,8 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
         ) : (
           <div className='bar-grid grid-border'>
             <BarCountryControl csv = {csv2} scenerio = {Scenerios.at(0).title} scenerio2 = {Scenerios.at(1).title} year = {curYear} className="choropleth-control"/>
-            <BarHorizontal csv = {csv} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(0).title} />
-            <BarHorizontal csv = {csv} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(1).title} />
+            <BarHorizontal csv = {csv} csv2 = {csv2} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(0).title} />
+            <BarHorizontal csv = {csv} csv2 = {csv2} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(1).title} />
           </div>
         )}
       </div>
@@ -198,8 +175,8 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
         ) : (
           <div className='bar-grid grid-border'>
             <BarCountryControl csv = {csv2} scenerio = {Scenerios.at(0).title} scenerio2 = {Scenerios.at(1).title} year = {curYear} className="choropleth-control"/>
-            <BarHorizontal csv = {csv} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(0).title} />
-            <BarHorizontal csv = {csv} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(1).title} />
+            <BarHorizontal csv = {csv} csv2 = {csv2} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(0).title} />
+            <BarHorizontal csv = {csv} csv2 = {csv2} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(1).title} />
           </div>
         )}
       </div>
