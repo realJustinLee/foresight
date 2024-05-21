@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import Dropdown from 'react-bootstrap/Dropdown';
 
 import { MdSettings } from "react-icons/md";
 import { setBarCountries } from '../Store';
 import { connect } from 'react-redux';
-import { getDates, getScenerio, filterRegion, listRegions } from '../../assets/data/DataManager';
+import { getDates, getScenerio, listRegions } from '../../assets/data/DataManager';
 import Form from 'react-bootstrap/Form';
 
 function BarChartControl({csv, scenerio, year, setCountries, countries}) {
-  const changeCountries = (e, checked, country) => {
+  const changeCountries = (checked, country) => {
     if(checked) {
       countries.push(country);
       let newList = Array.from(countries)
@@ -19,7 +19,6 @@ function BarChartControl({csv, scenerio, year, setCountries, countries}) {
       countries = countries.filter(i => i !== country);
       setCountries(countries);
     }
-    
   }
 
   let aggregates = getDates(getScenerio(csv, scenerio), year);
@@ -36,8 +35,7 @@ function BarChartControl({csv, scenerio, year, setCountries, countries}) {
         type="switch"
         id={country}
         label={country}
-        onChange={e => {changeCountries(e, e.target.checked, country)}}
-        //onClick={setCountries(countries.filter(c => c !== country))}
+        onChange={e => {changeCountries(e.target.checked, country)}}
       />
   )
   }
@@ -47,7 +45,7 @@ function BarChartControl({csv, scenerio, year, setCountries, countries}) {
       <Dropdown.Toggle variant="outline-secondary" size="sm" id="dropdown-basic">
         <MdSettings/>
       </Dropdown.Toggle>
-
+      
       <Dropdown.Menu>
         {colors.map((c) => (c))}
       </Dropdown.Menu>

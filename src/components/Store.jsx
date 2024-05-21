@@ -163,7 +163,6 @@ export function setEndDate(date) {
 // Change dashboard scenerios array
 export function setScenerios(index, newTitle, scenerios) {
   updateListHash("scenerios", index, newTitle);
-  scenerios.at(index).title = newTitle;
   return { type: 'setScenerios', payload: scenerios };
 }
 

@@ -3,7 +3,6 @@ import { Container, Row, Col } from "react-bootstrap";
 import SidebarDashboard from "./SidebarDashboard.jsx";
 import { connect } from "react-redux";
 import DateDropdown from "./dropdowns/DashboardDate";
-import DashboardScenerioRows from "./dropdowns/DashboardScenerioRows";
 import DashboardGraphs from "./DashboardGraphs.jsx";
 import { MdError, MdElectricBolt, MdGroups, MdFilterHdr } from "react-icons/md";
 import { GiCorn, GiFactory, GiWaterDrop } from "react-icons/gi";
@@ -15,7 +14,7 @@ import scenarios from "../assets/data/Scenarios.jsx";
 import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
 import { API, graphqlOperation } from "aws-amplify";
 import { filterRegion, getDates, getScenerio } from "../assets/data/DataManager.jsx";
-import { updateHash, updateListHash } from "./sharing/DashboardUrl.jsx";
+import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
 
 //UNUSED, Only For testing: Keeps track of the distance of the selection-divider and the top of the screen.
 //Allows divider to scroll with page.
@@ -281,7 +280,9 @@ function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd
       }
     }
   }
-
+//<DashboardScenerioRows
+//Scenarios={scenarios}
+///>
   return (
     <div className="body-page-dark">
       <SidebarDashboard></SidebarDashboard>
@@ -308,7 +309,7 @@ function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd
               />
             </Col>
           </Row>
-          <DashboardScenerioRows
+          <DashboardGuageBar
             Scenarios={scenarios}
           />
           <Row className="selection-divider">
