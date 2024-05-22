@@ -149,7 +149,7 @@ function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd
     } catch (error) {
       console.error(error);
   }
-  }, [selection, queryRegSub, updateParseRegSub]);
+  }, [queryRegSub, updateParseRegSub]);
   const fetchForesightSub = useCallback(async () => {
     let nextToken = null;
     let allItems = [];
@@ -176,7 +176,7 @@ function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd
     } catch (error) {
       console.error(error);
   }
-  }, [selection, querySub, updateParseSub]);
+  }, [selection, querySub, updateParseSub, curYear, openScenerios, setCountries]);
   const fetchForesightReg = useCallback(async () => {
     let nextToken = null;
     let allItems = [];

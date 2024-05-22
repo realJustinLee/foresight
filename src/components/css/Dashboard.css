@@ -278,8 +278,8 @@
 .selection-divider {
   position: relative;
   text-align: center;
-  margin: auto;
-  height: 80px;
+  margin: 0;
+  height: 85px;
   border-radius: 9px;
   background-color: black;
   align-items: center;
@@ -288,6 +288,32 @@
   font-weight: 600;
   white-space: pre;
   font-family: Arial, sans-serif;
+}
+
+@media screen and (max-width: 450px) {
+  .selection-divider {
+    left: -22px;
+    width: 330px;
+  }
+}
+
+@media screen and (max-width: 740px) and (min-width: 660px) {
+  .selection-divider {
+    margin-bottom: 10px;
+    height: 105px;
+  }
+}
+
+@media screen and (max-width: 660px) {
+  .selection-divider {
+    margin-bottom: 10px;
+    height: 180px;
+  }
+}
+
+.reset-button {
+  width: 60px;
+  padding-right: 5px;
 }
 
 .graph-grid {

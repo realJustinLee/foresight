@@ -2,18 +2,18 @@
 library(dplyr); library(data.table); library(gcamextractor); library(rgcam);
 
 # Variables
-dataset_i = "gcamv7p0"
+dataset_i = "gcamv7p0_ref"
 starting_n = 1
 params <- gcamextractor::params; params # List of params in gcamextractor
 paramsSelect_i = c("emissCO2BySector", "agProdByCrop", "landAlloc", "watWithdrawBySec", "pop", "elecFinalByFuelTWh")
 
-rgcam::localDBConn("C:/GCAM/gcam-v7.0-Windows-Release-Package/output","database_basexdb_ssp235")
+rgcam::localDBConn("../../model/gcam-core/output/database-basexdb", "ref")
 
 # GCAM 6.0
-data <- readgcam(gcamdatabase = "C:/GCAM/gcam-v7.0-Windows-Release-Package/output/database_basexdb_ssp235",
+data <- readgcam(gcamdatabase = "../../model/gcam-core/output/database-basexdb/ref",
                  dataProjFile = "dataProj.proj",
                  reReadData = F,
-                 folder = "gcamv7p0",
+                 folder = "gcamv7p0_ref",
                  paramsSelect = paramsSelect_i,
                  saveData = F)
 
