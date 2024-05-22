@@ -36,6 +36,13 @@
   overflow: auto !important;
 }
 
+@media screen and (max-width: 700px) {
+  .dashboard {
+    padding-right: 20px !important;
+    padding-left: 80px !important;
+  }
+}
+
 .chart-container {
   display: flex;
   justify-content: center;
@@ -189,7 +196,7 @@
   white-space: nowrap;
   text-align: center;
   text-overflow: ellipsis;
-  font-size: 1.25vw;
+  font-size: 1.00vw;
   margin-bottom: 10%;
 }
 
@@ -199,7 +206,7 @@
   cursor: pointer;
 }
 
-@media screen and (max-width: 822px) {
+@media screen and (max-width: 700px) {
   .dashboard-guage-grid {
     margin-left: 0%;
     margin-right: 0%;
@@ -266,6 +273,12 @@
     text-overflow: ellipsis;
     margin-bottom: 10%;
     font-size: 3.25vw;
+  }
+
+  @media screen and (max-width: 400px) {
+    .guageText {
+      font-size: 12px;
+    }
   }
 
   .guageDefault {
@@ -374,10 +387,10 @@
 }
 
 .graph-grid-small {
+  display: inline-block;
   box-sizing: border-box;
   min-width: 0;
   position: relative;
-  display: none;
   width: 100%;
   font-size: 2vw;
   font-weight: 500;
@@ -389,16 +402,6 @@
 }
 
 @media screen and (max-width: 1000px) {
-  .graph-grid {
-    display: none;
-    /*Change to none when fixed*/
-  }
-
-  .graph-grid-small {
-    display: inline-block;
-    /*Change when small fixed.*/
-  }
-
   .map-wrapper {
     position: relative;
     height: 60vh;

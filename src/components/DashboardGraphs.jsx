@@ -12,26 +12,39 @@ import { getBarColors } from '../assets/data/GcamColors';
 import { lineQuery, lineQueryAggReg, lineQueryAggSub, lineQueryAggRegSub } from '../assets/data/DataQuerries';
 
 function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, dataReg, dataSub, dataRegSub, selectedGuage, curYear, region, subcat, setLineData, dataLine }) {
+  const [width, setWidth] = useState(window.innerWidth);
+  useEffect(() => {
+    const handleResize = () => {
+      setWidth(window.innerWidth);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   const Scenerios = openedScenerios ? openedScenerios : ["ERR", "ERR"];
 
   const fetchLineData = useCallback(async () => {
     let nextToken = null;
     let allItems = [];
     try {
-      if(subcat === "Aggregate of Subsectors" || subcat === "class1") {
-        if(region === "Global") {
+      if (subcat === "Aggregate of Subsectors" || subcat === "class1") {
+        if (region === "Global") {
           //console.log("AGGREGSUB");
           do {
             const response = await API.graphql(
               graphqlOperation(lineQueryAggRegSub, {
-                param: selectedGuage, 
+                param: selectedGuage,
                 nextToken
               })
             );
             const items = response.data.listGcamDataTableAggParamGlobals.items;
             allItems = allItems.concat(items);
             nextToken = response.data.listGcamDataTableAggParamGlobals.nextToken;
-          } while(nextToken);
+          } while (nextToken);
           setLineData(getScenerios(allItems, Scenerios.at(0).title, Scenerios.at(1).title));
         }
         else {
@@ -39,7 +52,7 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
           do {
             const response = await API.graphql(
               graphqlOperation(lineQueryAggSub, {
-                param: selectedGuage, 
+                param: selectedGuage,
                 reg: region,
                 nextToken
               })
@@ -47,16 +60,16 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
             const items = response.data.listGcamDataTableAggParamRegions.items;
             allItems = allItems.concat(items);
             nextToken = response.data.listGcamDataTableAggParamRegions.nextToken;
-          } while(nextToken);
+          } while (nextToken);
           setLineData(getScenerios(allItems, Scenerios.at(0).title, Scenerios.at(1).title));
         }
       }
-      else if(region === "Global") {
+      else if (region === "Global") {
         //console.log("AGGSUB");
         do {
           const response = await API.graphql(
             graphqlOperation(lineQueryAggReg, {
-              param: selectedGuage, 
+              param: selectedGuage,
               sub: subcat,
               nextToken
             })
@@ -64,7 +77,7 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
           const items = response.data.listGcamDataTableAggClass1Globals.items;
           allItems = allItems.concat(items);
           nextToken = response.data.listGcamDataTableAggClass1Globals.nextToken;
-        } while(nextToken);
+        } while (nextToken);
         setLineData(getScenerios(allItems, Scenerios.at(0).title, Scenerios.at(1).title));
       }
       else {
@@ -72,7 +85,7 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
         do {
           const response = await API.graphql(
             graphqlOperation(lineQuery, {
-              param: selectedGuage, 
+              param: selectedGuage,
               reg: region,
               sub: subcat,
               nextToken
@@ -81,108 +94,119 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
           const items = response.data.listGcamDataTableAggClass1Regions.items;
           allItems = allItems.concat(items);
           nextToken = response.data.listGcamDataTableAggClass1Regions.nextToken;
-        } while(nextToken);
+        } while (nextToken);
         setLineData(getScenerios(allItems, Scenerios.at(0).title, Scenerios.at(1).title));
       }
     } catch (error) {
       console.error(error);
-  }
+    }
   }, [region, subcat, selectedGuage, setLineData]);
   useEffect(() => {
     setLineData("i");
     fetchLineData(region, subcat);
   }, [selectedGuage, subcat, region, Scenerios.at(0).title, Scenerios.at(1).title, fetchLineData, setLineData]);
 
-  const csv = data;
-  const csv1 = dataReg;
-  const csv2 = dataSub;
-  const csv3 = dataRegSub;
-  let rawData = "i"
-  let subcatDisplay = ""
-  let regionDisplay = ""
-  let units = "ERROR: Units not loaded";
+
+  // Initialize datasets. empty datasets will appear as the characer 'i'.
+  const csv = data; // No Agg (Bar Chart, Line Chart with filtered Region and Subsector, Choropleth with filtered Subsector)
+  const csv1 = dataReg; // Agg Region (Line Chart with filtered Subsector)
+  const csv2 = dataSub; // Agg Subsector (Line Chart with Filtered Region, Choropleth Default)
+  const csv3 = dataRegSub; // Agg Region and Subsector (Line Chart Default)
+
+  // Debug Data loading
+  // console.log("!!", csv, csv1, csv2, csv3);
+
+
+  // Display label text. Setting default display text for aggregates.
+  let subcatDisplay = "";
+  let regionDisplay = "";
   if (subcat !== "Aggregate of Subsectors")
     subcatDisplay = " " + subcat;
   if (region !== "class1")
     regionDisplay = region;
+
+
   const [startDate, setStartDate] = useState(start);
   const [endDate, setEndDate] = useState(end);
   useEffect(() => {
     setStartDate(start);
     setEndDate(end);
   }, [scenerioSpread, start, end]);
-  console.log("!!", csv, csv1, csv2, csv3);
+
+
+  // Load Units for Display
+  let units = "ERROR: Units not loaded";
   if (csv3 !== "i") {
     units = getUnits(csv3, selectedGuage);
   }
+
+
+  // Labels
+  const lineChartLabel = (<div>{regionDisplay} {subcatDisplay} Trends</div>)
+  const choroplethLabel = (<div>
+    <div>Spatial Composition {"(" + curYear + subcatDisplay + ")"}</div>
+    <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
+  </div>)
+  const barChartLabel = (<div>Top 10 Countries {"(" + curYear + ")"} -- By Subsector</div>)
+
+
+  // Line Chart Visualization
+  const lineChart = (dataLine === 'i') ? (
+    "Loading Dataset..."
+  ) : (
+    <Line data={lineGraphReduce(dataLine, selectedGuage, Scenerios, region, subcat, start, end)} unit={units} />
+  )
+
+
+  // Choropleth Visualization
+  const choropleth = (csv2 === 'i') ? (
+    "Loading Dataset..."
+  ) : (
+    <ChoroplethImageSlider
+      id={"Dashboard_Big"}
+      scenario_1={Scenerios.at(0).title}
+      scenario_2={Scenerios.at(1).title}
+      dataset={choroplethReduce(csv2, Scenerios.at(0).title, selectedGuage, curYear)}
+      dataset2={choroplethReduce(csv2, Scenerios.at(1).title, selectedGuage, curYear)}
+    />
+  )
+
+
+  // Bar Chart Visualization
+  const barChart = (csv === "i" || csv1 === 'i' || csv2 === 'i') ? (
+    "Loading Dataset..."
+  ) : (
+    <div className='bar-grid grid-border'>
+      <BarCountryControl csv={csv2} scenerio={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={curYear} className="choropleth-control" />
+      <BarHorizontal csv={csv} csv2={csv2} color={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(0).title} />
+      <BarHorizontal csv={csv} csv2={csv2} color={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(1).title} />
+    </div>
+  )
+
+
+  //Display the grid. Below 1000 pixels results in its upright form.
   return (
-    <>
+    (width >= 1000) ? (
       <div className="graph-grid">
-        <div>{regionDisplay} {subcatDisplay} Trends</div>
-        <div>
-          <div>Spatial Composition {"(" + curYear + subcatDisplay + ")"}</div>
-          <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
-        </div>
-        <div>Top 10 Countries {"(" + curYear + ")"} -- By Subsector</div>
-        {dataLine === 'i' ? (
-          "Loading Dataset..."
-        ) : (
-          <Line data={lineGraphReduce(dataLine, selectedGuage, Scenerios, region, subcat, start, end)} unit={units} />
-        )}
-        {csv2 === 'i' ? (
-          "Loading Dataset..."
-        ) : (
-          <ChoroplethImageSlider
-            id={"Dashboard_Big"}
-            scenario_1={Scenerios.at(0).title}
-            scenario_2={Scenerios.at(1).title}
-            dataset={choroplethReduce(csv2, Scenerios.at(0).title, selectedGuage, curYear)}
-            dataset2={choroplethReduce(csv2, Scenerios.at(1).title, selectedGuage, curYear)}
-          />
-        )}
-        {(csv === "i" || csv1 === 'i' || csv2 === 'i') ? (
-          "Loading Dataset..."
-        ) : (
-          <div className='bar-grid grid-border'>
-            <BarCountryControl csv = {csv2} scenerio = {Scenerios.at(0).title} scenerio2 = {Scenerios.at(1).title} year = {curYear} className="choropleth-control"/>
-            <BarHorizontal csv = {csv} csv2 = {csv2} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(0).title} />
-            <BarHorizontal csv = {csv} csv2 = {csv2} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(1).title} />
-          </div>
-        )}
+        {lineChartLabel}
+        {choroplethLabel}
+        {barChartLabel}
+        {lineChart}
+        {choropleth}
+        {barChart}
       </div>
+    ) : (
       <div className="graph-grid-small">
-        <div>{regionDisplay} {subcatDisplay} Trends</div>
-        {dataLine === 'i' ? (
-          "Loading Dataset..."
-        ) : (
-          <Line data={lineGraphReduce(dataLine, selectedGuage, Scenerios, region, subcat, start, end)} unit={units} />
-        )}
-        <div>Spatial Composition {"(" + curYear + subcatDisplay + ")"}</div>
-        {csv2 === 'i' ? (
-          "Loading Dataset..."
-        ) : (
-          <ChoroplethImageSlider
-            id={"Dashboard_Small"}
-            scenario_1={Scenerios.at(0).title}
-            scenario_2={Scenerios.at(1).title}
-            dataset={choroplethReduce(csv2, Scenerios.at(0).title, selectedGuage, curYear)}
-            dataset2={choroplethReduce(csv2, Scenerios.at(1).title, selectedGuage, curYear)}
-          />
-        )}
-        <div>Top 10 Countries {"(" + curYear + ")"} -- By Subsector</div>
-        {(csv === "i" || csv1 === 'i' || csv2 === 'i') ? (
-          "Loading Dataset..."
-        ) : (
-          <div className='bar-grid grid-border'>
-            <BarCountryControl csv = {csv2} scenerio = {Scenerios.at(0).title} scenerio2 = {Scenerios.at(1).title} year = {curYear} className="choropleth-control"/>
-            <BarHorizontal csv = {csv} csv2 = {csv2} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(0).title} />
-            <BarHorizontal csv = {csv} csv2 = {csv2} color ={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(1).title} />
-          </div>
-        )}
+        {lineChartLabel}
+        {lineChart}
+        {choroplethLabel}
+        {choropleth}
+        {barChartLabel}
+        {barChart}
       </div>
-    </>
-  );
+    ));
 }
+
 
 function mapStateToProps(state) {
   return {
@@ -203,11 +227,13 @@ function mapStateToProps(state) {
   };
 }
 
+
 function mapDispatchToProps(dispatch) {
   return {
-      setCountries: (color) => dispatch(setBarCountries(color)),
-      setLineData: (data) => dispatch(setParsedLine(data)),
+    setCountries: (color) => dispatch(setBarCountries(color)),
+    setLineData: (data) => dispatch(setParsedLine(data)),
   };
 }
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardGraphs);

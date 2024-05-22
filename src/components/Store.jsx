@@ -2,7 +2,7 @@ import { createStore } from 'redux';
 import {updateHash, updateListHash} from './sharing/DashboardUrl';
 // Define the initial state
 const initialState = {
-  open: 1,
+  open: 2,
   dataset: "foresight_v1",
   startDate: 2015,
   endDate: 2100,
@@ -56,7 +56,9 @@ function reducer(state = initialState, action) {
     case 'dashboardSelection':
       return { ...state, dashboardSelection: action.payload };
     case 'toggleOpen':
-      return { ...state, open: state.open ? 0 : 1 };
+      return { ...state, open: state.open === 1 ? 0 : 1 };
+    case 'setOpen':
+      return { ...state, open: action.payload };
     case 'setDataset':
       return { ...state, dataset: action.payload };
     case 'setStartDate':
@@ -105,6 +107,10 @@ export function setdashboardGraphParams(date, region, subsector) {
 
 export function setDashDate(date) {
   return { type: 'setDashYear', payload: date };
+}
+
+export function setOpen(open) {
+  return { type: 'setOpen', payload: open };
 }
 
 export function setDashReg(region) {

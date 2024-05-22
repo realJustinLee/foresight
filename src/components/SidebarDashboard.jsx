@@ -7,9 +7,16 @@ import { RiDashboardFill } from "react-icons/ri";
 import { MdElectricBolt } from "react-icons/md";
 import { GiWaterDrop } from "react-icons/gi";
 import { CiWheat } from "react-icons/ci"
+import { setOpen } from "./Store";
 
 
-function SidebarDashboard({open, toggleOpen}) {
+function SidebarDashboard({open, toggleOpen, setOpen}) {
+  if(open === 2) {
+    if(window.innerWidth < 700)
+      setOpen(0);
+    else
+      setOpen(1);
+  }
   return (
       <div className={open ? "sidenav" : "sidenavClosed"}>
         <button className={"menuBtn"} onClick={toggleOpen}>
@@ -51,7 +58,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    toggleOpen: () => dispatch({ type: 'toggleOpen' })
+    toggleOpen: () => dispatch({ type: 'toggleOpen' }),
+    setOpen: (opened) => dispatch(setOpen(opened))
   };
 }
 
