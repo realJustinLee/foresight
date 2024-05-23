@@ -178,8 +178,8 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
   ) : (
     <div className='bar-grid grid-border'>
       <BarCountryControl csv={csv2} scenerio={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={curYear} className="choropleth-control" />
-      <BarHorizontal csv={csv} csv2={csv2} color={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(0).title} />
-      <BarHorizontal csv={csv} csv2={csv2} color={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv1)} scenerio={Scenerios.at(1).title} />
+      <BarHorizontal csv={csv} csv2={csv2} color={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv)} scenerio={Scenerios.at(0).title} />
+      <BarHorizontal csv={csv} csv2={csv2} color={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv)} scenerio={Scenerios.at(1).title} />
     </div>
   )
 
