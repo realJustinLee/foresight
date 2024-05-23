@@ -99,3 +99,4 @@ query BarQuery($param: String!, $nextToken: String) {
   }
 }
 `;
+

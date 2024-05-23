@@ -142,12 +142,12 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
 
 
   // Labels
-  const lineChartLabel = (<div>{regionDisplay} {subcatDisplay} Trends</div>)
-  const choroplethLabel = (<div>
+  const lineChartLabel = (<div className="text-centered">{regionDisplay} {subcatDisplay} Trends</div>)
+  const choroplethLabel = (<div className="text-centered">
     <div>Spatial Composition {"(" + curYear + subcatDisplay + ")"}</div>
     <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
   </div>)
-  const barChartLabel = (<div>Top 10 Countries {"(" + curYear + ")"} -- By Subsector</div>)
+  const barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + curYear + ")"} -- By Subsector</div>)
 
 
   // Line Chart Visualization

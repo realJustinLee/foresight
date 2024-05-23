@@ -23,7 +23,7 @@ const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, selec
         //console.log("BAR DATA", getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
     }, [countries, csv, csv2, curYear, scenerio, selectedGuage])
     return (
-        <div className="nivo-wrapper">
+        <div className="bar-wrapper">
             <div className="double-bar-text-wrapper">  {scenerioName} </div>
             <ResponsiveBar
                 data={barData}

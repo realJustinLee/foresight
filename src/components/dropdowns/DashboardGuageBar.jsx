@@ -16,8 +16,8 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
     const [OpenedParameters, setValueParameter] = useState(OpenParameters);
 
     
-    //Maps the dropdown menu. Takes in the vector of all scenerios and creates 
-    //a Dropdown.Item for each.
+    // Maps the dropdown menu. Takes in the vector of all scenerios and creates 
+    // a Dropdown.Item for each.
     const scenarioDropdownList = (index) => Scenarios.map((scenerio) => (
         <div key={scenerio.title}>
             <Dropdown.Item as="button" onClick={() => handleScenerioChange(index, scenerio.title)}>
