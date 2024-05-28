@@ -183,6 +183,23 @@ query MyQuery($nextToken: String, $start: Int!, $end: Int!, $scenario1: String!,
 }
 `
 
+const queryDates = `
+query MyQuery($nextToken: String, $param: String!, $scenario1: String!, $scenario2: String!) {
+  listGcamDataTableAggParamGlobals(
+    filter: {
+      param: {eq: $param},
+      scenario: { in: [$scenario1, $scenario2] }
+    },
+    limit: 100000,
+    nextToken: $nextToken
+  ) {
+    items {
+      x
+    }
+    nextToken
+  }
+}
+`
 
 export const aggSubQuery = `
 query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: String!, $scenario2: String!) {
@@ -207,7 +224,7 @@ query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: Str
 `;
 
 
-function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, setGuage, setLine, setChoropleth, setBar, setAggSub, setCountries }) {
+function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries }) {
   const scenarios = scenerios.map(obj => obj.title);
 
 
@@ -418,6 +435,35 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
     }
   }, [scenarios, start, end, setGuage]);
   
+  //Query for dates
+  const fetchDates = useCallback(async () => {
+    let nextToken = null;
+    let allItems = [];
+
+    try {
+      do {
+        const response = await API.graphql(
+          graphqlOperation(queryDates, {
+            param: parameter,
+            scenario1: scenarios[0],
+            scenario2: scenarios[1],
+            nextToken
+          })
+        );
+
+        const items = response.data.listGcamDataTableAggParamGlobals.items;
+        allItems.push(...items)
+
+        nextToken = response.data.listGcamDataTableAggParamGlobals.nextToken;
+      } while (nextToken);
+
+      allItems.sort((a, b) => a.x - b.x);
+      console.log("Dates:", allItems);
+      setDates(allItems);
+    } catch (error) {
+      console.error(error);
+    }
+  }, [scenarios, parameter, setDates]);
 
   //Query for AggSub
   const fetchAggSub = useCallback(async () => {
@@ -489,7 +535,14 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
     fetchGuage();
   }, [scenarios, start, end, setGuage, fetchGuage]);
 
-
+  //Dates change for different parameters and scenarios
+  useEffect(() => {
+    console.log("Change Dates");
+    console.log(scenarios, start, end);
+    setDates("i");
+    fetchDates();
+  }, [scenarios, parameter, fetchDates]);
+  
   //Aggregated Subsectors for each country
   useEffect(() => {
     console.log("Change CSV2");

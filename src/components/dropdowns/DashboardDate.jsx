@@ -6,14 +6,14 @@ import 'react-datepicker/dist/react-datepicker.css';
 import '../css/DashboardDate.css';
 import { isValidDate, getFirstDate, getLastDate } from "../../assets/data/DataManager";
 
-function DashboardDate({ year, isOrNotStart, updateStart, updateEnd, start, end, dataRegSub }) {
+function DashboardDate({ year, isOrNotStart, updateStart, updateEnd, start, end, data }) {
     const [startDate, setStartDate] = useState(new Date().setFullYear(year));
     const isStart = isOrNotStart
     function dateHandler(date, isStart) {
         date = checkStartDate(date, isStart);
         setStartDate(date);
         var selectedYear = 1;
-        if(date != null)
+        if (date != null)
             selectedYear = date.getFullYear();
         if (isStart === 0) {
             updateStart(selectedYear);
@@ -32,29 +32,33 @@ function DashboardDate({ year, isOrNotStart, updateStart, updateEnd, start, end,
 
     const getBounds = (date) => {
         var selectedYear = 1;
-        if(date != null)
+        if (date != null)
             selectedYear = date.getFullYear();
         if (isStart === 0)
-            return selectedYear < end && selectedYear > 0 && isValidDate(dataRegSub, selectedYear);
-        return selectedYear > start && selectedYear > 0 && isValidDate(dataRegSub, selectedYear);
+            return selectedYear < end && selectedYear > 0 && isValidDate(data, selectedYear);
+        return selectedYear > start && selectedYear > 0 && isValidDate(data, selectedYear);
     }
 
     const checkStartDate = (date, isStart) => {
-        if(!isValidDate(dataRegSub, date.getFullYear())) {
-            if(isStart)
-                return getFirstDate(dataRegSub);
-            return getLastDate(dataRegSub);
+        if (!isValidDate(data, date.getFullYear())) {
+            if (isStart)
+                return getFirstDate(data);
+            return getLastDate(data);
         }
         return date;
     }
     return (
-        <DatePicker
-            selected={getYear(isStart)}
-            onChange={(date) => dateHandler(date, isStart)}
-            showYearPicker
-            dateFormat="yyyy"
-            filterDate={getBounds}
-        />
+        (data === "i") ? (
+            <div> "Loading..." </div>
+        ) : (
+            <DatePicker
+                selected={getYear(isStart)}
+                onChange={(date) => dateHandler(date, isStart)}
+                showYearPicker
+                dateFormat="yyyy"
+                filterDate={getBounds}
+            />
+        )
     );
 }
 
@@ -62,7 +66,6 @@ function mapStateToProps(state) {
     return {
         start: state.startDate,
         end: state.endDate,
-        dataRegSub: state.parsedDataRegSub,
     };
 }
 

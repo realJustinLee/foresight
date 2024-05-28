@@ -9,11 +9,12 @@ import { MdError, MdElectricBolt, MdGroups, MdFilterHdr } from "react-icons/md";
 import { GiCorn, GiFactory, GiWaterDrop } from "react-icons/gi";
 import { TbCoins } from "react-icons/tb";
 import { FaThermometerHalf } from "react-icons/fa"
-import { setdashboardSelection, setStartDate, setEndDate, setScenerios, setParsed, setParsedSub, setParsedReg, setParsedRegSub, setBarCountries} from "./Store";
+import { setdashboardSelection, setStartDate, setEndDate, setScenerios} from "./Store";
 import './css/Dashboard.css';
 import scenarios from "../assets/data/Scenarios.jsx";
 import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
 import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
+import DashboardUrl from "./sharing/DashboardUrl.jsx";
 
 
 //UNUSED, Only For testing: Keeps track of the distance of the selection-divider and the top of the screen.
@@ -57,6 +58,7 @@ export const getIcon = (selection) => {
 
 function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd, updateScenerios, openScenerios, openGuages }) {  
   const [guageData, setGuageData] = useState("i");
+  const [datesData, setDatesData] = useState("i");
   const [lineData, setLineData] = useState("i");
   const [choroplethData, setChoroplethData] = useState("i");
   const [barData, setBarData] = useState("i");
@@ -100,9 +102,11 @@ function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd
   return (
     <div className="body-page-dark">
       <SidebarDashboard></SidebarDashboard>
+      <DashboardUrl/>
       {setDataParameters()}
       <DataQuerries 
         setGuage = {setGuageData}
+        setDates = {setDatesData}
         setLine = {setLineData}
         setChoropleth = {setChoroplethData}
         setBar = {setBarData}
@@ -116,6 +120,7 @@ function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd
             </Col>
             <Col>
               <DateDropdown
+                data={datesData}
                 year={2015}
                 isOrNotStart={0}
               />
@@ -125,6 +130,7 @@ function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd
             </Col>
             <Col>
               <DateDropdown
+                data={datesData}
                 year={2100}
                 isOrNotStart={1}
               />

@@ -51,9 +51,9 @@ function ChoroplethControl({color, scale, updateColor, updateScale}) {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
-        {colors.map((c) => (c))}
+        {colors}
         <Dropdown.Divider />
-        {scales.map((s) => (s))}
+        {scales}
       </Dropdown.Menu>
     </Dropdown>
   );

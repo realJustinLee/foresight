@@ -131,7 +131,6 @@ export const getRegionsSorted = (countries, data) => {
 // data given. This data does not be in the form of an already
 // param filtered array.
 export const filterRegion = (data) => {
-    console.log("!!", data);
     data.sort((a,b) => b.value - a.value);
     data = data.slice(0, 10);
     data.sort((a,b) => a.value - b.value);
@@ -184,7 +183,6 @@ export const getBarHorizontal = (countries, data, dataAgg, scenerio, param, year
         }
         output.push(obj);  
     }
-    console.log("!!!", output);
     return output
 }
 
