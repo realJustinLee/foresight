@@ -1,18 +1,17 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { API, graphqlOperation } from "aws-amplify";
+import React, { useEffect, useState } from 'react';
 
 import BarHorizontal from "./charts/BarHorizontal";
 import ChoroplethImageSlider from './charts/ChoroplethImageSlider';
 import { connect } from 'react-redux';
-import { choroplethReduce, getScenerios, filterSubcat, lineGraphReduce, getUnits } from '../assets/data/DataManager';
+import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits } from '../assets/data/DataManager';
 import Line from './charts/Line';
 import BarCountryControl from './dropdowns/BarCountryControl';
 import { setBarCountries, setParsedLine } from './Store';
 import { getBarColors } from '../assets/data/GcamColors';
-import { lineQuery, lineQueryAggReg, lineQueryAggSub, lineQueryAggRegSub } from '../assets/data/DataQuerries';
 
-function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, dataReg, dataSub, dataRegSub, selectedGuage, curYear, region, subcat, setLineData, dataLine }) {
+function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, selectedGuage, curYear, region, subcat, lineData, choroplethData, barData, aggSub }) {
   const [width, setWidth] = useState(window.innerWidth);
+
   useEffect(() => {
     const handleResize = () => {
       setWidth(window.innerWidth);
@@ -26,96 +25,6 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
   }, []);
 
   const Scenerios = openedScenerios ? openedScenerios : ["ERR", "ERR"];
-
-  const fetchLineData = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
-    try {
-      if (subcat === "Aggregate of Subsectors" || subcat === "class1") {
-        if (region === "Global") {
-          //console.log("AGGREGSUB");
-          do {
-            const response = await API.graphql(
-              graphqlOperation(lineQueryAggRegSub, {
-                param: selectedGuage,
-                nextToken
-              })
-            );
-            const items = response.data.listGcamDataTableAggParamGlobals.items;
-            allItems = allItems.concat(items);
-            nextToken = response.data.listGcamDataTableAggParamGlobals.nextToken;
-          } while (nextToken);
-          setLineData(getScenerios(allItems, Scenerios.at(0).title, Scenerios.at(1).title));
-        }
-        else {
-          //console.log("AGGREG");
-          do {
-            const response = await API.graphql(
-              graphqlOperation(lineQueryAggSub, {
-                param: selectedGuage,
-                reg: region,
-                nextToken
-              })
-            );
-            const items = response.data.listGcamDataTableAggParamRegions.items;
-            allItems = allItems.concat(items);
-            nextToken = response.data.listGcamDataTableAggParamRegions.nextToken;
-          } while (nextToken);
-          setLineData(getScenerios(allItems, Scenerios.at(0).title, Scenerios.at(1).title));
-        }
-      }
-      else if (region === "Global") {
-        //console.log("AGGSUB");
-        do {
-          const response = await API.graphql(
-            graphqlOperation(lineQueryAggReg, {
-              param: selectedGuage,
-              sub: subcat,
-              nextToken
-            })
-          );
-          const items = response.data.listGcamDataTableAggClass1Globals.items;
-          allItems = allItems.concat(items);
-          nextToken = response.data.listGcamDataTableAggClass1Globals.nextToken;
-        } while (nextToken);
-        setLineData(getScenerios(allItems, Scenerios.at(0).title, Scenerios.at(1).title));
-      }
-      else {
-        //console.log("NOAGG", subcat);
-        do {
-          const response = await API.graphql(
-            graphqlOperation(lineQuery, {
-              param: selectedGuage,
-              reg: region,
-              sub: subcat,
-              nextToken
-            })
-          );
-          const items = response.data.listGcamDataTableAggClass1Regions.items;
-          allItems = allItems.concat(items);
-          nextToken = response.data.listGcamDataTableAggClass1Regions.nextToken;
-        } while (nextToken);
-        setLineData(getScenerios(allItems, Scenerios.at(0).title, Scenerios.at(1).title));
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }, [region, subcat, selectedGuage, setLineData]);
-  useEffect(() => {
-    setLineData("i");
-    fetchLineData(region, subcat);
-  }, [selectedGuage, subcat, region, Scenerios.at(0).title, Scenerios.at(1).title, fetchLineData, setLineData]);
-
-
-  // Initialize datasets. empty datasets will appear as the characer 'i'.
-  const csv = data; // No Agg (Bar Chart, Line Chart with filtered Region and Subsector, Choropleth with filtered Subsector)
-  const csv1 = dataReg; // Agg Region (Line Chart with filtered Subsector)
-  const csv2 = dataSub; // Agg Subsector (Line Chart with Filtered Region, Choropleth Default)
-  const csv3 = dataRegSub; // Agg Region and Subsector (Line Chart Default)
-
-  // Debug Data loading
-  // console.log("!!", csv, csv1, csv2, csv3);
-
 
   // Display label text. Setting default display text for aggregates.
   let subcatDisplay = "";
@@ -136,8 +45,8 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
 
   // Load Units for Display
   let units = "ERROR: Units not loaded";
-  if (csv3 !== "i") {
-    units = getUnits(csv3, selectedGuage);
+  if (lineData !== "i") {
+    units = getUnits(lineData, selectedGuage);
   }
 
 
@@ -151,35 +60,35 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, data, da
 
 
   // Line Chart Visualization
-  const lineChart = (dataLine === 'i') ? (
+  const lineChart = (lineData === 'i') ? (
     "Loading Dataset..."
   ) : (
-    <Line data={lineGraphReduce(dataLine, selectedGuage, Scenerios, region, subcat, start, end)} unit={units} />
+    <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, region, subcat, start, end)} unit={units} />
   )
 
 
   // Choropleth Visualization
-  const choropleth = (csv2 === 'i') ? (
+  const choropleth = (choroplethData === 'i') ? (
     "Loading Dataset..."
   ) : (
     <ChoroplethImageSlider
       id={"Dashboard_Big"}
       scenario_1={Scenerios.at(0).title}
       scenario_2={Scenerios.at(1).title}
-      dataset={choroplethReduce(csv2, Scenerios.at(0).title, selectedGuage, curYear)}
-      dataset2={choroplethReduce(csv2, Scenerios.at(1).title, selectedGuage, curYear)}
+      dataset={choroplethReduce(choroplethData, Scenerios.at(0).title, selectedGuage, curYear)}
+      dataset2={choroplethReduce(choroplethData, Scenerios.at(1).title, selectedGuage, curYear)}
     />
   )
 
 
   // Bar Chart Visualization
-  const barChart = (csv === "i" || csv1 === 'i' || csv2 === 'i') ? (
+  const barChart = (barData === "i" || aggSub === 'i') ? (
     "Loading Dataset..."
   ) : (
     <div className='bar-grid grid-border'>
-      <BarCountryControl csv={csv2} scenerio={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={curYear} className="choropleth-control" />
-      <BarHorizontal csv={csv} csv2={csv2} color={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv)} scenerio={Scenerios.at(0).title} />
-      <BarHorizontal csv={csv} csv2={csv2} color={getBarColors(csv, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(csv)} scenerio={Scenerios.at(1).title} />
+      <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={curYear} className="choropleth-control" />
+      <BarHorizontal csv={barData} csv2={aggSub} color={getBarColors(barData, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} />
+      <BarHorizontal csv={barData} csv2={aggSub} color={getBarColors(barData, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} />
     </div>
   )
 
@@ -215,11 +124,6 @@ function mapStateToProps(state) {
     scenerioSpread: { ...(state.scenerios) },
     start: state.startDate,
     end: state.endDate,
-    data: state.parsedData,
-    dataReg: state.parsedDataReg,
-    dataSub: state.parsedDataSub,
-    dataRegSub: state.parsedDataRegSub,
-    dataLine: state.parsedDataLine,
     curYear: state.dashboardYear,
     region: state.dashboardRegion,
     subcat: state.dashboardSubsector,
@@ -230,8 +134,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    setCountries: (color) => dispatch(setBarCountries(color)),
-    setLineData: (data) => dispatch(setParsedLine(data)),
+    
   };
 }
 

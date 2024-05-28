@@ -100,14 +100,6 @@ export const reduceRegion = (data, region) => {
     data.filter(item => item.region === region).sort((a,b) => a.x - b.x);
 }
 
-// getDates aggregates data by summing all data with the same region.
-// This results in an output where dates are merged and data is only
-// sorted by region. This is useful for charts like the bar chart where
-// dates are disregarded. 
-//
-// NOTE: Expect this function to change as date range functionality is added.
-export const getDates = (data, year) => data.filter(item => item.x.toString() === year.toString());
-
 // filterSubcat creates a list of all subcategories for the
 // data given. This data should be in the form of an already
 // param filtered array.
@@ -129,10 +121,17 @@ export const reduceSubcat = (data, subcat) => {
 export const getRegions = (countries, data) => {
     return data.filter(item => countries.includes(item.region));
 }
+
+export const getRegionsSorted = (countries, data) => {
+    let newdata = data.filter(item => countries.includes(item.region));
+    newdata.sort((a,b) => a.value - b.value);
+    return [...new Set(newdata.map(item => item.region))];
+}
 // filterRegion creates a list of all regions for the
 // data given. This data does not be in the form of an already
 // param filtered array.
 export const filterRegion = (data) => {
+    console.log("!!", data);
     data.sort((a,b) => b.value - a.value);
     data = data.slice(0, 10);
     data.sort((a,b) => a.value - b.value);
@@ -168,16 +167,14 @@ export const getBarTotal = (data, param, scenarios) => {
 
 export const getBarHorizontal = (countries, data, dataAgg, scenerio, param, year) => {
     let output = [];
-    let barData = getDates(getScenerio(data, scenerio), year);
-    let aggregates = getDates(getScenerio(dataAgg, scenerio), year);
+    let barData = getScenerio(data, scenerio);
+    let aggregates = getScenerio(dataAgg, scenerio);
     let subcatList = filterSubcat(barData);
     subcatList.sort()
-    //console.log("SCENERIOS:", subcatList);
-    let countryList = filterRegion(getRegions(countries, aggregates));
-    for(let i = 0; i < countryList.length; i++) {
-        let countryData = getRegion(barData, countryList[i], year);
+    for(let i = 0; i < countries.length; i++) {
+        let countryData = getRegion(barData, countries[i]);
         let obj = {
-            "country": countryList[i]
+            "country": countries[i]
         };
         for(let j = 0; j < subcatList.length; j++) {
             if(getSubcat(countryData, subcatList.at(j)).length > 0)
@@ -187,6 +184,7 @@ export const getBarHorizontal = (countries, data, dataAgg, scenerio, param, year
         }
         output.push(obj);  
     }
+    console.log("!!!", output);
     return output
 }
 
@@ -209,24 +207,4 @@ export const getLineGraphReduce = (data, param, subcat) => {
     }));
 }
 
-export const choroplethReduce = (data, scenario, param, year) => {
-    let final = getDates(getScenerio(data, scenario), year);
-    return getNoSubcatChoropleth(final);
-}
-
-export const processData = (aggNone, aggReg, aggSub, aggRegSub, scenario, param, region, subcat) => {
-    let data = [];
-    if(region === "Global") {
-        if(subcat === "Aggregate of Subsectors") {  //Agg Subcat agg Region
-            data = getParam(aggRegSub, param);
-        }
-        else  //Agg Region no agg Subcat
-            data = getSubcat(getParam(aggReg, param), subcat);
-    }
-    else if(subcat === "Aggregate of Subsectors") { //Agg Subcat no agg Region
-        data = getRegion(getParam(aggSub, param), region);
-    }
-    else
-        data = getSubcat(getRegion(getParam(aggNone, param), region), subcat);
-    return data;
-};
+export const choroplethReduce = (data, scenario, param, year) => getNoSubcatChoropleth(getScenerio(data, scenario));

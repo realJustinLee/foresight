@@ -1,6 +1,7 @@
-import React, {useEffect, useCallback} from "react";
+import React, {useState} from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import SidebarDashboard from "./SidebarDashboard.jsx";
+import DataQuerries from "../assets/data/DataQuerries.jsx";
 import { connect } from "react-redux";
 import DateDropdown from "./dropdowns/DashboardDate";
 import DashboardGraphs from "./DashboardGraphs.jsx";
@@ -12,9 +13,8 @@ import { setdashboardSelection, setStartDate, setEndDate, setScenerios, setParse
 import './css/Dashboard.css';
 import scenarios from "../assets/data/Scenarios.jsx";
 import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
-import { API, graphqlOperation } from "aws-amplify";
-import { filterRegion, getDates, getScenerio } from "../assets/data/DataManager.jsx";
 import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
+
 
 //UNUSED, Only For testing: Keeps track of the distance of the selection-divider and the top of the screen.
 //Allows divider to scroll with page.
@@ -55,198 +55,12 @@ export const getIcon = (selection) => {
   }
 }
 
-function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd, updateScenerios, openScenerios, openGuages, updateParse, updateParseReg, updateParseSub, updateParseRegSub, curYear, setCountries }) {  
-  //GraphQL Querries for dahsboard data.
-  const queryRegSub = `
-    query MyQuery($nextToken: String) {
-      listGcamDataTableAggParamGlobals(limit: 100000, nextToken: $nextToken) {
-        items {
-          id
-          value
-          x
-          scenario
-          units
-          param
-        }
-        nextToken
-      }
-    }
-  `;
-  const querySub = `
-    query MyQuery($param: String!, $nextToken: String) {
-      listGcamDataTableAggParamRegions(filter: {param: {eq: $param}}, limit: 100000, nextToken: $nextToken) {
-        items {
-          id
-          value
-          x
-          scenario
-          param
-          region
-        }
-        nextToken
-      }
-    }
-  `;
-  const queryReg = `
-    query MyQuery($param: String!, $nextToken: String) {
-      listGcamDataTableAggClass1Globals(filter: {param: {eq: $param}}, limit: 100000, nextToken: $nextToken) {
-        items {
-          id
-          value
-          x
-          scenario
-          param
-          region
-          classLabel
-          class
-        }
-        nextToken
-      }
-    }
-  `;
-  const query = `
-    query MyQuery($param: String!, $year: Int!, $nextToken: String) {
-      listGcamDataTableAggClass1Regions(filter: {x: {eq: $year}, param: {eq: $param}}, limit: 100000, nextToken: $nextToken) {
-        items {
-          id
-          value
-          x
-          scenario
-          param
-          region
-          classLabel
-          class
-        }
-        nextToken
-      }
-    }
-  `;
-  
-  //Retrieves data for all four needed categories.
-  //Raw data, Aggregate Region, Aggregate Subcategory, and Aggregate Region and Subcategory.
-  const fetchForesightRegSub = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
-
-    try {
-      do {
-        const response = await API.graphql(
-          graphqlOperation(queryRegSub, {
-           nextToken
-          })
-        );
-        //console.log("PAGINATION:" + response.data.listGcamDataTableAggParamGlobals.nextToken);
-        //console.log("Foresight data reg sub response:", response.data); // Print the response data
-
-        const items = response.data.listGcamDataTableAggParamGlobals.items;
-        allItems = allItems.concat(items);
-
-        nextToken = response.data.listGcamDataTableAggParamGlobals.nextToken;
-      } while(nextToken);
-      
-      allItems.sort((a,b) => a.x - b.x);
-      updateParseRegSub(allItems);
-    } catch (error) {
-      console.error(error);
-  }
-  }, [queryRegSub, updateParseRegSub]);
-  const fetchForesightSub = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
-
-    try {
-      do {
-        const response = await API.graphql(
-          graphqlOperation(querySub, {
-            param: selection, nextToken
-          })
-        );
-        const items = response.data.listGcamDataTableAggParamRegions.items;
-        allItems = allItems.concat(items);
-
-        nextToken = response.data.listGcamDataTableAggParamRegions.nextToken;
-      } while(nextToken);
-      
-      allItems.sort((a,b) => a.x - b.x);
-      let countries1 = filterRegion(getDates(getScenerio(allItems, openScenerios.at(0).title), curYear));
-      let countries2 = filterRegion(getDates(getScenerio(allItems, openScenerios.at(1).title), curYear));
-      countries1 = countries1.concat(countries2);
-      setCountries([...new Set(countries1)]);
-      updateParseSub(allItems);
-    } catch (error) {
-      console.error(error);
-  }
-  }, [selection, querySub, updateParseSub, curYear, openScenerios, setCountries]);
-  const fetchForesightReg = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
-
-    try {
-      do {
-        const response = await API.graphql(
-          graphqlOperation(queryReg, {
-            param: selection, nextToken
-          })
-        );
-        //console.log("PAGINATION:" + response.data.listGcamDataTableAggClass1Globals.nextToken);
-        //console.log("Foresight data reg response:", response.data); // Print the response data
-
-        const items = response.data.listGcamDataTableAggClass1Globals.items;
-        allItems = allItems.concat(items);
-
-        nextToken = response.data.listGcamDataTableAggClass1Globals.nextToken;
-      } while(nextToken);
-      
-      allItems.sort((a,b) => a.x - b.x);
-      updateParseReg(allItems);
-    } catch (error) {
-      console.error(error);
-  }
-  }, [selection, queryReg, updateParseReg]);
-  const fetchForesight = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
-
-    try {
-      do {
-        const response = await API.graphql(
-          graphqlOperation(query, {
-            param: selection, year: curYear, nextToken
-          })
-        );
-        //console.log("PAGINATION:" + response.data.listGcamDataTableAggClass1Regions.nextToken);
-        //console.log("Foresight data response:", response.data); // Print the response data
-
-        const items = response.data.listGcamDataTableAggClass1Regions.items;
-        allItems = allItems.concat(items);
-
-        nextToken = response.data.listGcamDataTableAggClass1Regions.nextToken;
-      } while(nextToken);
-      
-      allItems.sort((a,b) => a.x - b.x);
-      updateParse(allItems);
-    } catch (error) {
-      console.error(error);
-  }
-  }, [curYear, selection, query, updateParse]);
-
-  //For each change in selection, parses from AWS.
-  useEffect(() => {
-    updateParseReg("i");
-    updateParseSub("i");
-    updateParseRegSub("i");
-    fetchForesightRegSub();
-    fetchForesightSub();
-    fetchForesightReg();
-  }, [selection, updateParse, updateParseReg, updateParseSub, updateParseRegSub, fetchForesightRegSub, fetchForesightSub, fetchForesightReg, fetchForesight]);
-
-  useEffect(() => {
-    console.log("UPDATE QUERRY DATE:", curYear);
-    updateParse("i");
-    fetchForesight();
-  }, [curYear, selection, updateParse, updateParseReg, updateParseSub, updateParseRegSub, fetchForesightRegSub, fetchForesightSub, fetchForesightReg, fetchForesight]);
-
-  
+function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd, updateScenerios, openScenerios, openGuages }) {  
+  const [guageData, setGuageData] = useState("i");
+  const [lineData, setLineData] = useState("i");
+  const [choroplethData, setChoroplethData] = useState("i");
+  const [barData, setBarData] = useState("i");
+  const [aggSub, setAggSub] = useState("i");
 
   //Ran at the beginning of loading the dashboard right from an URL. Takes items in the hash and populates
   //the dashboard with them.
@@ -287,6 +101,13 @@ function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd
     <div className="body-page-dark">
       <SidebarDashboard></SidebarDashboard>
       {setDataParameters()}
+      <DataQuerries 
+        setGuage = {setGuageData}
+        setLine = {setLineData}
+        setChoropleth = {setChoroplethData}
+        setBar = {setBarData}
+        setAggSub = {setAggSub}
+      />
       <div className={open ? "dashboard" : "dashboardClosed"} onScroll={scrollHandler}>
         <Container fluid>
           <Row className="date-select-row">
@@ -310,13 +131,19 @@ function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd
             </Col>
           </Row>
           <DashboardGuageBar
+            data={guageData}
             Scenarios={scenarios}
           />
           <Row className="selection-divider">
             <DashboardFloater />
           </Row>
           <Row>
-            <DashboardGraphs />
+            <DashboardGraphs 
+              lineData={lineData}
+              choroplethData={choroplethData}
+              barData={barData}
+              aggSub={aggSub}
+            />
           </Row>
         </Container>
       </div>
@@ -342,11 +169,6 @@ function mapDispatchToProps(dispatch) {
     updateEnd: (end) => dispatch(setEndDate(end)),
     updateCurrentGuage: (guage) => dispatch(setdashboardSelection(guage)),
     updateScenerios: (index, name, scenerios) => dispatch(setScenerios(index, name, scenerios)),
-    updateParse: (data) => dispatch(setParsed(data)),
-    updateParseReg: (data) => dispatch(setParsedReg(data)),
-    updateParseSub: (data) => dispatch(setParsedSub(data)),
-    updateParseRegSub: (data) => dispatch(setParsedRegSub(data)),
-    setCountries: (color) => dispatch(setBarCountries(color)),
   };
 }
 

@@ -5,14 +5,14 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { MdSettings } from "react-icons/md";
 import { setBarCountries } from '../Store';
 import { connect } from 'react-redux';
-import { getDates, getScenerio, listRegions } from '../../assets/data/DataManager';
+import { getRegionsSorted, getScenerio, listRegions } from '../../assets/data/DataManager';
 import Form from 'react-bootstrap/Form';
 
-function BarChartControl({csv, scenerio, year, setCountries, countries}) {
+function BarChartControl({csv, scenario, year, setCountries, countries}) {
   const changeCountries = (checked, country) => {
     if(checked) {
       countries.push(country);
-      let newList = Array.from(countries)
+      let newList = getRegionsSorted(countries, getScenerio(csv, scenario));
       setCountries(newList);
     }
     else {
@@ -21,10 +21,10 @@ function BarChartControl({csv, scenerio, year, setCountries, countries}) {
     }
   }
 
-  let aggregates = getDates(getScenerio(csv, scenerio), year);
+  let aggregates = getScenerio(csv, scenario);
   const countryList = listRegions(aggregates);
   countryList.sort();
-  console.log("!", countries);
+  //console.log("!", countryList);
   let colors = []
   for (let i = 0; i < countryList.length; i++) {
     let country = countryList.at(i);
@@ -59,7 +59,7 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-//Gets open scenerios, open guages, and the current selected guage from storage.
+//Gets open scenarios, open guages, and the current selected guage from storage.
 function mapStateToProps(state) {
   return {
       countries: state.barCountries,

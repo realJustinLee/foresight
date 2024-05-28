@@ -177,7 +177,6 @@ function mapStateToProps(state) {
         OpenScenarios: state.scenerios,
         OpenParameters: state.guages,
         SelectedParameter: state.dashboardSelection,
-        data: state.parsedDataRegSub,
         startDate: state.startDate,
         endDate: state.endDate,
     };

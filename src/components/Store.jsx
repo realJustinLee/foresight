@@ -42,12 +42,7 @@ const initialState = {
     {
       title: "elecByTechTWh"
     }
-  ],
-  parsedData: "i",
-  parsedDataReg: "i",
-  parsedDataSub: "i",
-  parsedDataRegSub: "i",
-  parsedDataLine: "i"
+  ]
 };
 
 // Define a reducer function to update the state
@@ -69,14 +64,6 @@ function reducer(state = initialState, action) {
       return { ...state, scenerios: action.payload };
     case 'setGuages':
       return { ...state, guages: action.payload };
-    case 'setData':
-      return { ...state, parsedData: action.payload };
-    case 'setDataReg':
-      return { ...state, parsedDataReg: action.payload };
-    case 'setDataSub':
-      return { ...state, parsedDataSub: action.payload };
-    case 'setDataRegSub':
-      return { ...state, parsedDataRegSub: action.payload };
     case 'setDataLine':
       return { ...state, parsedDataLine: action.payload };
     case 'setDashYear':
@@ -129,29 +116,6 @@ export function setdashboardSelection(num) {
 // Action creator function to update the dataset
 export function setDataset(dataset) {
   return { type: 'setDataset', payload: dataset };
-}
-
-// Read in parsed data once at the start of loading.
-export function setParsed(dataset) {
-  return { type: 'setData', payload: dataset };
-}
-
-export function setParsedReg(dataset) {
-  return { type: 'setDataReg', payload: dataset };
-}
-
-export function setParsedSub(dataset) {
-  return { type: 'setDataSub', payload: dataset };
-}
-
-export function setParsedRegSub(dataset) {
-  return { type: 'setDataRegSub', payload: dataset };
-}
-
-//Set data for the line chart
-export function setParsedLine(dataset) {
-  //console.log("Line Data:", dataset);
-  return { type: 'setDataLine', payload: dataset };
 }
 
 // Change dashboard start date

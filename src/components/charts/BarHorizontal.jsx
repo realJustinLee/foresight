@@ -12,7 +12,7 @@ import { BarTooltip } from "./NivoTooltips.tsx";
 // you'll often use just a few of them.
 
 const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, selectedGuage, curYear, csv2, countries }) => {
-    console.log("!!!!", listKeys); 
+    //console.log("!!!!", csv, csv2, listKeys); 
     const [scenerioName, setScenerio] = useState(scenerio);
     const [barData, setData] = useState(getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
     useEffect(() => {

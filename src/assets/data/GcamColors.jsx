@@ -1,12 +1,13 @@
-import { getDates, getScenerio, filterSubcat } from './DataManager';
+import { getScenerio, filterSubcat } from './DataManager';
 import colorData from '../../components/GcamColors.json';
 
 export const pal_green = ["#FFFFE5","#F7FCB9","#D9F0A3","#ADDD8E","#78C679","#41AB5D","#238443","#006837","#004529","#003300"]
 
 export const getBarColors = (data, scenerio, year) => {
     let counter = 0;
-    let subcatList = filterSubcat(getDates(getScenerio(data, scenerio), year));
+    let subcatList = filterSubcat(getScenerio(data, scenerio));
     let colors = [];
+    //console.log("!!!!!", data, subcatList);
     subcatList.forEach((param) => colors.push(getColorJson(param, counter++)));
     return colors;
 }
