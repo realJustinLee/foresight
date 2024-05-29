@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setdashboardSelection } from "../Store";
-import { updateHash } from '../sharing/DashboardUrl';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { setDashDate, setDashReg, setDashSubs, setScenerios } from "../Store";
@@ -10,8 +9,9 @@ import ScenerioGuageNegative from "../guages/ScenerioGuageNegative"
 import Dropdown from 'react-bootstrap/Dropdown';
 import { getIcon } from "../Dashboard";
 import { getGuage } from '../../assets/data/DataManager';
+import { updateListHash } from '../sharing/DashboardUrl';
 
-function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParameters, SelectedParameter, startDate, endDate, data, updateSelection, updateScenerios, dashDate, dashReg, dashSubs }) {
+function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParameters, SelectedParameter, startDate, endDate, data, updateSelection, updateScenerios, dashDate, dashReg, dashSubs, reset }) {
     const [OpenedScenarios, setValueScenario] = useState(OpenScenarios);
     const [OpenedParameters, setValueParameter] = useState(OpenParameters);
 
@@ -32,6 +32,8 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
     // changed (Starting at 0 from top to bottom) as well as the string of
     // the new scenario.
     const handleScenerioChange = (index, scenario) => {
+        reset();
+        updateListHash("scenarios", index, scenario);
         OpenedScenarios.at(index).title = scenario;
         let newScenarios = [...OpenedScenarios];
         setValueScenario(newScenarios);
@@ -44,8 +46,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
     // scenario. This dataset should be aggregated by region and subcategory. 
     // If the value is found it is returned. Otherwise the function returns -1.
     const getDataValue = (scenario, fieldTitle) => {
-        const guageData = getGuage(data, scenario, fieldTitle, startDate, endDate);
-        return guageData
+        return getGuage(data, scenario, fieldTitle, startDate, endDate);
     };
 
 
@@ -112,24 +113,6 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
             ))
         )
     };
-
-
-    //Updates the hash value with the dashboard's current parameters. This is useful for auto-filling
-    //the URL when a user has opened up the dashboard for the first time or from another page.
-    useEffect(() => {
-        function getScenerioHash() {
-            var scenarioHash = OpenedScenarios.at(0).title;
-            for(var i = 1; i < OpenedScenarios.length; i++) {
-                scenarioHash = scenarioHash + "," + OpenedScenarios.at(i).title;
-            }
-            return scenarioHash
-        }
-
-        updateHash("start", startDate);
-        updateHash("end", endDate);
-        updateHash("selected", SelectedParameter);
-        updateHash("scenerios", getScenerioHash());
-    }, [startDate, endDate, SelectedParameter, OpenedScenarios]);
 
 
     // Returns the HTML for each column of the guage dashboard. As the user can add more scenarios, the columns

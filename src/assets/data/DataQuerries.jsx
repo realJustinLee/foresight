@@ -2,7 +2,7 @@ import { useEffect, useCallback } from 'react';
 import { API, graphqlOperation } from "aws-amplify";
 import { connect } from 'react-redux';
 import { setBarCountries } from '../../components/Store';
-import { getScenerio, filterRegion } from './DataManager';
+import { getScenerio, filterRegion, listRegions, filterSubcat} from './DataManager';
 
 
 export const lineQuery = `
@@ -223,8 +223,30 @@ query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: Str
 }
 `;
 
+export const aggRegQuery = `
+query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: String!) {
+  listGcamDataTableAggClass1Globals(
+    filter: {
+      x: {eq: $date}, 
+      param: {eq: $param},
+      scenario: {eq: $scenario1 }
+    },
+    limit: 100000, 
+    nextToken: $nextToken
+  ) {
+    items {
+      class
+      value
+      x
+      scenario
+      region
+    }
+    nextToken
+  }
+}
+`;
 
-function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries }) {
+function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories }) {
   const scenarios = scenerios.map(obj => obj.title);
 
 
@@ -235,7 +257,7 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
     try {
       if (subcat === "Aggregate of Subsectors" || subcat === "class1") {
         if (region === "Global") {
-          //console.log("AGGREGSUB");
+          ////console.log("AGGREGSUB");
           do {
             const response = await API.graphql(
               graphqlOperation(lineQueryAggRegSub, {
@@ -250,11 +272,11 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
             nextToken = response.data.listGcamDataTableAggParamGlobals.nextToken;
           } while (nextToken);
           allItems.sort((a, b) => a.x - b.x);
-          console.log("Line:", allItems);
+          //console.log("Line:", allItems);
           setLine(allItems);
         }
         else {
-          //console.log("AGGREG");
+          ////console.log("AGGREG");
           do {
             const response = await API.graphql(
               graphqlOperation(lineQueryAggSub, {
@@ -270,12 +292,12 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
             nextToken = response.data.listGcamDataTableAggParamRegions.nextToken;
           } while (nextToken);
           allItems.sort((a, b) => a.x - b.x);
-          console.log("Line:", allItems);
+          //console.log("Line:", allItems);
           setLine(allItems);
         }
       }
       else if (region === "Global") {
-        //console.log("AGGSUB");
+        ////console.log("AGGSUB");
         do {
           const response = await API.graphql(
             graphqlOperation(lineQueryAggReg, {
@@ -291,11 +313,11 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
           nextToken = response.data.listGcamDataTableAggClass1Globals.nextToken;
         } while (nextToken);
         allItems.sort((a, b) => a.x - b.x);
-        console.log("Line:", allItems);
+        //console.log("Line:", allItems);
         setLine(allItems);
       }
       else {
-        //console.log("NOAGG", subcat);
+        ////console.log("NOAGG", subcat);
         do {
           const response = await API.graphql(
             graphqlOperation(lineQuery, {
@@ -312,11 +334,11 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
           nextToken = response.data.listGcamDataTableAggClass1Regions.nextToken;
         } while (nextToken);
         allItems.sort((a, b) => a.x - b.x);
-        console.log("Line:", allItems);
+        //console.log("Line:", allItems);
         setLine(allItems);
       }
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   }, [region, subcat, scenarios, parameter, setLine]);
 
@@ -342,11 +364,12 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
           nextToken = response.data.listGcamDataTableAggParamRegions.nextToken;
         } while (nextToken);
         allItems.sort((a, b) => a.x - b.x);
-        console.log("Choropleth:", allItems);
+        //console.log("Choropleth:", allItems);
         setChoropleth(allItems);
+        setRegions(listRegions(allItems));
       }
       else {
-        //console.log("NOAGG", subcat);
+        ////console.log("NOAGG", subcat);
         do {
           const response = await API.graphql(
             graphqlOperation(choroplethQuery, {
@@ -363,11 +386,12 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
           nextToken = response.data.listGcamDataTableAggClass1Regions.nextToken;
         } while (nextToken);
         allItems.sort((a, b) => a.x - b.x);
-        console.log("Choropleth:", allItems);
+        //console.log("Choropleth:", allItems);
         setChoropleth(allItems);
+        setRegions(listRegions(allItems));
       }
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   }, [subcat, scenarios, parameter, year, setChoropleth]);
 
@@ -396,10 +420,10 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
       } while (nextToken);
 
       allItems.sort((a, b) => a.x - b.x);
-      console.log("Bar:", allItems);
+      //console.log("Bar:", allItems);
       setBar(allItems);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   }, [scenarios, parameter, year, setBar]);
 
@@ -428,10 +452,10 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
       } while (nextToken);
 
       allItems.sort((a, b) => a.x - b.x);
-      console.log("Guage:", allItems);
+      //console.log("Guage:", allItems);
       setGuage(allItems);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   }, [scenarios, start, end, setGuage]);
   
@@ -458,10 +482,10 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
       } while (nextToken);
 
       allItems.sort((a, b) => a.x - b.x);
-      console.log("Dates:", allItems);
+      //console.log("Dates:", allItems);
       setDates(allItems);
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   }, [scenarios, parameter, setDates]);
 
@@ -489,21 +513,53 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
       } while (nextToken);
 
       allItems.sort((a, b) => a.x - b.x);
-      console.log("AggSub:", allItems);
+      //console.log("AggSub:", allItems);
 
       setAggSub(allItems);
-      //console.log("!!", filterRegion(getScenerio(allItems, scenarios[0])));
+      ////console.log("!!", filterRegion(getScenerio(allItems, scenarios[0])));
       setCountries(filterRegion(getScenerio(allItems, scenarios[0])));
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   }, [scenarios, parameter, year, setAggSub, setCountries]);
 
 
+  //Query for AggReg
+  const fetchAggReg = useCallback(async () => {
+    let nextToken = null;
+    let allItems = [];
+
+    try {
+      do {
+        const response = await API.graphql(
+          graphqlOperation(aggRegQuery, {
+            param: parameter,
+            date: year,
+            scenario1: scenarios[0],
+            nextToken
+          })
+        );
+
+        const items = response.data.listGcamDataTableAggClass1Globals.items;
+        allItems.push(...items)
+
+        nextToken = response.data.listGcamDataTableAggClass1Globals.nextToken;
+      } while (nextToken);
+
+      allItems.sort((a, b) => a.x - b.x);
+      //console.log("AggReg:", filterSubcat(allItems));
+
+      setSubcategories(filterSubcat(allItems));
+    } catch (error) {
+      //console.error(error);
+    }
+  }, [scenarios, parameter, year, setSubcategories, setCountries]);
+
+
   //Line changes for different parameters, scenarios, regions and subcategories
   useEffect(() => {
-    console.log("Change Line");
-    console.log(scenarios, parameter, region, subcat);
+    //console.log("Change Line");
+    //console.log(scenarios, parameter, region, subcat);
     setLine("i");
     fetchLine();
   }, [scenarios, parameter, region, subcat, setLine, fetchLine]);
@@ -511,8 +567,8 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
 
   //Choropleth changes for different parameters, scenarios, year, and subcategories
   useEffect(() => {
-    console.log("Change Choropleth");
-    console.log(scenarios, parameter, year, subcat);
+    //console.log("Change Choropleth");
+    //console.log(scenarios, parameter, year, subcat);
     setChoropleth("i");
     fetchChoropleth();
   }, [scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth]);
@@ -520,8 +576,8 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
 
   //Bar Chart changes for different parameters, scenarios, and year
   useEffect(() => {
-    console.log("Change Bar");
-    console.log(scenarios, parameter, year);
+    //console.log("Change Bar");
+    //console.log(scenarios, parameter, year);
     setBar("i");
     fetchBar();
   }, [scenarios, parameter, year, setBar, fetchBar]);
@@ -529,27 +585,35 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
 
   //Guages change for different scenarios
   useEffect(() => {
-    console.log("Change Guage");
-    console.log(scenarios, start, end);
+    //console.log("Change Guage");
+    //console.log(scenarios, start, end);
     setGuage("i");
     fetchGuage();
   }, [scenarios, start, end, setGuage, fetchGuage]);
 
   //Dates change for different parameters and scenarios
   useEffect(() => {
-    console.log("Change Dates");
-    console.log(scenarios, start, end);
+    //console.log("Change Dates");
+    //console.log(scenarios, start, end);
     setDates("i");
     fetchDates();
   }, [scenarios, parameter, fetchDates]);
   
   //Aggregated Subsectors for each country
   useEffect(() => {
-    console.log("Change CSV2");
-    console.log(scenarios, parameter, year);
+    //console.log("Change CSV2");
+    //console.log(scenarios, parameter, year);
     setAggSub("i");
     fetchAggSub();
-  }, [scenarios, parameter, year, setAggSub, fetchGuage, fetchAggSub]);
+  }, [scenarios, parameter, year, setAggSub, fetchAggSub]);
+
+  //Aggregated Subsectors for each country
+  useEffect(() => {
+    //console.log("Change CSV1");
+    //console.log(scenarios, parameter, year);
+    setSubcategories("i");
+    fetchAggReg();
+  }, [scenarios, parameter, year, setSubcategories, fetchAggReg]);
 }
 
 function mapStateToProps(state) {

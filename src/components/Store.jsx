@@ -1,5 +1,5 @@
 import { createStore } from 'redux';
-import {updateHash, updateListHash} from './sharing/DashboardUrl';
+import {updateHash} from './sharing/DashboardUrl';
 // Define the initial state
 const initialState = {
   open: 2,
@@ -84,15 +84,16 @@ function reducer(state = initialState, action) {
 }
 // Update Dashboard Parameters
 export function setdashboardGraphParams(date, region, subsector) {
-  updateHash("dashdate", date);
-  updateHash("dashreg", region);
-  updateHash("dashsub", subsector);
+  //updateHash("dashdate", date);
+  //updateHash("dashreg", region);
+  //updateHash("dashsub", subsector);
   setDashReg(region);
   setDashSubs(subsector);
   return { type: 'setDashYear', payload: date };
 }
 
 export function setDashDate(date) {
+  updateHash("year", date);
   return { type: 'setDashYear', payload: date };
 }
 
@@ -108,9 +109,14 @@ export function setDashSubs(subsector) {
   return { type: 'setDashSubsectors', payload: subsector };
 }
 // Change currently selected guage
-export function setdashboardSelection(num) {
-  updateHash("selected", num);
-  return { type: 'dashboardSelection', payload: num };
+export function setdashboardSelection(param) {
+  updateHash("selectedParam", param);
+  return { type: 'dashboardSelection', payload: param };
+}
+
+export function setdashboardGuages(guages) {
+  //updateHash("selected", num);
+  return { type: 'setGuages', payload: guages };
 }
 
 // Action creator function to update the dataset
@@ -132,7 +138,10 @@ export function setEndDate(date) {
 
 // Change dashboard scenerios array
 export function setScenerios(index, newTitle, scenerios) {
-  updateListHash("scenerios", index, newTitle);
+  return { type: 'setScenerios', payload: scenerios };
+}
+
+export function setSceneriosNoUpdate(scenerios) {
   return { type: 'setScenerios', payload: scenerios };
 }
 

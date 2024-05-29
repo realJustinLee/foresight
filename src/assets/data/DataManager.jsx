@@ -20,24 +20,39 @@ export const getRegion = (data, region) => data.filter(item => item.region === r
 export const getScenerio = (data, scenario) => data.filter(item => item.scenario === scenario);
 
 //Same as above but for two scenerios. Useful for visualizations.
-export const getScenerios = (data, scenario1, scenario2) => data.filter(item => item.scenario === scenario1 || item.scenario === scenario2).sort((a,b) => a.x - b.x);
+export const getScenerios = (data, scenario1, scenario2) => data.filter(item => item.scenario === scenario1 || item.scenario === scenario2).sort((a, b) => a.x - b.x);
 
 //Gets the units of a parameter for dashboard display
 export const getUnits = (data, param) => {
     const item = data.find(item => item.param === param);
-    if(item) {
+    if (item) {
         return item.units;
     }
     return "";
 }
 
+
+// isValidDate takes in a year and determines if it is a valid date for the parameter in the dataset.
+// This is used in DashboardDate to grey out dates not available in the dataset and to determine if
+// the URL is valid.
+export const isValidParam = (data, param) => data.some(item => item.param === param);
+
+export const isValidParams = (data, params) => data.some(item => params.includes(item.param));
+
+export const isValidFromObject = (list, objectList) => list.every(scenario => objectList.some(scenarioObj => scenarioObj.title === scenario));
+
+
+export const getFirstParam = (data) => (data[0]?.param || "ERROR: NO PARAMETERS");
+
+// isValidDate takes in a year and determines if it is a valid date for the parameter in the dataset.
+// This is used in DashboardDate to grey out dates not available in the dataset and to determine if
+// the URL is valid.
+export const isValidDate = (data, date) => data.some(item => item.x === date);
+
+
 // filterDateRange filters a dataset between two provided dates. Three inputs
 // are given, the dataset to modify and the dates to filter by. This is used for guages.
 export const filterDateRange = (data, start, end) => data.filter(item => item.x >= start && item.x <= end);
-
-// isValidDate takes in a year and determines if it is a valid date for the parameter in the dataset.
-// This is uesed in DashboardDate to grey out dates not available in the dataset.
-export const isValidDate = (data, date) => data.some(item => item.x === date);
 
 //Returns the first date in the Dataset. Used for default dateranges in the dashboard.
 export const getFirstDate = (data) => new Date(data[0]?.x || 0);
@@ -63,7 +78,7 @@ export const getGuage = (data, scenario, param, start, end) => {
     const reducedData = data.filter(row => row.scenario === scenario && row.param === param);
     const startData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, start));
     const endData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, end));
-    const change = startData !== 0 ? (((endData - startData)/startData)*100) : -1;
+    const change = startData !== 0 ? (((endData - startData) / startData) * 100) : -1;
     //console.log("START: " + start, "END: " + end, "REV START: " + findClosestDate(reducedData, start), "REV END: " + findClosestDate(reducedData, end));
     //console.log("START DATA: " + startData, "END DATA: " + endData);
     //console.log("MATH DATA: " + change);
@@ -97,7 +112,7 @@ export const getChoroplethValue = (data, id) => {
 }
 
 export const reduceRegion = (data, region) => {
-    data.filter(item => item.region === region).sort((a,b) => a.x - b.x);
+    data.filter(item => item.region === region).sort((a, b) => a.x - b.x);
 }
 
 // filterSubcat creates a list of all subcategories for the
@@ -114,7 +129,7 @@ export const filterSubcat = (data) => {
 
 export const reduceSubcat = (data, subcat) => {
     const reducedData = data.filter(item => item.class === subcat);
-    reducedData.sort((a,b) => a.x - b.x);
+    reducedData.sort((a, b) => a.x - b.x);
     return reducedData;
 }
 
@@ -124,16 +139,16 @@ export const getRegions = (countries, data) => {
 
 export const getRegionsSorted = (countries, data) => {
     let newdata = data.filter(item => countries.includes(item.region));
-    newdata.sort((a,b) => a.value - b.value);
+    newdata.sort((a, b) => a.value - b.value);
     return [...new Set(newdata.map(item => item.region))];
 }
 // filterRegion creates a list of all regions for the
 // data given. This data does not be in the form of an already
 // param filtered array.
 export const filterRegion = (data) => {
-    data.sort((a,b) => b.value - a.value);
+    data.sort((a, b) => b.value - a.value);
     data = data.slice(0, 10);
-    data.sort((a,b) => a.value - b.value);
+    data.sort((a, b) => a.value - b.value);
     const reducedData = [...new Set(data.map(item => item.region))];
     return reducedData;
 }
@@ -144,18 +159,18 @@ export const listRegions = (data) => {
 
 export const getNoSubcatChoropleth = (data) => {
     let reducedData = [];
-    for(let i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
         reducedData.push({
             id: data.at(i).region,
             value: data.at(i).value
-        });   
+        });
     }
     return reducedData;
 }
 
-export const getBarTotal = (data, param, scenarios) => { 
+export const getBarTotal = (data, param, scenarios) => {
     let ans = [];
-    for(let i = 0; i < scenarios.length; i++) {
+    for (let i = 0; i < scenarios.length; i++) {
         ans.push({
             id: scenarios.at(i).title,
             data: getBarHorizontal(data, param)
@@ -170,30 +185,30 @@ export const getBarHorizontal = (countries, data, dataAgg, scenerio, param, year
     let aggregates = getScenerio(dataAgg, scenerio);
     let subcatList = filterSubcat(barData);
     subcatList.sort()
-    for(let i = 0; i < countries.length; i++) {
+    for (let i = 0; i < countries.length; i++) {
         let countryData = getRegion(barData, countries[i]);
         let obj = {
             "country": countries[i]
         };
-        for(let j = 0; j < subcatList.length; j++) {
-            if(getSubcat(countryData, subcatList.at(j)).length > 0)
+        for (let j = 0; j < subcatList.length; j++) {
+            if (getSubcat(countryData, subcatList.at(j)).length > 0)
                 obj[subcatList[j]] = parseFloat(getSubcat(countryData, subcatList.at(j)).at(0).value);
-            else 
+            else
                 obj[subcatList[j]] = 0;
         }
-        output.push(obj);  
+        output.push(obj);
     }
     return output
 }
 
-export const lineGraphReduce = (data, param, scenarios, region, subcat, start, end) => 
+export const lineGraphReduce = (data, param, scenarios, region, subcat, start, end) =>
     scenarios.map(scenario => ({
         id: scenario.title,
         data: getLineGraphReduce(getScenerio(data, scenario.title), param, subcat)
     }));
 
 export const getLineGraphReduce = (data, param, subcat) => {
-    if(param === "landAlloc" && subcat === "Aggregate of Subsectors") {
+    if (param === "landAlloc" && subcat === "Aggregate of Subsectors") {
         return data.map(item => ({
             x: parseFloat(item.x),
             y: parseInt(item.value)

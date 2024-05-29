@@ -9,7 +9,7 @@ import { MdError, MdElectricBolt, MdGroups, MdFilterHdr } from "react-icons/md";
 import { GiCorn, GiFactory, GiWaterDrop } from "react-icons/gi";
 import { TbCoins } from "react-icons/tb";
 import { FaThermometerHalf } from "react-icons/fa"
-import { setdashboardSelection, setStartDate, setEndDate, setScenerios} from "./Store";
+import { setdashboardSelection, setStartDate, setEndDate} from "./Store";
 import './css/Dashboard.css';
 import scenarios from "../assets/data/Scenarios.jsx";
 import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
@@ -56,54 +56,40 @@ export const getIcon = (selection) => {
   }
 }
 
-function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd, updateScenerios, openScenerios, openGuages }) {  
+function Dashboard({ open }) {  
   const [guageData, setGuageData] = useState("i");
   const [datesData, setDatesData] = useState("i");
   const [lineData, setLineData] = useState("i");
   const [choroplethData, setChoroplethData] = useState("i");
   const [barData, setBarData] = useState("i");
   const [aggSub, setAggSub] = useState("i");
+  const [regionList, setRegionList] = useState("i");
+  const [subcategoriesList, setSubcategoriesList] = useState("i");
 
-  //Ran at the beginning of loading the dashboard right from an URL. Takes items in the hash and populates
-  //the dashboard with them.
-  const setDataParameters = () => {
-    var searchParams = new URLSearchParams(window.location.hash.substring(1));
-    if (searchParams.has("start") && searchParams.has("end")) {
-      const newStart = Number(searchParams.get("start"));
-      const newEnd = Number(searchParams.get("end"));
-      if (newStart > 0 && newEnd > 0 && newStart < newEnd) {
-        updateStart(searchParams.get("start"));
-        updateEnd(searchParams.get("end"));
-      }
-    }
-    if (searchParams.has("selected")) {
-      for (var i = 0; i < openGuages.length; i++) {
-        if (openGuages.at(i).title === searchParams.get("selected")) {
-          updateCurrentGuage(searchParams.get("selected"));
-        }
-      }
-    }
-    if (searchParams.has("scenerios")) {
-      let arr = searchParams.get("scenerios").toString().split(",");
-      for (var j = 0; j < openScenerios.length; j++) {
-        var flag = 0;
-        for(var k = 0; k < scenarios.length; k++) {
-          if(arr[j].at(k).title === arr[j])
-            flag = 1;
-        }
-        if (flag === 1)
-          updateScenerios(j, arr[j], openScenerios);
-      }
-    }
+  const resetData = () => {
+    setGuageData("i");
+    setDatesData("i");
+    setLineData("i");
+    setChoroplethData("i");
+    setBarData("i");
+    setAggSub("i");
+    setRegionList("i");
+    setSubcategoriesList("i");
   }
+
 //<DashboardScenerioRows
 //Scenarios={scenarios}
 ///>
   return (
     <div className="body-page-dark">
       <SidebarDashboard></SidebarDashboard>
-      <DashboardUrl/>
-      {setDataParameters()}
+      <DashboardUrl
+        dataDate = {datesData}
+        guageData = {guageData}
+        regionList = {regionList}
+        subcategoriesList = {subcategoriesList}
+        Scenarios={scenarios}
+      />
       <DataQuerries 
         setGuage = {setGuageData}
         setDates = {setDatesData}
@@ -111,6 +97,8 @@ function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd
         setChoropleth = {setChoroplethData}
         setBar = {setBarData}
         setAggSub = {setAggSub}
+        setRegions = {setRegionList}
+        setSubcategories = {setSubcategoriesList}
       />
       <div className={open ? "dashboard" : "dashboardClosed"} onScroll={scrollHandler}>
         <Container fluid>
@@ -139,6 +127,7 @@ function Dashboard({ open, selection, updateCurrentGuage, updateStart, updateEnd
           <DashboardGuageBar
             data={guageData}
             Scenarios={scenarios}
+            reset={resetData}
           />
           <Row className="selection-divider">
             <DashboardFloater />
@@ -174,7 +163,6 @@ function mapDispatchToProps(dispatch) {
     updateStart: (start) => dispatch(setStartDate(start)),
     updateEnd: (end) => dispatch(setEndDate(end)),
     updateCurrentGuage: (guage) => dispatch(setdashboardSelection(guage)),
-    updateScenerios: (index, name, scenerios) => dispatch(setScenerios(index, name, scenerios)),
   };
 }
 
