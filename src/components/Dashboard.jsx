@@ -138,6 +138,7 @@ function Dashboard({ open }) {
               choroplethData={choroplethData}
               barData={barData}
               aggSub={aggSub}
+              guageData={guageData}
             />
           </Row>
         </Container>

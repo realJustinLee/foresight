@@ -51,8 +51,10 @@ function ChoroplethControl({color, scale, updateColor, updateScale}) {
       </Dropdown.Toggle>
 
       <Dropdown.Menu>
+        <Dropdown.Header>Colors</Dropdown.Header>
         {colors}
         <Dropdown.Divider />
+        <Dropdown.Header>Scales</Dropdown.Header>
         {scales}
       </Dropdown.Menu>
     </Dropdown>

@@ -65,6 +65,12 @@ export const getDataDate = (data, scenario, param, date) => {
     return item ? item.value : 0;
 }
 
+//Given an object array, return the units given the matchoign title. For store guages.
+export const findUnitsByTitle = (objectsArray, titleToFind) => {
+    const foundObject = objectsArray.find(obj => obj.title === titleToFind);
+    return foundObject ? foundObject.units : "ERROR";
+}
+
 //Finds the closest date to the selected date in the dataset if there is no index with the specified date.
 export const findClosestDate = (data, targetDate) => {
     const closest = data.reduce((prev, curr) => {

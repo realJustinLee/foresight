@@ -173,6 +173,7 @@ query MyQuery($nextToken: String, $start: Int!, $end: Int!, $scenario1: String!,
     nextToken: $nextToken
   ) {
     items {
+      units
       value
       x
       scenario
@@ -528,7 +529,6 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
   const fetchAggReg = useCallback(async () => {
     let nextToken = null;
     let allItems = [];
-
     try {
       do {
         const response = await API.graphql(

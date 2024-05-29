@@ -55,8 +55,8 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
     // values, the guage if which is [GUAGE_TITLE][ROW_NUMBER] with no spaces, the text
     // to display below the guage which is given by the guage title, and the value of the
     // guage, given by the number, num.
-    const guageNumber = (number, guageTitle, index) => {
-        let displayTitle = guageTitle;
+    const guageNumber = (number, guageTitle, guageUnit, index) => {
+        let displayTitle = guageUnit;
         if (displayTitle.length > 10)
             displayTitle = displayTitle.substring(0, 10) + "...";
         return (number < 0) ? (
@@ -121,7 +121,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
         return (
             OpenedParameters.map((param, index) => (
                 <div className={getGuageCSS(param.title)} key={index} onClick={() => resetAndUpdate(param.title)}>
-                    {row(param.title)}
+                    {row(param.title, param.units)}
                 </div>
             ))
         )
@@ -130,11 +130,11 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
 
     // Returns the HTML for each row of the guage dashboard. With the new guage format,
     // each column now has its seperate grid for rows.
-    const row = (param) => {
+    const row = (param, units) => {
         return (
             OpenedScenarios.map((scenario, index) => (
                 <div key={index}>
-                    {guageNumber(getDataValue(scenario.title, param), param, index)}
+                    {guageNumber(getDataValue(scenario.title, param), param, units, index)}
                 </div>
             ))
         )

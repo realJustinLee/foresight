@@ -9,7 +9,7 @@ import BarCountryControl from './dropdowns/BarCountryControl';
 import { setBarCountries, setParsedLine } from './Store';
 import { getBarColors } from '../assets/data/GcamColors';
 
-function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, selectedGuage, curYear, region, subcat, lineData, choroplethData, barData, aggSub }) {
+function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub }) {
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
@@ -45,8 +45,8 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, selected
 
   // Load Units for Display
   let units = "ERROR: Units not loaded";
-  if (lineData !== "i") {
-    units = getUnits(lineData, selectedGuage);
+  if (guageData !== "i") {
+    units = getUnits(guageData, selectedGuage);
   }
 
 

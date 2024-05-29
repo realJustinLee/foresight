@@ -47,6 +47,7 @@ function BarChartControl({csv, scenario, year, setCountries, countries}) {
       </Dropdown.Toggle>
       
       <Dropdown.Menu>
+        <Dropdown.Header>Region Selection</Dropdown.Header>
         {colors.map((c) => (c))}
       </Dropdown.Menu>
     </Dropdown>

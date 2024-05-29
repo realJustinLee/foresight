@@ -160,7 +160,7 @@ const Line = ({ data, date, setdashboardDate, unit }) => (
                     legendOffset: -70,
                     legendPosition: 'middle'
                 }}
-                colors={{ scheme: 'set1' }}
+                colors={["#E69F00", "#56B4E9"]}
                 pointSize={10}
                 pointColor={{ theme: 'background' }}
                 pointBorderWidth={2}
