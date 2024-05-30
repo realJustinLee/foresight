@@ -70,8 +70,8 @@
 .date-select-row {
   height: 30px;
   background: rgb(0, 0, 0, 1);
-  margin: auto !important;
   margin-bottom: 50px;
+  margin-left: 5%;
   border: 1px solid rgb(21, 21, 21);
   border-radius: 5px;
   color: rgb(187, 155, 49) !important;
@@ -84,7 +84,6 @@
 @media screen and (min-width: 940px) {
   .date-select-row {
     width: 420px;
-    margin-left: 45% !important;
   }
 }
 
@@ -96,6 +95,11 @@
     padding: 0%;
     text-indent: 15px !important;
     align-items: flex-end;
+  }
+}
+@media screen and (max-width: 700px) {
+  .date-select-row {
+    margin: auto !important;
   }
 }
 

@@ -2,7 +2,7 @@ import { useEffect, useCallback } from 'react';
 import { API, graphqlOperation } from "aws-amplify";
 import { connect } from 'react-redux';
 import { setBarCountries } from '../../components/Store';
-import { getScenerio, filterRegion, listRegions, filterSubcat} from './DataManager';
+import { getScenerio, filterRegion, listRegions, filterSubcat } from './DataManager';
 
 
 export const lineQuery = `
@@ -146,7 +146,7 @@ query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: Str
       param: {eq: $param},
       scenario: { in: [$scenario1, $scenario2] }
     },
-    limit: 100000, 
+    limit: 50000, 
     nextToken: $nextToken
   ) {
     items {
@@ -250,369 +250,125 @@ query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: Str
 function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories }) {
   const scenarios = scenerios.map(obj => obj.title);
 
+  const fetchData = async (query, variables) => {
+    let nextToken = null;
+    let allItems = [];
+    do {
+      const response = await API.graphql(graphqlOperation(query, { ...variables, nextToken }));
+      const items = response.data[Object.keys(response.data)[0]].items;
+      allItems.push(...items);
+      nextToken = response.data[Object.keys(response.data)[0]].nextToken;
+    } while (nextToken);
+    return allItems;
+  };
 
-  //Query for Line
+  const fetchParallel = useCallback(async (queries) => {
+    const results = await Promise.all(queries.map(([query, variables]) => fetchData(query, variables)));
+    return results.flat().sort((a, b) => a.x - b.x);
+  }, []);
+
   const fetchLine = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
-    try {
-      if (subcat === "Aggregate of Subsectors" || subcat === "class1") {
-        if (region === "Global") {
-          ////console.log("AGGREGSUB");
-          do {
-            const response = await API.graphql(
-              graphqlOperation(lineQueryAggRegSub, {
-                param: parameter,
-                scenario1: scenarios[0],
-                scenario2: scenarios[1],
-                nextToken
-              })
-            );
-            const items = response.data.listGcamDataTableAggParamGlobals.items;
-            allItems.push(...items)
-            nextToken = response.data.listGcamDataTableAggParamGlobals.nextToken;
-          } while (nextToken);
-          allItems.sort((a, b) => a.x - b.x);
-          //console.log("Line:", allItems);
-          setLine(allItems);
-        }
-        else {
-          ////console.log("AGGREG");
-          do {
-            const response = await API.graphql(
-              graphqlOperation(lineQueryAggSub, {
-                param: parameter,
-                scenario1: scenarios[0],
-                scenario2: scenarios[1],
-                reg: region,
-                nextToken
-              })
-            );
-            const items = response.data.listGcamDataTableAggParamRegions.items;
-            allItems.push(...items)
-            nextToken = response.data.listGcamDataTableAggParamRegions.nextToken;
-          } while (nextToken);
-          allItems.sort((a, b) => a.x - b.x);
-          //console.log("Line:", allItems);
-          setLine(allItems);
-        }
+    const queries = [];
+    if (subcat === "Aggregate of Subsectors" || subcat === "class1") {
+      if (region === "Global") {
+        queries.push([lineQueryAggRegSub, { param: parameter, scenario1: scenarios[0], scenario2: scenarios[1] }]);
+      } else {
+        queries.push([lineQueryAggSub, { param: parameter, scenario1: scenarios[0], scenario2: scenarios[1], reg: region }]);
       }
-      else if (region === "Global") {
-        ////console.log("AGGSUB");
-        do {
-          const response = await API.graphql(
-            graphqlOperation(lineQueryAggReg, {
-              param: parameter,
-              scenario1: scenarios[0],
-              scenario2: scenarios[1],
-              sub: subcat,
-              nextToken
-            })
-          );
-          const items = response.data.listGcamDataTableAggClass1Globals.items;
-          allItems.push(...items)
-          nextToken = response.data.listGcamDataTableAggClass1Globals.nextToken;
-        } while (nextToken);
-        allItems.sort((a, b) => a.x - b.x);
-        //console.log("Line:", allItems);
-        setLine(allItems);
-      }
-      else {
-        ////console.log("NOAGG", subcat);
-        do {
-          const response = await API.graphql(
-            graphqlOperation(lineQuery, {
-              param: parameter,
-              scenario1: scenarios[0],
-              scenario2: scenarios[1],
-              reg: region,
-              sub: subcat,
-              nextToken
-            })
-          );
-          const items = response.data.listGcamDataTableAggClass1Regions.items;
-          allItems = allItems.concat(items);
-          nextToken = response.data.listGcamDataTableAggClass1Regions.nextToken;
-        } while (nextToken);
-        allItems.sort((a, b) => a.x - b.x);
-        //console.log("Line:", allItems);
-        setLine(allItems);
-      }
-    } catch (error) {
-      //console.error(error);
+    } else if (region === "Global") {
+      queries.push([lineQueryAggReg, { param: parameter, scenario1: scenarios[0], scenario2: scenarios[1], sub: subcat }]);
+    } else {
+      queries.push([lineQuery, { param: parameter, scenario1: scenarios[0], scenario2: scenarios[1], reg: region, sub: subcat }]);
     }
-  }, [region, subcat, scenarios, parameter, setLine]);
+    const result = await fetchParallel(queries);
+    setLine(result);
+  }, [region, subcat, scenarios, parameter, setLine, fetchParallel]);
 
-
-  //Query for Choropleth
   const fetchChoropleth = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
-    try {
-      if (subcat === "Aggregate of Subsectors") {
-        do {
-          const response = await API.graphql(
-            graphqlOperation(choroplethQueryAggSub, {
-              param: parameter,
-              date: year,
-              scenario1: scenarios[0],
-              scenario2: scenarios[1],
-              nextToken
-            })
-          );
-          const items = response.data.listGcamDataTableAggParamRegions.items;
-          allItems.push(...items)
-          nextToken = response.data.listGcamDataTableAggParamRegions.nextToken;
-        } while (nextToken);
-        allItems.sort((a, b) => a.x - b.x);
-        //console.log("Choropleth:", allItems);
-        setChoropleth(allItems);
-        setRegions(listRegions(allItems));
-      }
-      else {
-        ////console.log("NOAGG", subcat);
-        do {
-          const response = await API.graphql(
-            graphqlOperation(choroplethQuery, {
-              param: parameter,
-              date: year,
-              scenario1: scenarios[0],
-              scenario2: scenarios[1],
-              sub: subcat,
-              nextToken
-            })
-          );
-          const items = response.data.listGcamDataTableAggClass1Regions.items;
-          allItems = allItems.concat(items);
-          nextToken = response.data.listGcamDataTableAggClass1Regions.nextToken;
-        } while (nextToken);
-        allItems.sort((a, b) => a.x - b.x);
-        //console.log("Choropleth:", allItems);
-        setChoropleth(allItems);
-        setRegions(listRegions(allItems));
-      }
-    } catch (error) {
-      //console.error(error);
+    const queries = [];
+    if (subcat === "Aggregate of Subsectors") {
+      queries.push([choroplethQueryAggSub, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1] }]);
+    } else {
+      queries.push([choroplethQuery, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1], sub: subcat }]);
     }
-  }, [subcat, scenarios, parameter, year, setChoropleth]);
+    const result = await fetchParallel(queries);
+    setChoropleth(result);
+    setRegions(listRegions(result));
+  }, [subcat, scenarios, parameter, year, setChoropleth, fetchParallel]);
 
-
-  //Query for Bar
   const fetchBar = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
+    const result = await fetchParallel([[barQuery, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
+    setBar(result);
+  }, [scenarios, parameter, year, setBar, fetchParallel]);
 
-    try {
-      do {
-        const response = await API.graphql(
-          graphqlOperation(barQuery, {
-            param: parameter,
-            date: year,
-            scenario1: scenarios[0],
-            scenario2: scenarios[1],
-            nextToken
-          })
-        );
-
-        const items = response.data.listGcamDataTableAggClass1Regions.items;
-        allItems.push(...items)
-
-        nextToken = response.data.listGcamDataTableAggClass1Regions.nextToken;
-      } while (nextToken);
-
-      allItems.sort((a, b) => a.x - b.x);
-      //console.log("Bar:", allItems);
-      setBar(allItems);
-    } catch (error) {
-      //console.error(error);
-    }
-  }, [scenarios, parameter, year, setBar]);
-
-
-  //Query for guages
   const fetchGuage = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
+    const result = await fetchParallel([[queryGuage, { start, end, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
+    setGuage(result);
+  }, [scenarios, start, end, setGuage, fetchParallel]);
 
-    try {
-      do {
-        const response = await API.graphql(
-          graphqlOperation(queryGuage, {
-            start: start,
-            end: end,
-            scenario1: scenarios[0],
-            scenario2: scenarios[1],
-            nextToken
-          })
-        );
-
-        const items = response.data.listGcamDataTableAggParamGlobals.items;
-        allItems.push(...items)
-
-        nextToken = response.data.listGcamDataTableAggParamGlobals.nextToken;
-      } while (nextToken);
-
-      allItems.sort((a, b) => a.x - b.x);
-      //console.log("Guage:", allItems);
-      setGuage(allItems);
-    } catch (error) {
-      //console.error(error);
-    }
-  }, [scenarios, start, end, setGuage]);
-  
-  //Query for dates
   const fetchDates = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
+    const result = await fetchParallel([[queryDates, { param: parameter, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
+    setDates(result);
+  }, [scenarios, parameter, setDates, fetchParallel]);
 
-    try {
-      do {
-        const response = await API.graphql(
-          graphqlOperation(queryDates, {
-            param: parameter,
-            scenario1: scenarios[0],
-            scenario2: scenarios[1],
-            nextToken
-          })
-        );
-
-        const items = response.data.listGcamDataTableAggParamGlobals.items;
-        allItems.push(...items)
-
-        nextToken = response.data.listGcamDataTableAggParamGlobals.nextToken;
-      } while (nextToken);
-
-      allItems.sort((a, b) => a.x - b.x);
-      //console.log("Dates:", allItems);
-      setDates(allItems);
-    } catch (error) {
-      //console.error(error);
-    }
-  }, [scenarios, parameter, setDates]);
-
-  //Query for AggSub
   const fetchAggSub = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
+    const result = await fetchParallel([[aggSubQuery, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
+    setAggSub(result);
+    setCountries(filterRegion(getScenerio(result, scenarios[0])));
+  }, [scenarios, parameter, year, setAggSub, setCountries, fetchParallel]);
 
-    try {
-      do {
-        const response = await API.graphql(
-          graphqlOperation(aggSubQuery, {
-            param: parameter,
-            date: year,
-            scenario1: scenarios[0],
-            scenario2: scenarios[1],
-            nextToken
-          })
-        );
-
-        const items = response.data.listGcamDataTableAggParamRegions.items;
-        allItems.push(...items)
-
-        nextToken = response.data.listGcamDataTableAggParamRegions.nextToken;
-      } while (nextToken);
-
-      allItems.sort((a, b) => a.x - b.x);
-      //console.log("AggSub:", allItems);
-
-      setAggSub(allItems);
-      ////console.log("!!", filterRegion(getScenerio(allItems, scenarios[0])));
-      setCountries(filterRegion(getScenerio(allItems, scenarios[0])));
-    } catch (error) {
-      //console.error(error);
-    }
-  }, [scenarios, parameter, year, setAggSub, setCountries]);
-
-
-  //Query for AggReg
   const fetchAggReg = useCallback(async () => {
-    let nextToken = null;
-    let allItems = [];
-    try {
-      do {
-        const response = await API.graphql(
-          graphqlOperation(aggRegQuery, {
-            param: parameter,
-            date: year,
-            scenario1: scenarios[0],
-            nextToken
-          })
-        );
+    const result = await fetchParallel([[aggRegQuery, { param: parameter, date: year, scenario1: scenarios[0] }]]);
+    setSubcategories(filterSubcat(result));
+  }, [scenarios, parameter, year, setSubcategories, fetchParallel]);
 
-        const items = response.data.listGcamDataTableAggClass1Globals.items;
-        allItems.push(...items)
-
-        nextToken = response.data.listGcamDataTableAggClass1Globals.nextToken;
-      } while (nextToken);
-
-      allItems.sort((a, b) => a.x - b.x);
-      //console.log("AggReg:", filterSubcat(allItems));
-
-      setSubcategories(filterSubcat(allItems));
-    } catch (error) {
-      //console.error(error);
-    }
-  }, [scenarios, parameter, year, setSubcategories, setCountries]);
-
-
-  //Line changes for different parameters, scenarios, regions and subcategories
   useEffect(() => {
-    //console.log("Change Line");
-    //console.log(scenarios, parameter, region, subcat);
+    const abortController = new AbortController();
     setLine("i");
-    fetchLine();
+    fetchLine(abortController.signal);
+    return () => abortController.abort();
   }, [scenarios, parameter, region, subcat, setLine, fetchLine]);
 
-
-  //Choropleth changes for different parameters, scenarios, year, and subcategories
   useEffect(() => {
-    //console.log("Change Choropleth");
-    //console.log(scenarios, parameter, year, subcat);
+    const abortController = new AbortController();
     setChoropleth("i");
-    fetchChoropleth();
+    fetchChoropleth(abortController.signal);
+    return () => abortController.abort();
   }, [scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth]);
 
-
-  //Bar Chart changes for different parameters, scenarios, and year
   useEffect(() => {
-    //console.log("Change Bar");
-    //console.log(scenarios, parameter, year);
+    const abortController = new AbortController();
     setBar("i");
-    fetchBar();
+    fetchBar(abortController.signal);
+    return () => abortController.abort();
   }, [scenarios, parameter, year, setBar, fetchBar]);
 
-
-  //Guages change for different scenarios
   useEffect(() => {
-    //console.log("Change Guage");
-    //console.log(scenarios, start, end);
+    const abortController = new AbortController();
     setGuage("i");
-    fetchGuage();
+    fetchGuage(abortController.signal);
+    return () => abortController.abort();
   }, [scenarios, start, end, setGuage, fetchGuage]);
 
-  //Dates change for different parameters and scenarios
   useEffect(() => {
-    //console.log("Change Dates");
-    //console.log(scenarios, start, end);
+    const abortController = new AbortController();
     setDates("i");
-    fetchDates();
-  }, [scenarios, parameter, fetchDates]);
-  
-  //Aggregated Subsectors for each country
+    fetchDates(abortController.signal);
+    return () => abortController.abort();
+  }, [scenarios, parameter, setDates, fetchDates]);
+
   useEffect(() => {
-    //console.log("Change CSV2");
-    //console.log(scenarios, parameter, year);
+    const abortController = new AbortController();
     setAggSub("i");
-    fetchAggSub();
+    fetchAggSub(abortController.signal);
+    return () => abortController.abort();
   }, [scenarios, parameter, year, setAggSub, fetchAggSub]);
 
-  //Aggregated Subsectors for each country
   useEffect(() => {
-    //console.log("Change CSV1");
-    //console.log(scenarios, parameter, year);
+    const abortController = new AbortController();
     setSubcategories("i");
-    fetchAggReg();
+    fetchAggReg(abortController.signal);
+    return () => abortController.abort();
   }, [scenarios, parameter, year, setSubcategories, fetchAggReg]);
 }
 
