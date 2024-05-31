@@ -16,20 +16,6 @@ import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
 import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
 import DashboardUrl from "./sharing/DashboardUrl.jsx";
 
-
-//UNUSED, Only For testing: Keeps track of the distance of the selection-divider and the top of the screen.
-//Allows divider to scroll with page.
-const scrollHandler = () => {
-  let divider = document.querySelector('.selection-divider');
-  let y = window.scrollY + divider.getBoundingClientRect().bottom;
-  if (y < 100) {
-    divider.style.top = '100'
-  }
-  else {
-    divider.style.top = 'auto'
-  }
-};
-
 //Gets the icon of each category by name. Shows up next to the guages and the selection.
 export const getIcon = (selection) => {
   switch (selection) {
@@ -100,7 +86,7 @@ function Dashboard({ open }) {
         setRegions = {setRegionList}
         setSubcategories = {setSubcategoriesList}
       />
-      <div className={open ? "dashboard" : "dashboardClosed"} onScroll={scrollHandler}>
+      <div className={open ? "dashboard" : "dashboardClosed"}>
         <Container fluid>
           <Row className="date-select-row">
             <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto">

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ResponsiveBar } from '@nivo/bar'
 import { connect } from 'react-redux';
-import { setDashSubs } from "../Store";
 import { getBarHorizontal } from "../../assets/data/DataManager";
 import { BarTooltip } from "./NivoTooltips.tsx";
 
@@ -11,18 +10,18 @@ import { BarTooltip } from "./NivoTooltips.tsx";
 // website examples showcase many properties,
 // you'll often use just a few of them.
 
-const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, selectedGuage, curYear, csv2, countries }) => {
+const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, csv2, countries }) => {
     //console.log("!!!!", csv, csv2, listKeys); 
     const [scenerioName, setScenerio] = useState(scenerio);
-    const [barData, setData] = useState(getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
+    const [barData, setData] = useState(getBarHorizontal(countries, csv, csv2, scenerio));
     useEffect(() => {
         setScenerio(scenerio);
         //console.log("Scenario:", scenerio);
     }, [scenerio])
     useEffect(() => {
-        setData(getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
+        setData(getBarHorizontal(countries, csv, csv2, scenerio));
         //console.log("BAR DATA:", getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
-    }, [countries, csv, csv2, curYear, scenerio, selectedGuage])
+    }, [countries, csv, csv2, scenerio])
     return (
         <div className="bar-wrapper">
             <div className="double-bar-text-wrapper">  {scenerioName} </div>
@@ -198,15 +197,7 @@ const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, selec
 function mapStateToProps(state) {
     return {
         countries: state.barCountries,
-        selectedGuage: state.dashboardSelection,
-        curYear: state.dashboardYear,
     };
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        setdashboardSub: (subs) => dispatch(setDashSubs(subs)),
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(MyResponsiveBar);
+export default connect(mapStateToProps)(MyResponsiveBar);

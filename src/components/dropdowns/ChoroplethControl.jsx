@@ -1,26 +1,24 @@
 import Dropdown from 'react-bootstrap/Dropdown';
 
 import { MdSettings } from "react-icons/md";
-import { setChoroplethColor, setChoroplethScale } from '../Store';
-import { connect } from 'react-redux';
 
-function ChoroplethControl({color, scale, updateColor, updateScale}) {
+function ChoroplethControl({palette, interpolation, changePalette, changeInterpolation}) {
   //console.log(color, scale);
-  const colorList = ["Spectral", "Rd-Yl-Gr", "Contrast", "Green"];
-  const scaleList = ["Linear", "Log", "Pretty Log"];
+  const colorList = ["pal_16", "pal_spectral", "pal_basic", "pal_hot", "pal_wet", "pal_green"];
+  const scaleList = ["VALUE - LINEAR", "VALUE - LOG", "VALUE - CUBIC", "DATA - EQUAL", "DATA - SIGMOID"];
   let colors = [];
   let scales = [];
   for (let i = 0; i < colorList.length; i++) {
-    if(i === color) {
+    if(colorList[i] === palette) {
       colors.push(
-        <Dropdown.Item as="button" active onClick={() => updateColor(i)}>
+        <Dropdown.Item as="button" key={colorList[i]} active onClick={() => changePalette(colorList[i])}>
           {colorList[i]}
         </Dropdown.Item>
       )
     }
     else {
       colors.push(
-        <Dropdown.Item as="button" onClick={() => updateColor(i)}>
+        <Dropdown.Item as="button" key={colorList[i]} onClick={() => changePalette(colorList[i])}>
           {colorList[i]}
         </Dropdown.Item>
       )
@@ -28,16 +26,16 @@ function ChoroplethControl({color, scale, updateColor, updateScale}) {
   }
 
   for (let i = 0; i < scaleList.length; i++) {
-    if(i === scale) {
+    if(scaleList[i] === interpolation) {
       scales.push(
-        <Dropdown.Item as="button" active onClick={() => updateScale(i)}>
+        <Dropdown.Item as="button" key={scaleList[i]} active onClick={() => changeInterpolation(scaleList[i])}>
           {scaleList[i]}
         </Dropdown.Item>
       )
     }
     else {
       scales.push(
-        <Dropdown.Item as="button" onClick={() => updateScale(i)}>
+        <Dropdown.Item as="button" key={scaleList[i]} onClick={() => changeInterpolation(scaleList[i])}>
           {scaleList[i]}
         </Dropdown.Item>
       )
@@ -61,19 +59,5 @@ function ChoroplethControl({color, scale, updateColor, updateScale}) {
   );
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-      updateColor: (color) => dispatch(setChoroplethColor(color)),
-      updateScale: (scale) => dispatch(setChoroplethScale(scale)),
-  };
-}
 
-//Gets open scenerios, open guages, and the current selected guage from storage.
-function mapStateToProps(state) {
-  return {
-      color: state.choroplethColor,
-      scale: state.choroplethScale,
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ChoroplethControl);
+export default ChoroplethControl;

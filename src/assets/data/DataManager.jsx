@@ -164,6 +164,7 @@ export const listRegions = (data) => {
 }
 
 export const getNoSubcatChoropleth = (data) => {
+    console.log("!!! LOAD CHOROPLETH");
     let reducedData = [];
     for (let i = 0; i < data.length; i++) {
         reducedData.push({
@@ -185,7 +186,7 @@ export const getBarTotal = (data, param, scenarios) => {
     return ans;
 }
 
-export const getBarHorizontal = (countries, data, dataAgg, scenerio, param, year) => {
+export const getBarHorizontal = (countries, data, dataAgg, scenerio) => {
     let output = [];
     let barData = getScenerio(data, scenerio);
     let aggregates = getScenerio(dataAgg, scenerio);
@@ -207,7 +208,7 @@ export const getBarHorizontal = (countries, data, dataAgg, scenerio, param, year
     return output
 }
 
-export const lineGraphReduce = (data, param, scenarios, region, subcat, start, end) =>
+export const lineGraphReduce = (data, param, scenarios, subcat) =>
     scenarios.map(scenario => ({
         id: scenario.title,
         data: getLineGraphReduce(getScenerio(data, scenario.title), param, subcat)
@@ -226,4 +227,4 @@ export const getLineGraphReduce = (data, param, subcat) => {
     }));
 }
 
-export const choroplethReduce = (data, scenario, param, year) => getNoSubcatChoropleth(getScenerio(data, scenario));
+export const choroplethReduce = (data, scenario) => getNoSubcatChoropleth(getScenerio(data, scenario));

@@ -1,16 +1,36 @@
 import React, { useEffect, useState } from 'react';
 
 import BarHorizontal from "./charts/BarHorizontal";
-import ChoroplethImageSlider from './charts/ChoroplethImageSlider';
 import { connect } from 'react-redux';
 import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits } from '../assets/data/DataManager';
 import Line from './charts/Line';
 import BarCountryControl from './dropdowns/BarCountryControl';
-import { setBarCountries, setParsedLine } from './Store';
 import { getBarColors } from '../assets/data/GcamColors';
+import { setDashDate, setDashReg, setDashSubs } from './Store';
+import LeafletSync from "./maps/LeafletSync";
 
-function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub }) {
+function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs }) {
   const [width, setWidth] = useState(window.innerWidth);
+
+  const [dashYear, setYear] = useState(curYear);
+  const [dashRegion, setRegion] = useState(region);
+  const [dashSubcategory, setSubcategory] = useState(subcat);
+
+  useEffect(() => {
+    setDashboardDate(dashYear)
+  }, [dashYear]);
+
+  useEffect(() => {
+    setDashboardReg(dashRegion)
+  }, [dashRegion]);
+
+  useEffect(() => {
+    setDashboardSubs(dashSubcategory)
+  }, [dashSubcategory]);
+
+  useEffect(() => {
+    console.log("SCENERIO CHANGE");
+  }, [openedScenerios]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -29,18 +49,10 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, selected
   // Display label text. Setting default display text for aggregates.
   let subcatDisplay = "";
   let regionDisplay = "";
-  if (subcat !== "Aggregate of Subsectors")
-    subcatDisplay = " " + subcat;
-  if (region !== "class1")
-    regionDisplay = region;
-
-
-  const [startDate, setStartDate] = useState(start);
-  const [endDate, setEndDate] = useState(end);
-  useEffect(() => {
-    setStartDate(start);
-    setEndDate(end);
-  }, [scenerioSpread, start, end]);
+  if (dashSubcategory !== "Aggregate of Subsectors")
+    subcatDisplay = " " + dashSubcategory;
+  if (dashRegion !== "class1")
+    regionDisplay = dashRegion;
 
 
   // Load Units for Display
@@ -53,17 +65,17 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, selected
   // Labels
   const lineChartLabel = (<div className="text-centered">{regionDisplay} {subcatDisplay} Trends</div>)
   const choroplethLabel = (<div className="text-centered">
-    <div>Spatial Composition {"(" + curYear + subcatDisplay + ")"}</div>
+    <div>Spatial Composition {"(" + dashYear + subcatDisplay + ")"}</div>
     <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
   </div>)
-  const barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + curYear + ")"} -- By Subsector</div>)
+  const barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + dashYear + ")"} -- By Subsector</div>)
 
 
   // Line Chart Visualization
   const lineChart = (lineData === 'i') ? (
     "Loading Dataset..."
   ) : (
-    <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, region, subcat, start, end)} unit={units} />
+    <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date = {dashYear} setDate = {setYear} />
   )
 
 
@@ -71,12 +83,11 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, selected
   const choropleth = (choroplethData === 'i') ? (
     "Loading Dataset..."
   ) : (
-    <ChoroplethImageSlider
-      id={"Dashboard_Big"}
-      scenario_1={Scenerios.at(0).title}
-      scenario_2={Scenerios.at(1).title}
-      dataset={choroplethReduce(choroplethData, Scenerios.at(0).title, selectedGuage, curYear)}
-      dataset2={choroplethReduce(choroplethData, Scenerios.at(1).title, selectedGuage, curYear)}
+    <LeafletSync
+      setRegion = {setRegion}
+      data = {choroplethReduce(choroplethData, Scenerios.at(0).title)}
+      data2 = {choroplethReduce(choroplethData, Scenerios.at(1).title)}
+      uniqueValue = {"Dashboard_Big"}
     />
   )
 
@@ -86,9 +97,9 @@ function DashboardGraphs({ openedScenerios, scenerioSpread, start, end, selected
     "Loading Dataset..."
   ) : (
     <div className='bar-grid grid-border'>
-      <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={curYear} className="choropleth-control" />
-      <BarHorizontal csv={barData} csv2={aggSub} color={getBarColors(barData, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} />
-      <BarHorizontal csv={barData} csv2={aggSub} color={getBarColors(barData, Scenerios.at(0).title, curYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} />
+      <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={dashYear} className="choropleth-control" />
+      <BarHorizontal csv={barData} csv2={aggSub} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub = {setSubcategory}/>
+      <BarHorizontal csv={barData} csv2={aggSub} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub = {setSubcategory}/>
     </div>
   )
 
@@ -121,9 +132,6 @@ function mapStateToProps(state) {
   return {
     openedScenerios: state.scenerios,
     selectedGuage: state.dashboardSelection,
-    scenerioSpread: { ...(state.scenerios) },
-    start: state.startDate,
-    end: state.endDate,
     curYear: state.dashboardYear,
     region: state.dashboardRegion,
     subcat: state.dashboardSubsector,
@@ -131,12 +139,12 @@ function mapStateToProps(state) {
   };
 }
 
-
 function mapDispatchToProps(dispatch) {
   return {
-    
+    setDashboardDate: (date) => dispatch(setDashDate(date)),
+    setDashboardReg: (reg) => dispatch(setDashReg(reg)),
+    setDashboardSubs: (subs) => dispatch(setDashSubs(subs)),
   };
 }
-
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardGraphs);

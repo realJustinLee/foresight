@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { API, graphqlOperation } from "aws-amplify";
 import { connect } from 'react-redux';
 import { setBarCountries } from '../../components/Store';
@@ -248,7 +248,13 @@ query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: Str
 `;
 
 function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories }) {
-  const scenarios = scenerios.map(obj => obj.title);
+  const [scenarios, setScenarios] = useState(scenerios.map(obj => obj.title));
+
+
+  useEffect(() => {
+    setScenarios(scenerios.map(obj => obj.title));
+  }, [scenerios]);
+
 
   const fetchData = async (query, variables) => {
     let nextToken = null;
@@ -331,12 +337,14 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
 
   useEffect(() => {
     const abortController = new AbortController();
+    console.log("!!! LOAD CHOROPLETH DATA");
     setChoropleth("i");
     fetchChoropleth(abortController.signal);
     return () => abortController.abort();
   }, [scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth]);
 
   useEffect(() => {
+    console.log("DATA REFRESH!");
     const abortController = new AbortController();
     setBar("i");
     fetchBar(abortController.signal);
@@ -358,6 +366,7 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
   }, [scenarios, parameter, setDates, fetchDates]);
 
   useEffect(() => {
+    console.log("DATA REGRESH!");
     const abortController = new AbortController();
     setAggSub("i");
     fetchAggSub(abortController.signal);

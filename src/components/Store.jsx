@@ -10,8 +10,6 @@ const initialState = {
   dashboardYear: 2020,
   dashboardRegion: "Global",
   dashboardSubsector: "Aggregate of Subsectors",
-  choroplethColor: 3,
-  choroplethScale: 2,
   barCountries: [],
   scenerios: [
     {
@@ -78,10 +76,6 @@ function reducer(state = initialState, action) {
       return { ...state, dashboardRegion: action.payload };
     case 'setDashSubsectors':
       return { ...state, dashboardSubsector: action.payload };
-    case 'setChoroplethColor':
-      return { ...state, choroplethColor: action.payload };
-    case 'setChoroplethScale':
-      return { ...state, choroplethScale: action.payload };
     case 'setBarCountries':
       return { ...state, barCountries: action.payload };
     default:
@@ -149,14 +143,6 @@ export function setScenerios(index, newTitle, scenerios) {
 
 export function setSceneriosNoUpdate(scenerios) {
   return { type: 'setScenerios', payload: scenerios };
-}
-
-export function setChoroplethColor(color) {
-  return { type: 'setChoroplethColor', payload: color };
-}
-
-export function setChoroplethScale(scale) {
-  return { type: 'setChoroplethScale', payload: scale };
 }
 
 export function setBarCountries(country) {

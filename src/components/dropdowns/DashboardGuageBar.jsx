@@ -99,7 +99,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
     const scenarioSelectionCol = () => {
         return (
             OpenedScenarios.map((scenario, index) => (
-                <Dropdown as={ButtonGroup} className={"dashboard-scenerio-selector"}>
+                <Dropdown as={ButtonGroup} key = {index} className={"dashboard-scenerio-selector"}>
                     <Button variant="outline-light">{scenario.title}</Button>
                     <Dropdown.Toggle
                         split

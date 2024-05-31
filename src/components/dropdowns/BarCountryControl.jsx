@@ -33,6 +33,7 @@ function BarChartControl({csv, scenario, year, setCountries, countries}) {
         disabled={!(countries.includes(country)) && countries.length >= 10}
         checked={countries.includes(country)}
         type="switch"
+        key={country}
         id={country}
         label={country}
         onChange={e => {changeCountries(e.target.checked, country)}}
@@ -48,7 +49,7 @@ function BarChartControl({csv, scenario, year, setCountries, countries}) {
       
       <Dropdown.Menu>
         <Dropdown.Header>Region Selection</Dropdown.Header>
-        {colors.map((c) => (c))}
+        {colors}
       </Dropdown.Menu>
     </Dropdown>
   );

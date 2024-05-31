@@ -1,8 +1,6 @@
 import React from "react";
 import { ResponsiveLine } from '@nivo/line'
-import { connect } from 'react-redux';
-import { setDashDate } from "../Store";
-const Line = ({ data, date, setdashboardDate, unit }) => (
+const Line = ({ data, setDate, unit }) => (
     <div className="line_container">
         <div className="nivo-wrapper grid-border">
             <ResponsiveLine
@@ -23,7 +21,7 @@ const Line = ({ data, date, setdashboardDate, unit }) => (
                     reverse: false
                 }}
                 onClick={(data) => {
-                    setdashboardDate(
+                    setDate(
                         parseInt(`${data["data"]["x"]}`)
                     );
                 }}
@@ -199,16 +197,6 @@ const Line = ({ data, date, setdashboardDate, unit }) => (
     </div>
 )
 
-function mapStateToProps(state) {
-    return {
-        date: state.dashboardYear,
-    };
-}
 
-function mapDispatchToProps(dispatch) {
-    return {
-        setdashboardDate: (date) => dispatch(setDashDate(date)),
-    };
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(Line);
+export default Line;

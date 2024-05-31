@@ -7,12 +7,14 @@ import {
 } from "react-compare-slider";
 import { getChoroplethValue, getSmallestChoropleth, getLargestChoropleth } from '../../assets/data/DataManager';
 
-import { connect } from 'react-redux';
-import { setDashReg } from '../Store';
 import ChoroplethControl from '../dropdowns/ChoroplethControl';
+import { getColorsFromPalette } from '../../assets/data/GcamColors';
 
-const LeafletSync = ({ data, data2, uniqueValue, setdashboardReg, color, scale }) => {
-  //console.log("***", data, data2);
+const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
+  //Choropleth Visualization Settings
+  const [choroplethColorPalette, setChoroplethColorPalette] = useState("pal_green");
+  const [choroplethInterpolation, setInterpolation] = useState("VALUE - LOG");
+
   const mapData = data
   const mapData2 = data2
   // Map state:
@@ -20,36 +22,55 @@ const LeafletSync = ({ data, data2, uniqueValue, setdashboardReg, color, scale }
   const [mapInstance2, setMapInstance2] = useState(null);
 
   const [country, setCountryDisplay] = useState("");
-  function getColorValues(color, seg) {
-    let colorValues = [['#D7191C', '#FDAE61', '#FFFFBG', '#4575B4', '#D1E5F0', '#1B7837', '#E7D4E8', '#762A83'],
-    ['#D73027', '#F46D43', '#FDAE61', '#FEE08B', '#D9EF8B', '#A6D96A', '#66BD63', '#1A9850'],
-    ['#E41A1C', '#377EB8', '#4DAF4A', '#984EA3', '#FF7F00', '#FFFF33', '#A65628', '#F781BF'],
-    ['#005A32', '#238B45', '#41AB5D', '#74C476', '#A1D99B', '#C7E9C0', '#E5F5E0', '#F7FCF5']]
-    return colorValues[parseInt(color)][seg];
+
+  function getColorValues(color, number, n) {
+    const colors = getColorsFromPalette(color);
+    return colors[Math.floor(((Object.keys(colors).length - 1) / n) * (n - number))];
   }
 
-  function getScaleValues(scale, seg) {
-    let scaleValues = [[43, 37, 31, 25, 19, 12, 6],[30, 19, 12, 7, 4, 2, 1],[49, 25, 10, 5, 3, 2, 1]]
-    return scaleValues[parseInt(scale)][seg]
+  function getScaleValuesTest(value, placement, dataLength) {
+    const divisions = 7;
+    let bracket = 0;
+    switch(choroplethInterpolation) {
+      case "VALUE - LINEAR":
+        bracket = Math.round((1-value)*(divisions-1));
+        break;
+      case "VALUE - LOG":
+        bracket = divisions - Math.round(divisions*(-1*Math.exp(-5*(value))+1));
+        break;
+      case "VALUE - CUBIC":
+        bracket = Math.round(((1-value)**3)*(divisions-1));
+        break;
+      case "DATA - EQUAL":
+        bracket = Math.round((1-value)*(divisions-1));
+        break;
+      case "DATA - SIGMOID":
+        bracket = Math.round((placement/dataLength)*divisions);
+        break;
+      default:
+        bracket = Math.round(divisions/(1+Math.exp(-10*(placement/dataLength)+5)));
+        break;
+    }
+    return getColorValues(choroplethColorPalette, Math.min(Math.abs(bracket), divisions), divisions);
   }
-  function getColor(d, data) {
-    //console.log("**", d, data);
-    var minval = getSmallestChoropleth(data);
-    var maxval = getLargestChoropleth(data);
-    var seg = (maxval - minval) / 50;
-    return d > minval + seg * getScaleValues(scale, 0) ? getColorValues(color, 0) :
-      d > minval + seg * getScaleValues(scale, 1) ? getColorValues(color, 1) :
-        d > minval + seg * getScaleValues(scale, 2) ? getColorValues(color, 2) :
-          d > minval + seg * getScaleValues(scale, 3) ? getColorValues(color, 3) :
-            d > minval + seg * getScaleValues(scale, 4) ? getColorValues(color, 4) :
-              d > minval + seg * getScaleValues(scale, 5) ? getColorValues(color, 5) :
-                d > minval + seg * getScaleValues(scale, 6) ? getColorValues(color, 6) :
-                  getColorValues(color, 7);
+
+  function getRelativeDataValue(countryValue) {
+    return (countryValue - getSmallestChoropleth(data)) / (getLargestChoropleth(data) - getSmallestChoropleth(data))
+  }
+
+  function getRank(data, country) {
+    data.sort((a, b) => b.value - a.value);
+    const index = data.findIndex(item => item.id === country);
+    return index !== -1 ? index + 1 : -1;
+  }
+
+  function getColor(d, data, country) {
+    return getScaleValuesTest(getRelativeDataValue(d), getRank(data, country), Object.keys(data).length);
   }
 
   function style(feature) {
     return {
-      fillColor: getColor(getChoroplethValue(mapData, feature.id), mapData),
+      fillColor: getColor(getChoroplethValue(mapData, feature.id), mapData, feature.id),
       weight: 2,
       opacity: 1,
       color: 'white',
@@ -60,7 +81,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setdashboardReg, color, scale }
 
   function style2(feature) {
     return {
-      fillColor: getColor(getChoroplethValue(mapData2, feature.id), mapData2),
+      fillColor: getColor(getChoroplethValue(mapData2, feature.id), mapData2, feature.id),
       weight: 2,
       opacity: 1,
       color: 'white',
@@ -188,7 +209,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setdashboardReg, color, scale }
     //mapInstance.addControl(legend);
     mapInstance.sync(mapInstance2);
     mapInstance2.sync(mapInstance);
-  }, [mapInstance, mapInstance2, mapData, mapData2]);
+  }, [mapInstance, mapInstance2, mapData, mapData2, choroplethColorPalette, choroplethInterpolation]);
 
   function highlightFeature(e) {
     var layer = e.target;
@@ -216,7 +237,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setdashboardReg, color, scale }
   }
 
   function setCountry(e) {
-    setdashboardReg(e.sourceTarget.feature.id);
+    setRegion(e.sourceTarget.feature.id);
   }
 
   function onEachFeature(feature, layer) {
@@ -236,7 +257,12 @@ const LeafletSync = ({ data, data2, uniqueValue, setdashboardReg, color, scale }
             {country}
             {country===""?"":" - " + getChoroplethValue(mapData, country).toFixed(2)}
           </div>
-          <ChoroplethControl/>
+          <ChoroplethControl
+            palette = {choroplethColorPalette}
+            interpolation = {choroplethInterpolation}
+            changePalette = {setChoroplethColorPalette}
+            changeInterpolation = {setInterpolation}
+          />
           <div id="map" />
           <ReactCompareSlider
             itemOne={
@@ -254,17 +280,4 @@ const LeafletSync = ({ data, data2, uniqueValue, setdashboardReg, color, scale }
   );
 };
 
-function mapStateToProps(state) {
-  return {
-    color: state.choroplethColor,
-    scale: state.choroplethScale,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-      setdashboardReg: (reg) => dispatch(setDashReg(reg)),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(LeafletSync);
+export default LeafletSync;
