@@ -1,23 +1,46 @@
-function ChoroplethLegend({color, scale, updateColor, updateScale}) {
-  const rows = () => {
-    return (
-      <>
-      </>
-    )
-  };
+import { MdArrowDownward, MdArrowUpward } from 'react-icons/md';
+import { getColorsFromPalette } from '../../assets/data/GcamColors';
+import { useState } from 'react';
 
-  const cols = () => {
+export default function ChoroplethLegend({ data, color, scale, divisions }) {
+  const [opened, setOpened] = useState(true);
+
+  function getColorValues(color, number, n) {
+    const colors = getColorsFromPalette(color);
+    return colors[Math.floor(((Object.keys(colors).length - 1) / n) * (n - number))];
+  }
+
+
+  function getMaxValueByColor(targetColor) {
+    const filteredCountries = data.filter(country => country.color === targetColor);
+    const values = filteredCountries.map(country => country.value);
+    const maxValue = Math.max(...values);
+    return Math.floor(maxValue);
+  }
+
+  const rows = () => {
+    let rowHTML = [];
+    let min = 0;
+    rowHTML.push(opened?(<div className="choropleth-legend-arrow" onClick={() => setOpened(opened?false:true)}/>):(<MdArrowUpward className="choropleth-legend-arrow-closed" onClick={() => setOpened(true)}/>))
+    rowHTML.push(opened?(<MdArrowDownward className="choropleth-legend-arrow" onClick={() => setOpened(false)}/>):(<div className= "choropleth-legend-text"> Legend </div>))
+    for (let index = divisions; index >= 0; index--) {
+      let max = getMaxValueByColor(getColorValues(color, index, divisions));
+      if(max !== -Infinity) {
+        rowHTML.push(<div className= {opened?"choropleth-legend-color":"choropleth-legend-closed"} style={{ backgroundColor: getColorValues(color, index, divisions) }}></div>);
+        rowHTML.push(<div className= {opened?"choropleth-legend-text":"choropleth-legend-closed"}> {min} - {getMaxValueByColor(getColorValues(color, index, divisions))} </div>);
+        min = max;
+      }
+    }
     return (
-      <>
-      </>
+      <div className={"choropleth-legend-grid"}>
+        {rowHTML}
+      </div>
     )
   };
 
   return (
-    <div className = "ChoroplethLegendContainer">
+    <div className="choropleth-legend-container">
       {rows()}
     </div>
   );
 }
-
-export default ChoroplethLegend;

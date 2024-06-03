@@ -45,7 +45,7 @@ def csv_to_dynamodb_json(file_name, table_name, data_types, batch_size=25, keep_
 
 # Foresight Table 1: gcamDataTable_aggClass1_regions (Dashboard: Top 10 Country Plot)
 #...................................................................................
-file_name_i = 'C:/Z/models/foresight/extras/data_prep/gcamDataTable_aggClass1_regions.csv'
+file_name_i = '/rcfs/projects/gcims/projects/foresight/output/dynamodb/pre/gcamDataTable_aggClass1_regions.csv'
 table_name_i = 'gcamDataTable_aggClass1_regions'
 data_types_i = {
     'id':'N',
@@ -73,108 +73,108 @@ data_types_i = {
 #   createdAt: String!
 #   updatedAt:String!
 }
-folder_out_i='C:/Z/models/foresight_data/batch_files/gcamDataTable_aggClass1_regions'
+folder_out_i='/rcfs/projects/gcims/projects/foresight/output/dynamodb/post/gcamDataTable_aggClass1_regions'
 
 csv_to_dynamodb_json(file_name=file_name_i, table_name=table_name_i, data_types=data_types_i, folder_out=folder_out_i)  # Send to AWS DynamoDB
 
-# # Foresight Table 2: gcamDataTable_aggParam_regions (Dashboard: Map by param)
-# #...................................................................................
-# file_name_i = 'C:/Z/models/foresight/extras/data_prep/gcamDataTable_aggParam_regions.csv'
-# table_name_i = 'gcamDataTable_aggParam_regions'
-# data_types_i = {
-#     'id':'N',
-#     'param': 'S',
-#     'scenario': 'S',
-#     'dataset': 'S',
-#     'region': 'S',
-#     'x': 'N',    
-#     'units': 'S',
-#     'value':'N',
-#     'createdAt':'S',
-#     'updatedAt':'S'
-# #   id: Int!
-# #   param: String!
-# #   scenario: String!
-# #   dataset: String!
-# #   region: String!
-# #   x: Int!    
-# #   units: String!
-# #   value: Float!
-# #   createdAt: String!
-# #   updatedAt:String!
-# }
-# folder_out_i='C:/Z/models/foresight_data/batch_files/gcamDataTable_aggParam_regions'
+# Foresight Table 2: gcamDataTable_aggParam_regions (Dashboard: Map by param)
+#...................................................................................
+file_name_i = '/rcfs/projects/gcims/projects/foresight/output/dynamodb/pre/gcamDataTable_aggParam_regions.csv'
+table_name_i = 'gcamDataTable_aggParam_regions'
+data_types_i = {
+    'id':'N',
+    'param': 'S',
+    'scenario': 'S',
+    'dataset': 'S',
+    'region': 'S',
+    'x': 'N',    
+    'units': 'S',
+    'value':'N',
+    'createdAt':'S',
+    'updatedAt':'S'
+#   id: Int!
+#   param: String!
+#   scenario: String!
+#   dataset: String!
+#   region: String!
+#   x: Int!    
+#   units: String!
+#   value: Float!
+#   createdAt: String!
+#   updatedAt:String!
+}
+folder_out_i='/rcfs/projects/gcims/projects/foresight/output/dynamodb/post/gcamDataTable_aggParam_regions'
 
-# csv_to_dynamodb_json(file_name=file_name_i, table_name=table_name_i, data_types=data_types_i, folder_out=folder_out_i)  # Send to AWS DynamoDB
+csv_to_dynamodb_json(file_name=file_name_i, table_name=table_name_i, data_types=data_types_i, folder_out=folder_out_i)  # Send to AWS DynamoDB
 
-# # Foresight Table 3: gcamDataTable_aggParam_global (Dashboard: Lines)
-# #...................................................................................
-# file_name_i = 'C:/Z/models/foresight/extras/data_prep/gcamDataTable_aggParam_global.csv'
-# table_name_i = 'gcamDataTable_aggParam_global'
-# data_types_i = {
-    # 'id':'N',
-    # 'param': 'S',
-    # 'scenario': 'S',
-    # 'dataset': 'S',
-    # 'region': 'S',
-    # 'x': 'N',    
-    # 'units': 'S',
-    # 'value':'N',
-    # 'createdAt':'S',
-    # 'updatedAt':'S'
-#   #id: Int!
-#   #param: String!
-#   #scenario: String!
-#   #dataset: String!
-#   #region: String!
-#   #x: Int!    
-#   #units: String!
-#   #value: Float!
-#   #createdAt: String!
-#   #updatedAt:String!
-# }
-# folder_out_i='C:/Z/models/foresight_data/batch_files/gcamDataTable_aggParam_global'
+# Foresight Table 3: gcamDataTable_aggParam_global (Dashboard: Lines)
+#...................................................................................
+file_name_i = '/rcfs/projects/gcims/projects/foresight/output/dynamodb/pre/gcamDataTable_aggParam_global.csv'
+table_name_i = 'gcamDataTable_aggParam_global'
+data_types_i = {
+    'id':'N',
+    'param': 'S',
+    'scenario': 'S',
+    'dataset': 'S',
+    'region': 'S',
+    'x': 'N',    
+    'units': 'S',
+    'value':'N',
+    'createdAt':'S',
+    'updatedAt':'S'
+  #id: Int!
+  #param: String!
+  #scenario: String!
+  #dataset: String!
+  #region: String!
+  #x: Int!    
+  #units: String!
+  #value: Float!
+  #createdAt: String!
+  #updatedAt:String!
+}
+folder_out_i='/rcfs/projects/gcims/projects/foresight/output/dynamodb/post/gcamDataTable_aggParam_global'
 
-# csv_to_dynamodb_json(file_name=file_name_i, table_name=table_name_i, data_types=data_types_i, folder_out=folder_out_i)  # Send to AWS DynamoDB
+csv_to_dynamodb_json(file_name=file_name_i, table_name=table_name_i, data_types=data_types_i, folder_out=folder_out_i)  # Send to AWS DynamoDB
 
-# # Foresight Table 4: gcamDataTable_aggClass1_global (Dashboard: Lines by class)
-# #...................................................................................
-# file_name_i = 'C:/Z/models/foresight/extras/data_prep/gcamDataTable_aggClass1_global.csv'
-# table_name_i = 'gcamDataTable_aggClass1_global'
-# data_types_i = {
-#     'id':'N',
-#     'param': 'S',
-#     'scenario': 'S',
-#     'dataset': 'S',
-#     'region': 'S',
-#     'classLabel': 'S',
-#     'class': 'S',
-#     'x': 'N',    
-#     'units': 'S',
-#     'value':'N',
-#     'createdAt':'S',
-#     'updatedAt':'S'
-#   #id: Int!
-#   #param: String!
-#   #scenario: String!
-#   #dataset: String!
-#   #region: String!
-#   #classLabel: String!
-#   #class: String!
-#   #x: Int!    
-#   #units: String!
-#   #value: Float!
-#   #createdAt: String!
-#   #updatedAt:String!
-# }
-# folder_out_i='C:/Z/models/foresight_data/batch_files/gcamDataTable_aggClass1_global'
+# Foresight Table 4: gcamDataTable_aggClass1_global (Dashboard: Lines by class)
+#...................................................................................
+file_name_i = '/rcfs/projects/gcims/projects/foresight/output/dynamodb/pre/gcamDataTable_aggClass1_global.csv'
+table_name_i = 'gcamDataTable_aggClass1_global'
+data_types_i = {
+    'id':'N',
+    'param': 'S',
+    'scenario': 'S',
+    'dataset': 'S',
+    'region': 'S',
+    'classLabel': 'S',
+    'class': 'S',
+    'x': 'N',    
+    'units': 'S',
+    'value':'N',
+    'createdAt':'S',
+    'updatedAt':'S'
+  #id: Int!
+  #param: String!
+  #scenario: String!
+  #dataset: String!
+  #region: String!
+  #classLabel: String!
+  #class: String!
+  #x: Int!    
+  #units: String!
+  #value: Float!
+  #createdAt: String!
+  #updatedAt:String!
+}
+folder_out_i='/rcfs/projects/gcims/projects/foresight/output/dynamodb/post/gcamDataTable_aggClass1_global'
 
-# csv_to_dynamodb_json(file_name=file_name_i, table_name=table_name_i, data_types=data_types_i, folder_out=folder_out_i)  # Send to AWS DynamoDB
+csv_to_dynamodb_json(file_name=file_name_i, table_name=table_name_i, data_types=data_types_i, folder_out=folder_out_i)  # Send to AWS DynamoDB
 
-# python extras/data_prep/csv2json2dynamo.py
+#python extras/data_prep/csv2json2dynamo.py
 
-# # To get count of all items in the table
-# # aws dynamodb scan --table-name gcamDataTable_aggParam_regions --select "COUNT" # 14688
-# # aws dynamodb scan --table-name gcamDataTable_aggClass1_regions --select "COUNT" # 125241
-# # aws dynamodb scan --table-name gcamDataTable_aggParam_global --select "COUNT" # 459
-# # aws dynamodb scan --table-name gcamDataTable_aggClass1_global --select "COUNT" # 4191
+# To get count of all items in the table
+# aws dynamodb scan --table-name gcamDataTable_aggParam_regions --select "COUNT" # 14688
+# aws dynamodb scan --table-name gcamDataTable_aggClass1_regions --select "COUNT" # 125241
+# aws dynamodb scan --table-name gcamDataTable_aggParam_global --select "COUNT" # 459
+# aws dynamodb scan --table-name gcamDataTable_aggClass1_global --select "COUNT" # 4191

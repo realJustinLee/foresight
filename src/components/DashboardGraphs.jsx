@@ -73,7 +73,9 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
 
   // Line Chart Visualization
   const lineChart = (lineData === 'i') ? (
-    "Loading Dataset..."
+    <div className = "grid-border-hidden text-centered">
+      Loading Dataset...
+    </div>
   ) : (
     <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date = {dashYear} setDate = {setYear} />
   )
@@ -81,7 +83,9 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
 
   // Choropleth Visualization
   const choropleth = (choroplethData === 'i') ? (
-    "Loading Dataset..."
+    <div className = "grid-border-hidden text-centered">
+      Loading Dataset...
+    </div>
   ) : (
     <LeafletSync
       setRegion = {setRegion}
@@ -94,7 +98,9 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
 
   // Bar Chart Visualization
   const barChart = (barData === "i" || aggSub === 'i') ? (
-    "Loading Dataset..."
+    <div className = "grid-border-hidden text-centered">
+      Loading Dataset...
+    </div>
   ) : (
     <div className='bar-grid grid-border'>
       <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={dashYear} className="choropleth-control" />

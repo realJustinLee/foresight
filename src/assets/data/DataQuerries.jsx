@@ -337,14 +337,12 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
 
   useEffect(() => {
     const abortController = new AbortController();
-    console.log("!!! LOAD CHOROPLETH DATA");
     setChoropleth("i");
     fetchChoropleth(abortController.signal);
     return () => abortController.abort();
   }, [scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth]);
 
   useEffect(() => {
-    console.log("DATA REFRESH!");
     const abortController = new AbortController();
     setBar("i");
     fetchBar(abortController.signal);
@@ -366,7 +364,6 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
   }, [scenarios, parameter, setDates, fetchDates]);
 
   useEffect(() => {
-    console.log("DATA REGRESH!");
     const abortController = new AbortController();
     setAggSub("i");
     fetchAggSub(abortController.signal);
