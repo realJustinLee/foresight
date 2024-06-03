@@ -11,64 +11,11 @@ import ChoroplethControl from '../dropdowns/ChoroplethControl';
 import { getColorsFromPalette } from '../../assets/data/GcamColors';
 import ChoroplethLegend from '../dropdowns/ChoroplethLegend';
 
-const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
-  //Choropleth Visualization Settings
-  const [choroplethColorPalette, setChoroplethColorPalette] = useState("pal_green");
-  const [choroplethInterpolation, setInterpolation] = useState("VALUE - LOG");
-  const divisions = 7;
-  const mapData = data
-  console.log("CHoropleth Data", data);
+const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
+  const mapData = data;
   mapData.forEach(country => {
     country.color = getColor(country.value, data, country.id);
   });
-  console.log("CHoropleth Data", data, mapData);
-  // Map state:
-  const [mapInstance, setMapInstance] = useState(null);
-  const [country, setCountryDisplay] = useState("");
-
-  function getColorValues(color, number, n) {
-    const colors = getColorsFromPalette(color);
-    return colors[Math.floor(((Object.keys(colors).length - 1) / n) * (n - number))];
-  }
-
-  function getScaleValuesTest(value, placement, dataLength) {
-    let bracket = 0;
-    switch (choroplethInterpolation) {
-      case "VALUE - LINEAR":
-        bracket = Math.round((1 - value) * (divisions - 1));
-        break;
-      case "VALUE - LOG":
-        bracket = divisions - Math.round(divisions * (-1 * Math.exp(-5 * (value)) + 1));
-        break;
-      case "VALUE - CUBIC":
-        bracket = Math.round(((1 - value) ** 3) * (divisions - 1));
-        break;
-      case "DATA - EQUAL":
-        bracket = Math.round((1 - value) * (divisions - 1));
-        break;
-      case "DATA - SIGMOID":
-        bracket = Math.round((placement / dataLength) * divisions);
-        break;
-      default:
-        bracket = Math.round(divisions / (1 + Math.exp(-10 * (placement / dataLength) + 5)));
-        break;
-    }
-    return getColorValues(choroplethColorPalette, Math.min(Math.abs(bracket), divisions), divisions);
-  }
-
-  function getRelativeDataValue(countryValue) {
-    return (countryValue - getSmallestChoropleth(data)) / (getLargestChoropleth(data) - getSmallestChoropleth(data))
-  }
-
-  function getRank(data, country) {
-    data.sort((a, b) => b.value - a.value);
-    const index = data.findIndex(item => item.id === country);
-    return index !== -1 ? index + 1 : -1;
-  }
-
-  function getColor(value, data, country) {
-    return getScaleValuesTest(getRelativeDataValue(value), getRank(data, country), Object.keys(data).length);
-  }
 
   function style(feature) {
     console.log(feature.id, mapData.filter(item => item.index === feature.id).at(0))
@@ -83,7 +30,6 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
   }
 
   // Map refs:
-  const mapkey = uniqueValue
   const mapRef = useRef(null);
   const tileRef = useRef(null);
 
@@ -95,11 +41,6 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }
   );
-
-  const mapStyles = {
-    width: '100%',
-    height: '100%',
-  };
 
   // Options for our map instance:
   const mapParams = {
@@ -115,7 +56,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
 
   // Map creation:
   useEffect(() => {
-    mapRef.current = L.map(mapkey + '_1', mapParams);
+    mapRef.current = L.map(id, mapParams);
     // Set map instance to state:
     if (!mapInstance) {
       setMapInstance(mapRef.current);
@@ -142,12 +83,13 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
     var map_base = L.layerGroup([tileRef.current]);
     map_base.addTo(mapInstance);
     L.geoJSON(landcells, { style: style, onEachFeature: onEachFeature }).addTo(mapInstance);
-    setMapInstance(mapInstance);
+    //setMapInstance(mapInstance);
   }, [mapInstance, mapData, choroplethColorPalette, choroplethInterpolation]);
 
   function highlightFeature(e) {
     var layer = e.target;
     setCountryDisplay(e.sourceTarget.feature.id);
+    setCountryDisplayValue(getChoroplethValue(mapData, e.sourceTarget.feature.id));
     layer.setStyle({
       weight: 5,
       color: '#666',
@@ -161,6 +103,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
   function resetHighlight(e) {
     var layer = e.target;
     setCountryDisplay("");
+    setCountryDisplayValue("");
     layer.setStyle({
       weight: 2,
       opacity: 1,
@@ -184,8 +127,20 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
 
   // Toggle marker on button click:
   return (
-    <div id={mapkey + '_1'} style={mapStyles} />
+    (displayLegend) ? (
+    <>
+      <ChoroplethLegend
+        data={mapData}
+        color={choroplethColorPalette}
+        scale={choroplethInterpolation}
+        divisions={divisions}
+      />
+      <div id={id} style={mapStyles} />
+    </>
+    ) : (
+      <div id={id} style={mapStyles} />
+    )
   );
 };
 
-export default LeafletSync;
+export default DashboardLeaflet;

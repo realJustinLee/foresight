@@ -89,6 +89,8 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
   ) : (
     <LeafletSync
       setRegion = {setRegion}
+      choroplethData = {choroplethData}
+      Scenerios = {Scenerios}
       data = {choroplethReduce(choroplethData, Scenerios.at(0).title)}
       data2 = {choroplethReduce(choroplethData, Scenerios.at(1).title)}
       uniqueValue = {"Dashboard_Big"}

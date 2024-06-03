@@ -519,6 +519,8 @@
 
 .choropleth-legend-container {
   position: absolute;
+  padding-bottom: 5px;
+  padding-right: 8px;
   left: 0px;
   bottom: 0px;
   border-radius: 4px;
@@ -528,6 +530,7 @@
 
 .choropleth-legend-grid {
   display: grid;
+  width: 110%;
   grid-template-columns: 1fr 3fr;
 }
 
@@ -552,11 +555,18 @@
   font-size: 60%;
   text-align: left;
   padding-left: 5%;
+  width: 100%;
+}
+
+.choropleth-legend-text-closed {
+  font-size: 60%;
+  text-align: left;
+  padding-left: 5%;
+  cursor: pointer;
 }
 
 .choropleth-legend-closed {
   display: none;
-  height: 0px !important;
 }
 
 .choropleth-data-info {
