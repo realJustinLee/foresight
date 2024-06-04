@@ -18,7 +18,7 @@ const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, set
   });
 
   function style(feature) {
-    console.log(feature.id, mapData.filter(item => item.index === feature.id).at(0))
+    //console.log(feature.id, mapData.filter(item => item.index === feature.id).at(0))
     return {
       fillColor: getColor(getChoroplethValue(mapData, feature.id), mapData, feature.id),
       weight: 2,
@@ -56,9 +56,9 @@ const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, set
 
   // Map creation:
   useEffect(() => {
-    mapRef.current = L.map(id, mapParams);
     // Set map instance to state:
     if (!mapInstance) {
+      mapRef.current = L.map(id, mapParams);
       setMapInstance(mapRef.current);
     }
   }, []);
@@ -129,12 +129,7 @@ const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, set
   return (
     (displayLegend) ? (
     <>
-      <ChoroplethLegend
-        data={mapData}
-        color={choroplethColorPalette}
-        scale={choroplethInterpolation}
-        divisions={divisions}
-      />
+      
       <div id={id} style={mapStyles} />
     </>
     ) : (

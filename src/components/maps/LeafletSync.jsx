@@ -32,24 +32,24 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
 
   function getScaleValuesTest(value, placement, dataLength) {
     let bracket = 0;
-    switch(choroplethInterpolation) {
+    switch (choroplethInterpolation) {
       case "VALUE - LINEAR":
-        bracket = Math.round((1-value)*(divisions-1));
+        bracket = Math.round((1 - value) * (divisions - 1));
         break;
       case "VALUE - LOG":
-        bracket = divisions - Math.round(divisions*(-1*Math.exp(-5*(value))+1));
+        bracket = divisions - Math.round(divisions * (-1 * Math.exp(-5 * (value)) + 1));
         break;
       case "VALUE - CUBIC":
-        bracket = Math.round(((1-value)**3)*(divisions-1));
+        bracket = Math.round(((1 - value) ** 3) * (divisions - 1));
         break;
       case "DATA - EQUAL":
-        bracket = Math.round((placement/dataLength)*divisions);
+        bracket = Math.round((placement / dataLength) * divisions);
         break;
       case "DATA - SIGMOID":
-        bracket = Math.round(divisions/(1+Math.exp(-10*(placement/dataLength)+5)));
+        bracket = Math.round(divisions / (1 + Math.exp(-10 * (placement / dataLength) + 5)));
         break;
       default:
-        bracket = divisions - Math.round(divisions*(-1*Math.exp(-5*(value))+1));
+        bracket = divisions - Math.round(divisions * (-1 * Math.exp(-5 * (value)) + 1));
         break;
     }
     return getColorValues(choroplethColorPalette, Math.min(Math.abs(bracket), divisions), divisions);
@@ -92,48 +92,53 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
         <div className="image-container">
           <div className="choropleth-data-info">
             {country}
-            {country===""?"":" - " + countryValue.toFixed(2)}
+            {country === "" ? "" : " - " + countryValue.toFixed(2)}
           </div>
           <ChoroplethControl
-            palette = {choroplethColorPalette}
-            interpolation = {choroplethInterpolation}
-            changePalette = {setChoroplethColorPalette}
-            changeInterpolation = {setInterpolation}
+            palette={choroplethColorPalette}
+            interpolation={choroplethInterpolation}
+            changePalette={setChoroplethColorPalette}
+            changeInterpolation={setInterpolation}
           />
-          
+          <ChoroplethLegend
+            data={data}
+            color={choroplethColorPalette}
+            scale={choroplethInterpolation}
+            divisions={divisions}
+          />
           <div id="map" />
           <ReactCompareSlider
             itemOne={
               <DashboardLeaflet
-                data = {data}
-                displayLegend = {true}
+                data={data}
+                displayLegend={true}
                 id={mapkey + '_1'}
-                setRegion = {setRegion}
-                mapInstance = {mapInstance}
-                setMapInstance = {setMapInstance}
-                mapStyles = {mapStyles}
-                getColor = {getColor}
-                setCountryDisplay = {setCountryDisplay}
-                setCountryDisplayValue = {setCountryDisplayValue}
-                choroplethColorPalette = {choroplethColorPalette}
-                choroplethInterpolation = {choroplethInterpolation}
+                setRegion={setRegion}
+                mapInstance={mapInstance}
+                setMapInstance={setMapInstance}
+                mapStyles={mapStyles}
+                getColor={getColor}
+                setCountryDisplay={setCountryDisplay}
+                setCountryDisplayValue={setCountryDisplayValue}
+                choroplethColorPalette={choroplethColorPalette}
+                choroplethInterpolation={choroplethInterpolation}
                 divisions={divisions}
               />
             }
             itemTwo={
               <DashboardLeaflet
-                data = {data2}
-                displayLegend = {false}
+                data={data2}
+                displayLegend={false}
                 id={mapkey + '_2'}
-                setRegion = {setRegion}
-                mapInstance = {mapInstance2}
-                setMapInstance = {setMapInstance2}
-                mapStyles = {mapStyles}
-                getColor = {getColor}
-                setCountryDisplay = {setCountryDisplay}
-                setCountryDisplayValue = {setCountryDisplayValue}
-                choroplethColorPalette = {choroplethColorPalette}
-                choroplethInterpolation = {choroplethInterpolation}
+                setRegion={setRegion}
+                mapInstance={mapInstance2}
+                setMapInstance={setMapInstance2}
+                mapStyles={mapStyles}
+                getColor={getColor}
+                setCountryDisplay={setCountryDisplay}
+                setCountryDisplayValue={setCountryDisplayValue}
+                choroplethColorPalette={choroplethColorPalette}
+                choroplethInterpolation={choroplethInterpolation}
                 divisions={divisions}
               />
             }

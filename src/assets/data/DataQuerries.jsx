@@ -259,14 +259,29 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
   const fetchData = async (query, variables) => {
     let nextToken = null;
     let allItems = [];
+    let retries = 5;
+    let delay = 500; // initial delay of 1/2 second
+
     do {
-      const response = await API.graphql(graphqlOperation(query, { ...variables, nextToken }));
-      const items = response.data[Object.keys(response.data)[0]].items;
-      allItems.push(...items);
-      nextToken = response.data[Object.keys(response.data)[0]].nextToken;
+      try {
+        const response = await API.graphql(graphqlOperation(query, { ...variables, nextToken }));
+        const items = response.data[Object.keys(response.data)[0]].items;
+        allItems.push(...items);
+        nextToken = response.data[Object.keys(response.data)[0]].nextToken;
+      } catch (error) {
+        if (error.errors && error.errors.some(e => e.errorType === 'DynamoDB:ProvisionedThroughputExceededException')) {
+          if (retries === 0) throw new Error('Retries exhausted');
+          await new Promise(resolve => setTimeout(resolve, delay));
+          delay *= 2; // exponential backoff
+          retries -= 1;
+        } else {
+          throw error;
+        }
+      }
     } while (nextToken);
     return allItems;
   };
+
 
   const fetchParallel = useCallback(async (queries) => {
     const results = await Promise.all(queries.map(([query, variables]) => fetchData(query, variables)));
