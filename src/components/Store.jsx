@@ -23,28 +23,29 @@ const initialState = {
   ],
   guages: [
     {
-      title: "watConsumBySec",
-      units: "Water Consumption by Sector"
-    },
-    {
-      title: "agProdByCrop",
-      units: "Ag Production"
-    },
-    {
-      title: "landAlloc",
-      units: "Land Allocation"
+      title: "pop",
+      units: "Population",
+      group: "population"
     },
     {
       title: "watWithdrawBySec",
-      units: "Water Withdrawal by Sector"
+      units: "Water Withdrawal by Sector",
+      group: "water"
     },
     {
-      title: "pop",
-      units: "Population"
+      title: "agProdByCrop",
+      units: "Ag Production",
+      group: "agriculture"
     },
     {
-      title: "elecByTechTWh",
-      units: "Electricity Generation by Fuel"
+      title: "energyPrimaryByFuelEJ",
+      units: "Energy Primary by Fuel",
+      group: "energy"
+    },
+    {
+      title: "emissCO2BySector",
+      units: "CO2 emissions",
+      group: "emissions"
     }
   ]
 };

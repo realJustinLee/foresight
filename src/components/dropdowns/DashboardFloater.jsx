@@ -44,7 +44,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     return (
         <>
             <div>
-                SELECTED:    { findUnitsByTitle(openGuages, selection).toUpperCase()}   {getIcon(selection)}
+                SELECTED:    { findUnitsByTitle(openGuages, selection).toUpperCase()}   {getIcon(selection, openGuages)}
                 <Dropdown as={ButtonGroup}>
                     <Dropdown.Toggle
                         split

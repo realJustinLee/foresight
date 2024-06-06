@@ -164,7 +164,7 @@
 .dashboard-guage-grid {
   display: grid;
   color: rgb(218, 218, 218);
-  grid-template-columns: auto repeat(6, 1fr);
+  grid-template-columns: auto repeat(5, 1fr);
   column-gap: 4px;
   margin-top: 2%;
   margin-bottom: 2%;
@@ -217,7 +217,7 @@
   }
   .dashboard-data-grid {
     justify-items: start;
-    grid-template-columns: auto repeat(6, 80px);
+    grid-template-columns: auto repeat(5, 80px);
     grid-template-rows: repeat(2, 80px);
   }
 

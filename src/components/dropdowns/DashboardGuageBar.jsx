@@ -65,7 +65,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
           guageText={'' + guageTitle + index}
           guageValue={number}
         />
-        <div className="guageText"> {getIcon(guageTitle)}  {displayTitle}</div>
+        <div className="guageText"> {getIcon(guageTitle, OpenParameters)}  {displayTitle}</div>
       </>
     ) : (
       <>
@@ -73,7 +73,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
           guageText={'' + guageTitle + index}
           guageValue={number}
         />
-        <div className="guageText"> {getIcon(guageTitle)}  {displayTitle}</div>
+        <div className="guageText"> {getIcon(guageTitle, OpenParameters)}  {displayTitle}</div>
       </>
     )
   }
@@ -147,7 +147,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
       <div className="dashboard-guage-grid-columns">
         {scenarioSelectionCol()}
       </div>
-      {data === 'i' ? (
+      {(data === 'i' || data.length === 0) ? (
         "Loading Dataset..."
       ) : (col())}
     </div>

@@ -5,10 +5,10 @@ import DataQuerries from "../assets/data/DataQuerries.jsx";
 import { connect } from "react-redux";
 import DateDropdown from "./dropdowns/DashboardDate";
 import DashboardGraphs from "./DashboardGraphs.jsx";
-import { MdError, MdElectricBolt, MdGroups, MdFilterHdr } from "react-icons/md";
-import { GiCorn, GiFactory, GiWaterDrop } from "react-icons/gi";
+import { MdError, MdElectricBolt, MdGroups, MdFilterHdr, MdOutlineWindPower  } from "react-icons/md";
+import { GiCorn, GiFactory, GiWaterDrop, GiCow } from "react-icons/gi";
 import { TbCoins } from "react-icons/tb";
-import { FaThermometerHalf } from "react-icons/fa"
+import { FaTruckMoving } from "react-icons/fa";
 import { setdashboardSelection, setStartDate, setEndDate} from "./Store";
 import './css/Dashboard.css';
 import scenarios from "../assets/data/Scenarios.jsx";
@@ -17,26 +17,31 @@ import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
 import DashboardUrl from "./sharing/DashboardUrl.jsx";
 
 //Gets the icon of each category by name. Shows up next to the guages and the selection.
-export const getIcon = (selection) => {
-  switch (selection) {
-    case "watConsumBySec":
-      return <GiWaterDrop />;
-    case "watWithdrawBySec":
-      return <GiWaterDrop />;
-    case "agProdByCrop":
-      return <GiCorn />;
-    case "temp":
-      return <FaThermometerHalf />;
-    case "emiss":
-      return <GiFactory />;
-    case "pop":
-      return <MdGroups />;
-    case "gdp":
+export const getIcon = (selection, openGuages) => {
+  const found = openGuages.find(gauge => gauge.title === selection);
+  const guageCategory = found ? found.group : "error"
+
+  switch (guageCategory) {
+    case "socioeconomics":
       return <TbCoins />;
-    case "elecByTechTWh":
-      return <MdElectricBolt />
-    case "landAlloc":
+    case "population":
+      return <MdGroups />;
+    case "transport":
+      return <FaTruckMoving />;
+    case "water":
+      return <GiWaterDrop />;
+    case "agriculture":
+      return <GiCorn />;
+    case "livestock":
+      return <GiCow />;
+    case "land":
       return <MdFilterHdr />
+    case "emissions":
+      return <GiFactory />;
+    case "electricity":
+      return <MdElectricBolt />;
+    case "energy":
+      return <MdOutlineWindPower />;
     default:
       return <MdError />;
   }

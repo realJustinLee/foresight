@@ -48,7 +48,7 @@ function DashboardDate({ year, isOrNotStart, updateStart, updateEnd, start, end,
         return date;
     }
     return (
-        (data === "i") ? (
+        (data === "i" || data.length === 0) ? (
             <div> "Loading..." </div>
         ) : (
             <DatePicker

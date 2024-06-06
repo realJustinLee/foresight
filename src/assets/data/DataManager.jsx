@@ -81,7 +81,10 @@ export const findClosestDate = (data, targetDate) => {
 
 // Gets the percentage for guages
 export const getGuage = (data, scenario, param, start, end) => {
+    console.log(data, scenario, param);
+    if (data.length === 0) return -1; // Check for invalid data.
     const reducedData = data.filter(row => row.scenario === scenario && row.param === param);
+    if (reducedData.length === 0) return -1; // Check to make sure the parameter exists.
     const startData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, start));
     const endData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, end));
     const change = startData !== 0 ? (((endData - startData) / startData) * 100) : -1;
