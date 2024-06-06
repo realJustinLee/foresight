@@ -66,19 +66,9 @@ function Navigation({ dataset, updateDataset }) {
               id="dataset-dropdown"
             >
               <NavDropdown.Item
-                onClick={() => handleDatasetChange("foresight_v1")}
+                onClick={() => handleDatasetChange("gcamv7p0")}
               >
-                foresight_v1
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                onClick={() => handleDatasetChange("Dataset 1")}
-              >
-                Dataset 1
-              </NavDropdown.Item>
-              <NavDropdown.Item
-                onClick={() => handleDatasetChange("Dataset 2")}
-              >
-                Dataset 2
+                gcamv7p0
               </NavDropdown.Item>
             </NavDropdown>
             <NavLink className="nav-link" to="/dashboard" onClick={handleClose}>
@@ -86,16 +76,6 @@ function Navigation({ dataset, updateDataset }) {
                 <RiDashboardFill />
               </div>{" "}
               Dashboard
-            </NavLink>
-            <NavLink
-              className="nav-link"
-              to="/charts"
-              onClick={handleClose}
-            >
-              <div className="nav-icon">
-                <AiFillExperiment />
-              </div>
-              Experiment
             </NavLink>
           </Nav>
           <Nav className="ms-auto nav-right">

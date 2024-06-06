@@ -81,7 +81,7 @@ export const findClosestDate = (data, targetDate) => {
 
 // Gets the percentage for guages
 export const getGuage = (data, scenario, param, start, end) => {
-    console.log(data, scenario, param);
+    //console.log(data, scenario, param);
     if (data.length === 0) return -1; // Check for invalid data.
     const reducedData = data.filter(row => row.scenario === scenario && row.param === param);
     if (reducedData.length === 0) return -1; // Check to make sure the parameter exists.
@@ -167,7 +167,7 @@ export const listRegions = (data) => {
 }
 
 export const getNoSubcatChoropleth = (data) => {
-    console.log("!!! LOAD CHOROPLETH");
+    //console.log("!!! LOAD CHOROPLETH");
     let reducedData = [];
     for (let i = 0; i < data.length; i++) {
         reducedData.push({

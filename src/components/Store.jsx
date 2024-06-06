@@ -3,7 +3,7 @@ import {updateHash} from './sharing/DashboardUrl';
 // Define the initial state
 const initialState = {
   open: 2,
-  dataset: "foresight_v1",
+  dataset: "gcamv7p0",
   startDate: 2015,
   endDate: 2100,
   dashboardSelection: "watWithdrawBySec",
