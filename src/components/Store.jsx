@@ -3,6 +3,7 @@ import {updateHash} from './sharing/DashboardUrl';
 // Define the initial state
 const initialState = {
   open: 2,
+  urlLoaded: false,
   dataset: "gcamv7p0",
   startDate: 2015,
   endDate: 2100,
@@ -57,6 +58,8 @@ function reducer(state = initialState, action) {
       return { ...state, dashboardSelection: action.payload };
     case 'toggleOpen':
       return { ...state, open: state.open === 1 ? 0 : 1 };
+    case 'toggleURLLoaded':
+      return { ...state, urlLoaded: !state.urlLoaded};
     case 'setOpen':
       return { ...state, open: action.payload };
     case 'setDataset':

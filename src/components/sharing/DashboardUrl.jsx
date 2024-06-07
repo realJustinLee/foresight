@@ -37,9 +37,17 @@ const isequal = (A, B) => {
 //Load Start Date
 //if (searchParams.has("start") && parseInt(searchParams.get("start")) &&
 
-function DashboardURL({ start, end, openedScenarios, parameter, parameters, year, region, subcat, regionsList, subcategoriesList, updateStartDate, updateEndDate, updateYear, updateParam, updateParams, updateScenerios, dataDate, guageData, Scenarios }) {
+function DashboardURL({ start, end, openedScenarios, parameter, year, URLLoaded, toggleURLLoaded, updateStartDate, updateEndDate, updateYear, updateParam, updateScenerios, dataDate, guageData, Scenarios }) {
 
   let searchParams = new URLSearchParams(window.location.hash.substring(1));
+
+  async function checkIfLoaded() {
+    if (searchParams.has("start") || searchParams.has("end") || searchParams.has("year"))
+      await waitForData(dataDate);
+    if (searchParams.has("selectedParam") || searchParams.has("scenarios"))
+      await waitForData(guageData);
+    toggleURLLoaded();
+  }
 
   function waitForData(data) {
     return new Promise((resolve) => {
@@ -151,10 +159,13 @@ function DashboardURL({ start, end, openedScenarios, parameter, parameters, year
       updateHash("scenarios", openedScenarios.map(item => item.title).join(","));
     }   
   }
-
-  loadDates();
-  loadParams();
-  loadScenarios();
+  if(!URLLoaded) {
+    loadDates();
+    loadParams();
+    loadScenarios();
+    checkIfLoaded();
+  }
+  
 }
 
 function mapStateToProps(state) {
@@ -167,6 +178,7 @@ function mapStateToProps(state) {
     year: state.dashboardYear,
     region: state.dashboardRegion,
     subcat: state.dashboardSubsector,
+    URLLoaded: state.urlLoaded
   };
 }
 
@@ -179,6 +191,7 @@ function mapDispatchToProps(dispatch) {
     updateParam: (guage) => dispatch(setdashboardSelection(guage)),
     updateParams: (guages) => dispatch(setdashboardGuages(guages)),
     updateScenerios: (scenarios) => dispatch(setSceneriosNoUpdate(scenarios)),
+    toggleURLLoaded: () => dispatch({ type: 'toggleURLLoaded' })
   };
 }
 

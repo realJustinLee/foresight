@@ -247,7 +247,7 @@ query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: Str
 }
 `;
 
-function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories }) {
+function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, URLLoaded }) {
   const [scenarios, setScenarios] = useState(scenerios.map(obj => obj.title));
 
 
@@ -344,25 +344,31 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
   }, [scenarios, parameter, year, setSubcategories, fetchParallel]);
 
   useEffect(() => {
-    const abortController = new AbortController();
-    setLine("i");
-    fetchLine(abortController.signal);
-    return () => abortController.abort();
-  }, [scenarios, parameter, region, subcat, setLine, fetchLine]);
+    if (URLLoaded) {
+      const abortController = new AbortController();
+      setLine("i");
+      fetchLine(abortController.signal);
+      return () => abortController.abort();
+    }
+  }, [scenarios, parameter, region, subcat, setLine, fetchLine, URLLoaded]);
 
   useEffect(() => {
-    const abortController = new AbortController();
-    setChoropleth("i");
-    fetchChoropleth(abortController.signal);
-    return () => abortController.abort();
-  }, [scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth]);
+    if (URLLoaded) {
+      const abortController = new AbortController();
+      setChoropleth("i");
+      fetchChoropleth(abortController.signal);
+      return () => abortController.abort();
+    }
+  }, [scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth, URLLoaded]);
 
   useEffect(() => {
-    const abortController = new AbortController();
-    setBar("i");
-    fetchBar(abortController.signal);
-    return () => abortController.abort();
-  }, [scenarios, parameter, year, setBar, fetchBar]);
+    if (URLLoaded) {
+      const abortController = new AbortController();
+      setBar("i");
+      fetchBar(abortController.signal);
+      return () => abortController.abort();
+    }
+  }, [scenarios, parameter, year, setBar, fetchBar, URLLoaded]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -379,11 +385,13 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
   }, [scenarios, parameter, setDates, fetchDates]);
 
   useEffect(() => {
-    const abortController = new AbortController();
-    setAggSub("i");
-    fetchAggSub(abortController.signal);
-    return () => abortController.abort();
-  }, [scenarios, parameter, year, setAggSub, fetchAggSub]);
+    if (URLLoaded) {
+      const abortController = new AbortController();
+      setAggSub("i");
+      fetchAggSub(abortController.signal);
+      return () => abortController.abort();
+    }
+  }, [scenarios, parameter, year, setAggSub, fetchAggSub, URLLoaded]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -403,6 +411,7 @@ function mapStateToProps(state) {
     region: state.dashboardRegion,
     subcat: state.dashboardSubsector,
     dataLine: state.parsedDataLine,
+    URLLoaded: state.urlLoaded
   };
 }
 
