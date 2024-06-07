@@ -189,12 +189,12 @@ export const getBarTotal = (data, param, scenarios) => {
     return ans;
 }
 
-export const getBarHorizontal = (countries, data, dataAgg, scenerio) => {
+export const getBarHorizontal = (countries, data, scenerio) => {
     let output = [];
     let barData = getScenerio(data, scenerio);
-    let aggregates = getScenerio(dataAgg, scenerio);
     let subcatList = filterSubcat(barData);
-    subcatList.sort()
+    subcatList.sort((a, b) => a.toLowerCase() - b.toLowerCase());
+    console.log(subcatList);
     for (let i = 0; i < countries.length; i++) {
         let countryData = getRegion(barData, countries[i]);
         let obj = {
