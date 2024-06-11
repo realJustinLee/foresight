@@ -1,0 +1,32 @@
+.data-upload-page {
+  height: calc(100vh - 150px);
+}
+
+.data-black-info-box {
+  position: relative;
+  text-align: center;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin: 0;
+  border-radius: 9px;
+  background-color: black;
+  align-items: center;
+  color: rgb(254, 254, 254);
+  font-size: 100%;
+  font-weight: 600;
+  white-space: pre-wrap;
+}
+
+.title-info-gap {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.data-text-thick {
+  font-weight: 700;
+  font-size: 150%;
+}
+
+.text-left {
+  text-align: left ;
+}

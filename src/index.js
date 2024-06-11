@@ -16,6 +16,7 @@ import {
   Globes,
   Energy,
   Water,
+  UploadData,
   Land,
   Test,
   About,
@@ -33,6 +34,7 @@ root.render(
       <Navigation />
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/dataupload" element={<UploadData />} />
         <Route path="/energy" element={<Energy />} />    
         <Route path="/water" element={<Water />} />    
         <Route path="/land" element={<Land />} />    

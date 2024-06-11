@@ -23,7 +23,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
   const divisions = 7;
 
   const [country, setCountryDisplay] = useState("");
-  const [countryValue, setCountryDisplayValue] = useState("");
+  const [countryValue, setCountryDisplayValue] = useState(0);
 
   function getColorValues(color, number, n) {
     const colors = getColorsFromPalette(color);
