@@ -47,25 +47,25 @@ export const getFirstParam = (data) => (data[0]?.param || "ERROR: NO PARAMETERS"
 // isValidDate takes in a year and determines if it is a valid date for the parameter in the dataset.
 // This is used in DashboardDate to grey out dates not available in the dataset and to determine if
 // the URL is valid.
-export const isValidDate = (data, date) => data.some(item => item.x === date);
+export const isValidDate = (data, date) => data.some(item => item.x.toString() === date.toString());
 
 
 // filterDateRange filters a dataset between two provided dates. Three inputs
 // are given, the dataset to modify and the dates to filter by. This is used for guages.
-export const filterDateRange = (data, start, end) => data.filter(item => item.x >= start && item.x <= end);
+export const filterDateRange = (data, start, end) => data.filter(item => item.x.toString() >= start.toString() && item.x.toString() <= end.toString());
 
 //Returns the first date in the Dataset. Used for default dateranges in the dashboard.
-export const getFirstDate = (data) => new Date(data[0]?.x || 0);
+export const getFirstDate = (data) => new Date(parseInt(data[0]?.x) || 0);
 
 //Returns the last date in the Dataset. Used for default dateranges in the dashboard.
-export const getLastDate = (data) => new Date(data[data.length - 1]?.x || 0);
+export const getLastDate = (data) => new Date(parseInt(data[data.length - 1]?.x) || 0);
 
 export const getDataDate = (data, scenario, param, date) => {
-    const item = data.find(row => row.x === parseInt(date) && row.scenario === scenario && row.param === param);
-    return item ? item.value : 0;
+    const item = data.find(row => row.x.toString() === date.toString() && row.scenario === scenario && row.param === param);
+    return item ? parseInt(item.value) : 0;
 }
 
-//Given an object array, return the units given the matchoign title. For store guages.
+//Given an object array, return the units given the matching title. For store guages.
 export const findUnitsByTitle = (objectsArray, titleToFind) => {
     const foundObject = objectsArray.find(obj => obj.title === titleToFind);
     return foundObject ? foundObject.units : "ERROR";
@@ -73,10 +73,23 @@ export const findUnitsByTitle = (objectsArray, titleToFind) => {
 
 //Finds the closest date to the selected date in the dataset if there is no index with the specified date.
 export const findClosestDate = (data, targetDate) => {
+    if(data.length === 0) return -1; 
     const closest = data.reduce((prev, curr) => {
-        return (Math.abs(curr.x - targetDate) < Math.abs(prev.x - targetDate)) ? curr : prev;
+        return (Math.abs(parseInt(curr.x) - targetDate) < Math.abs(parseInt(prev.x) - targetDate)) ? curr : prev;
     });
     return closest ? closest.x : -1
+}
+
+export const findClosestDateAllParamsAbove = (data, params, targetDate) => {
+    let date = Infinity;
+    params.forEach((param) => {date = Math.min(date, findClosestDate(data.filter(item => item.param === param), targetDate))});
+    return date;
+}
+
+export const findClosestDateAllParamsBelow = (data, params, targetDate) => {
+    let date = -Infinity;
+    params.forEach((param) => {date = Math.max(date, findClosestDate(data.filter(item => item.param === param), targetDate))});
+    return date;
 }
 
 // Gets the percentage for guages
@@ -84,6 +97,7 @@ export const getGuage = (data, scenario, param, start, end) => {
     //console.log(data, scenario, param);
     if (data.length === 0) return -1; // Check for invalid data.
     const reducedData = data.filter(row => row.scenario === scenario && row.param === param);
+    //console.log(reducedData);
     if (reducedData.length === 0) return -1; // Check to make sure the parameter exists.
     const startData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, start));
     const endData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, end));

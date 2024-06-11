@@ -1,10 +1,13 @@
 import { createStore } from 'redux';
-import {updateHash} from './sharing/DashboardUrl';
+import { updateHash } from './sharing/DashboardUrl';
 // Define the initial state
 const initialState = {
   open: 2,
+  
   urlLoaded: false,
-  dataset: "gcamv7p0",
+  dataset: "foresight_v1",
+  datasets: ["foresight_v1"],
+  userUploadedData: {},
   startDate: 2015,
   endDate: 2100,
   dashboardSelection: "watWithdrawBySec",
@@ -12,6 +15,26 @@ const initialState = {
   dashboardRegion: "Global",
   dashboardSubsector: "Aggregate of Subsectors",
   barCountries: [],
+  allScenarios: [
+    {
+      title: "Reference",
+    },
+    {
+      title: "GCAM_SSP1",
+    },
+    {
+      title: "GCAM_SSP2",
+    },
+    {
+      title: "GCAM_SSP3",
+    },
+    {
+      title: "GCAM_SSP4",
+    },
+    {
+      title: "GCAM_SSP5",
+    }
+  ],
   scenerios: [
     {
       title: "GCAM_SSP2",
@@ -23,6 +46,33 @@ const initialState = {
     }
   ],
   guages: [
+    {
+      title: "pop",
+      units: "Population",
+      group: "population"
+    },
+    {
+      title: "watWithdrawBySec",
+      units: "Water Withdrawal by Sector",
+      group: "water"
+    },
+    {
+      title: "agProdByCrop",
+      units: "Ag Production",
+      group: "agriculture"
+    },
+    {
+      title: "energyPrimaryByFuelEJ",
+      units: "Energy Primary by Fuel",
+      group: "energy"
+    },
+    {
+      title: "emissCO2BySector",
+      units: "CO2 emissions",
+      group: "emissions"
+    }
+  ],
+  guageList: [
     {
       title: "pop",
       units: "Population",
@@ -68,10 +118,14 @@ function reducer(state = initialState, action) {
       return { ...state, startDate: action.payload };
     case 'setEndDate':
       return { ...state, endDate: action.payload };
+    case 'setAllScenarios':
+      return { ...state, allScenarios: action.payload };
     case 'setScenerios':
       return { ...state, scenerios: action.payload };
     case 'setGuages':
       return { ...state, guages: action.payload };
+    case 'setGuageList':
+      return { ...state, guageList: action.payload };
     case 'setDataLine':
       return { ...state, parsedDataLine: action.payload };
     case 'setDashYear':
@@ -82,10 +136,15 @@ function reducer(state = initialState, action) {
       return { ...state, dashboardSubsector: action.payload };
     case 'setBarCountries':
       return { ...state, barCountries: action.payload };
+    case 'setDatasets':
+      return { ...state, datasets: action.payload };
+    case 'setUserUploadedData':
+      return { ...state, userUploadedData: action.payload };
     default:
       return state;
   }
 }
+
 // Update Dashboard Parameters
 export function setdashboardGraphParams(date, region, subsector) {
   //updateHash("dashdate", date);
@@ -99,6 +158,14 @@ export function setdashboardGraphParams(date, region, subsector) {
 export function setDashDate(date) {
   updateHash("year", date);
   return { type: 'setDashYear', payload: date };
+}
+
+export function setUserUploadedData(data) {
+  return { type: 'setUserUploadedData', payload: data };
+}
+
+export function setDatasets(datasets) {
+  return { type: 'setDatasets', payload: datasets };
 }
 
 export function setOpen(open) {
@@ -123,6 +190,11 @@ export function setdashboardGuages(guages) {
   return { type: 'setGuages', payload: guages };
 }
 
+export function setGuageList(guages) {
+  //updateHash("selected", num);
+  return { type: 'setGuages', payload: guages };
+}
+
 // Action creator function to update the dataset
 export function setDataset(dataset) {
   return { type: 'setDataset', payload: dataset };
@@ -138,6 +210,10 @@ export function setStartDate(date) {
 export function setEndDate(date) {
   updateHash("end", date);
   return { type: 'setEndDate', payload: date };
+}
+
+export function setAllScenarios(scenarios) {
+  return { type: 'setAllScenarios', payload: scenarios };
 }
 
 // Change dashboard scenerios array

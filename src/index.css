@@ -94,6 +94,10 @@ a {
   z-index: 2 !important;
 }
 
+.page-text-dark {
+  color: rgb(254, 254, 254) !important;
+}
+
 .page-image-container {
   text-align: center;
 }

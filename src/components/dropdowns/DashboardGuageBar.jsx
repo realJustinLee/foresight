@@ -15,6 +15,13 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
   const [OpenedScenarios, setValueScenario] = useState(OpenScenarios);
   const [OpenedParameters, setValueParameter] = useState(OpenParameters);
 
+  useEffect(() => {
+    setValueScenario(OpenScenarios);
+  }, [OpenScenarios]);
+
+  useEffect(() => {
+    setValueParameter(OpenParameters);
+  }, [OpenParameters]);
 
   // Maps the dropdown menu. Takes in the vector of all scenerios and creates 
   // a Dropdown.Item for each.
@@ -126,7 +133,9 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
       ))
     )
   };
-
+  // <div className="guage-selection-menu">
+  //   <RiPlayListAddFill />
+  // </div>
 
   // Returns the HTML for each row of the guage dashboard. With the new guage format,
   // each column now has its seperate grid for rows.
@@ -139,8 +148,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
       ))
     )
   };
-
-
+  //style={{gridTemplateColumns: "auto repeat(" + OpenedParameters.length + ", 1fr)"}}
   // If the dataset hasn't loaded yet, we give the user the "Loading Dataset..." message.
   return (
     <div className="dashboard-guage-grid">
