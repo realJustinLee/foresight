@@ -42,6 +42,7 @@ function DashboardURL({ start, end, openedScenarios, parameter, year, URLLoaded,
   let searchParams = new URLSearchParams(window.location.hash.substring(1));
 
   async function checkIfLoaded() {
+    await waitForDate(year);
     if (searchParams.has("start") || searchParams.has("end") || searchParams.has("year"))
       await waitForData(dataDate);
     if (searchParams.has("selectedParam") || searchParams.has("scenarios"))
@@ -60,7 +61,19 @@ function DashboardURL({ start, end, openedScenarios, parameter, year, URLLoaded,
     });
   }
 
+  function waitForDate(date) {
+    return new Promise((resolve) => {
+      const intervalId = setInterval(() => {
+        if (date !== -1) {
+          clearInterval(intervalId);
+          resolve();
+        }
+      }, 100);
+    });
+  }
+
   async function loadDates() {
+    await waitForDate(year);
     if (searchParams.has("start")) {
       let date = parseInt(searchParams.get("start"));
       await waitForData(dataDate);
@@ -99,16 +112,20 @@ function DashboardURL({ start, end, openedScenarios, parameter, year, URLLoaded,
         if (date !== year)
           updateYear(date);
       }
-      else
+      else {
+        console.log("!!!");
         updateHash("year", findClosestDate(dataDate, year));
+      }
     }
     else {
       await waitForData(dataDate);
+      console.log("!!!");
       updateHash("year", findClosestDate(dataDate, year));
     }
   }
 
   async function loadParams() {
+    await waitForDate(year);
     if (searchParams.has("selectedParam")) {
       let param = searchParams.get("selectedParam");
       await waitForData(guageData);
@@ -143,6 +160,7 @@ function DashboardURL({ start, end, openedScenarios, parameter, year, URLLoaded,
   }
 
   async function loadScenarios() {
+    await waitForDate(year);
     if (searchParams.has("scenarios")) {
       let scenarioList = searchParams.get("scenarios").toString().split(",");
       if (isValidFromObject(scenarioList, Scenarios) && scenarioList.length === 2) {

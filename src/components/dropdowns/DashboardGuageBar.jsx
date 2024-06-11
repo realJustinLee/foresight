@@ -8,10 +8,10 @@ import ScenerioGuage from "../guages/ScenerioGuage"
 import ScenerioGuageNegative from "../guages/ScenerioGuageNegative"
 import Dropdown from 'react-bootstrap/Dropdown';
 import { getIcon } from "../Dashboard";
-import { getGuage } from '../../assets/data/DataManager';
-import { updateListHash } from '../sharing/DashboardUrl';
+import { findClosestDate, getGuage } from '../../assets/data/DataManager';
+import { updateHash, updateListHash } from '../sharing/DashboardUrl';
 
-function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParameters, SelectedParameter, startDate, endDate, data, updateSelection, updateScenerios, dashDate, dashReg, dashSubs, reset }) {
+function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParameters, SelectedParameter, startDate, endDate, data, dateData, updateSelection, updateScenerios, dashDate, dashReg, dashSubs, reset }) {
   const [OpenedScenarios, setValueScenario] = useState(OpenScenarios);
   const [OpenedParameters, setValueParameter] = useState(OpenParameters);
 
@@ -94,10 +94,17 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
   // This function resets and updates each selected parameter apon a new parameter being
   // chosen.
   function resetAndUpdate(title) {
-    dashDate(2020);
+    let date = findClosestDate(dateData, 2020);
+
+    dashDate(date);
     dashReg("Global");
     dashSubs("Aggregate of Subsectors");
     updateSelection(title);
+
+    updateHash("year", date);
+    updateHash("region", "Global");
+    updateHash("class", "Aggregate of Subsectors");
+    updateHash("selectedParam", title);
   }
 
 

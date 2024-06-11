@@ -3,102 +3,21 @@ import { updateHash } from './sharing/DashboardUrl';
 // Define the initial state
 const initialState = {
   open: 2,
-  
   urlLoaded: false,
   dataset: "foresight_v1",
   datasets: ["foresight_v1"],
   userUploadedData: {},
-  startDate: 2015,
-  endDate: 2100,
-  dashboardSelection: "watWithdrawBySec",
-  dashboardYear: 2020,
+  startDate: -1,
+  endDate: -1,
+  dashboardSelection: "Error: Guage Loading Error",
+  dashboardYear: -1,
   dashboardRegion: "Global",
   dashboardSubsector: "Aggregate of Subsectors",
   barCountries: [],
-  allScenarios: [
-    {
-      title: "Reference",
-    },
-    {
-      title: "GCAM_SSP1",
-    },
-    {
-      title: "GCAM_SSP2",
-    },
-    {
-      title: "GCAM_SSP3",
-    },
-    {
-      title: "GCAM_SSP4",
-    },
-    {
-      title: "GCAM_SSP5",
-    }
-  ],
-  scenerios: [
-    {
-      title: "GCAM_SSP2",
-      pos: 1,
-    },
-    {
-      title: "GCAM_SSP3",
-      pos: 2,
-    }
-  ],
-  guages: [
-    {
-      title: "pop",
-      units: "Population",
-      group: "population"
-    },
-    {
-      title: "watWithdrawBySec",
-      units: "Water Withdrawal by Sector",
-      group: "water"
-    },
-    {
-      title: "agProdByCrop",
-      units: "Ag Production",
-      group: "agriculture"
-    },
-    {
-      title: "energyPrimaryByFuelEJ",
-      units: "Energy Primary by Fuel",
-      group: "energy"
-    },
-    {
-      title: "emissCO2BySector",
-      units: "CO2 emissions",
-      group: "emissions"
-    }
-  ],
-  guageList: [
-    {
-      title: "pop",
-      units: "Population",
-      group: "population"
-    },
-    {
-      title: "watWithdrawBySec",
-      units: "Water Withdrawal by Sector",
-      group: "water"
-    },
-    {
-      title: "agProdByCrop",
-      units: "Ag Production",
-      group: "agriculture"
-    },
-    {
-      title: "energyPrimaryByFuelEJ",
-      units: "Energy Primary by Fuel",
-      group: "energy"
-    },
-    {
-      title: "emissCO2BySector",
-      units: "CO2 emissions",
-      group: "emissions"
-    }
-  ]
+  allScenarios: [],
+  scenerios: [],
+  guages: [],
+  guageList: []
 };
 
 // Define a reducer function to update the state
@@ -156,7 +75,6 @@ export function setdashboardGraphParams(date, region, subsector) {
 }
 
 export function setDashDate(date) {
-  updateHash("year", date);
   return { type: 'setDashYear', payload: date };
 }
 
@@ -181,7 +99,6 @@ export function setDashSubs(subsector) {
 }
 // Change currently selected guage
 export function setdashboardSelection(param) {
-  updateHash("selectedParam", param);
   return { type: 'dashboardSelection', payload: param };
 }
 
@@ -192,7 +109,7 @@ export function setdashboardGuages(guages) {
 
 export function setGuageList(guages) {
   //updateHash("selected", num);
-  return { type: 'setGuages', payload: guages };
+  return { type: 'setGuagesList', payload: guages };
 }
 
 // Action creator function to update the dataset
@@ -202,13 +119,11 @@ export function setDataset(dataset) {
 
 // Change dashboard start date
 export function setStartDate(date) {
-  updateHash("start", date);
   return { type: 'setStartDate', payload: date };
 }
 
 // Change dashboard end date
 export function setEndDate(date) {
-  updateHash("end", date);
   return { type: 'setEndDate', payload: date };
 }
 

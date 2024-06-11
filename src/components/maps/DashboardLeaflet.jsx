@@ -2,14 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import "leaflet.sync";
 import landcells from "./data/landcells.json"
-import {
-  ReactCompareSlider
-} from "react-compare-slider";
-import { getChoroplethValue, getSmallestChoropleth, getLargestChoropleth } from '../../assets/data/DataManager';
+import { getChoroplethValue } from '../../assets/data/DataManager';
+import { updateHash } from '../sharing/DashboardUrl';
 
-import ChoroplethControl from '../dropdowns/ChoroplethControl';
-import { getColorsFromPalette } from '../../assets/data/GcamColors';
-import ChoroplethLegend from '../dropdowns/ChoroplethLegend';
 
 const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
   const mapData = data;
@@ -115,6 +110,7 @@ const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, set
 
   function setCountry(e) {
     setRegion(e.sourceTarget.feature.id);
+    updateHash("region", e.sourceTarget.feature.id);
   }
 
   function onEachFeature(feature, layer) {

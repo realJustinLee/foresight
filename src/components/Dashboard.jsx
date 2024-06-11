@@ -134,11 +134,14 @@ function Dashboard({ open, dataset, scenarios }) {
           </Row>
           <DashboardGuageBar
             data={guageData}
+            dateData={datesData}
             Scenarios={scenarios}
             reset={resetData}
           />
           <Row className="selection-divider">
-            <DashboardFloater />
+            <DashboardFloater 
+              data = {datesData}
+            />
           </Row>
           <Row>
             <DashboardGraphs 

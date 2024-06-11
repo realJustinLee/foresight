@@ -29,7 +29,7 @@ export const getUnits = (data, param) => {
         return item.units;
     }
     return "";
-}
+};
 
 
 // isValidDate takes in a year and determines if it is a valid date for the parameter in the dataset.
@@ -63,13 +63,13 @@ export const getLastDate = (data) => new Date(parseInt(data[data.length - 1]?.x)
 export const getDataDate = (data, scenario, param, date) => {
     const item = data.find(row => row.x.toString() === date.toString() && row.scenario === scenario && row.param === param);
     return item ? parseInt(item.value) : 0;
-}
+};
 
 //Given an object array, return the units given the matching title. For store guages.
 export const findUnitsByTitle = (objectsArray, titleToFind) => {
     const foundObject = objectsArray.find(obj => obj.title === titleToFind);
     return foundObject ? foundObject.units : "ERROR";
-}
+};
 
 //Finds the closest date to the selected date in the dataset if there is no index with the specified date.
 export const findClosestDate = (data, targetDate) => {
@@ -78,19 +78,19 @@ export const findClosestDate = (data, targetDate) => {
         return (Math.abs(parseInt(curr.x) - targetDate) < Math.abs(parseInt(prev.x) - targetDate)) ? curr : prev;
     });
     return closest ? closest.x : -1
-}
+};
 
 export const findClosestDateAllParamsAbove = (data, params, targetDate) => {
     let date = Infinity;
     params.forEach((param) => {date = Math.min(date, findClosestDate(data.filter(item => item.param === param), targetDate))});
     return date;
-}
+};
 
 export const findClosestDateAllParamsBelow = (data, params, targetDate) => {
     let date = -Infinity;
     params.forEach((param) => {date = Math.max(date, findClosestDate(data.filter(item => item.param === param), targetDate))});
     return date;
-}
+};
 
 // Gets the percentage for guages
 export const getGuage = (data, scenario, param, start, end) => {
@@ -106,19 +106,19 @@ export const getGuage = (data, scenario, param, start, end) => {
     //console.log("START DATA: " + startData, "END DATA: " + endData);
     //console.log("MATH DATA: " + change);
     return Math.round(change);
-}
+};
 
 // Gets value selected for display
 export const getDataset = (data, dataaggr, dataaggs, dataaggrs, date, region, subcat) => {
     return subcat === "" ? (region === "" ? dataaggrs : dataaggs) : (region === "" ? dataaggr : data);
-}
+};
 
 // Gets the individual value from the dtat given the date, region, subcat, and scenerio.
 export const getDataPoint = (datad, dataaggr, dataaggs, dataaggrs, date, region, subcat, scenario) => {
     let data = getDataset(datad, dataaggr, dataaggs, dataaggrs, date, region, subcat);
     let item = data.find(row => row.x === date && row.scenario === scenario && (region === "" || row.region === region) && (subcat === "" || row.subcat === subcat));
     return item ? item.value : "0";
-}
+};
 
 // getLargestChoropleth gets the largest value from a dataset to calculate the shading
 // for the Choropleth map. Takes in an already choropleth formated dataset.
@@ -126,17 +126,21 @@ export const getLargestChoropleth = (data) => data.reduce((max, item) => Math.ma
 
 // getSmallestChoropleth gets the smallest value from a dataset to calculate the shading
 // for the Choropleth map. Takes in an already choropleth formated dataset.
-export const getSmallestChoropleth = (data) => data.reduce((min, item) => Math.min(min, item.value), data[0].value);
+export const getSmallestChoropleth = (data) => {
+    if(data.length > 0 && Object.hasOwn(data[0], "value"))
+        return data.reduce((min, item) => Math.min(min, (item.value) ? (item.value) : (-1)), data[0].value);
+    return -1;
+};
 
 // getChoroplethValue gets the value for a choropleth region with the id given by id.
 export const getChoroplethValue = (data, id) => {
     const item = data.find(item => item.id === id);
     return item ? item.value : 0;
-}
+};
 
 export const reduceRegion = (data, region) => {
     data.filter(item => item.region === region).sort((a, b) => a.x - b.x);
-}
+};
 
 // filterSubcat creates a list of all subcategories for the
 // data given. This data should be in the form of an already
@@ -148,23 +152,23 @@ export const filterSubcat = (data) => {
     const reducedData = [...new Set(data.map(item => item.class))];
     reducedData.sort();
     return reducedData;
-}
+};
 
 export const reduceSubcat = (data, subcat) => {
     const reducedData = data.filter(item => item.class === subcat);
     reducedData.sort((a, b) => a.x - b.x);
     return reducedData;
-}
+};
 
 export const getRegions = (countries, data) => {
     return data.filter(item => countries.includes(item.region));
-}
+};
 
 export const getRegionsSorted = (countries, data) => {
     let newdata = data.filter(item => countries.includes(item.region));
     newdata.sort((a, b) => a.value - b.value);
     return [...new Set(newdata.map(item => item.region))];
-}
+};
 // filterRegion creates a list of all regions for the
 // data given. This data does not be in the form of an already
 // param filtered array.
@@ -174,11 +178,11 @@ export const filterRegion = (data) => {
     data.sort((a, b) => a.value - b.value);
     const reducedData = [...new Set(data.map(item => item.region))];
     return reducedData;
-}
+};
 
 export const listRegions = (data) => {
     return Array.from(new Set(data.map(item => item.region)));
-}
+};
 
 export const getNoSubcatChoropleth = (data) => {
     //console.log("!!! LOAD CHOROPLETH");
@@ -190,7 +194,7 @@ export const getNoSubcatChoropleth = (data) => {
         });
     }
     return reducedData;
-}
+};
 
 export const getBarTotal = (data, param, scenarios) => {
     let ans = [];
@@ -201,14 +205,14 @@ export const getBarTotal = (data, param, scenarios) => {
         })
     }
     return ans;
-}
+};
 
 export const getBarHorizontal = (countries, data, scenerio) => {
     let output = [];
     let barData = getScenerio(data, scenerio);
     let subcatList = filterSubcat(barData);
     subcatList.sort((a, b) => a.toLowerCase() - b.toLowerCase());
-    console.log(subcatList);
+    //console.log(subcatList);
     for (let i = 0; i < countries.length; i++) {
         let countryData = getRegion(barData, countries[i]);
         let obj = {
@@ -223,7 +227,7 @@ export const getBarHorizontal = (countries, data, scenerio) => {
         output.push(obj);
     }
     return output
-}
+};
 
 export const lineGraphReduce = (data, param, scenarios, subcat) =>
     scenarios.map(scenario => ({
@@ -242,6 +246,6 @@ export const getLineGraphReduce = (data, param, subcat) => {
         x: parseFloat(item.x),
         y: item.value
     }));
-}
+};
 
 export const choroplethReduce = (data, scenario) => getNoSubcatChoropleth(getScenerio(data, scenario));

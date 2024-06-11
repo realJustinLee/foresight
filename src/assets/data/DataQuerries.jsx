@@ -312,10 +312,10 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
 
   const fetchDashboard = useCallback(async () => {
     const result = await fetchParallel([[queryDataset]]);
-    console.log("Dashboard:", result);
+    //console.log("Dashboard:", result);
     const scenarios = [...new Set(result.map(item => item.scenario))];
     //Prepare total scenarios
-    console.log("STORE SCENARIOS:", scenarios);
+    //console.log("STORE SCENARIOS:", scenarios);
     setAllScenarios(scenarios.map(obj => ({title: obj})));
     //Prepare opened scenarios
     const currentScenarios = [];
@@ -323,7 +323,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
     opened.forEach((scenario, index) => {
       currentScenarios.push({ title: scenario, pos: index + 1 });
     });
-    console.log("STORE CURRENT SCENARIOS:", currentScenarios);
+    //console.log("STORE CURRENT SCENARIOS:", currentScenarios);
     setScenariosTotal(currentScenarios);
 
     const params = [...new Set(result.map(item => item.param))];
@@ -331,30 +331,30 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       let units = getUnits(result, guage);
       units = units.slice(0, units.indexOf("(")).trim();
       return { title: guage, units: units, group: "water"}});
-    console.log("STORE ALL GUAGES:", guages);
+    //console.log("STORE ALL GUAGES:", guages);
     setGuagesTotal(guages);
     // Prepare opened guages
     const currentGuages = guages.slice(0, 5);
-    console.log("STORE CURRENT GUAGES:", currentGuages);
+    //console.log("STORE CURRENT GUAGES:", currentGuages);
     setGuagesCurrent(currentGuages);
     // Prepared selected guage
     const selectedGuage = params[0];
-    console.log("STORE SELECTED GUAGE:", selectedGuage);
+    //console.log("STORE SELECTED GUAGE:", selectedGuage);
     setGuageSelected(selectedGuage);
 
     const start = findClosestDateAllParamsAbove(result, params, 2015);
     const end = findClosestDateAllParamsAbove(result, params, 2100);
     const dashboardDate = findClosestDateAllParamsAbove(result, params, 2020);
-    console.log("START DATE:", start);
+    //console.log("START DATE:", start);
     setStart(start);
-    console.log("END DATE:", end);
+    //console.log("END DATE:", end);
     setEnd(end);
     console.log("DASHBOARD DATE:", dashboardDate);
     setCurrentDate(dashboardDate);
   }, [fetchParallel]);
 
   const fetchLine = useCallback(async () => {
-    if (scenarios != "i") {
+    if (scenarios !== "i" && scenarios.length > 1) {
       const queries = [];
       if (subcat === "Aggregate of Subsectors" || subcat === "class1") {
         if (region === "Global") {
@@ -373,7 +373,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [region, subcat, scenarios, parameter, setLine, fetchParallel]);
 
   const fetchChoropleth = useCallback(async () => {
-    if (scenarios != "i") {
+    if (scenarios !== "i" && scenarios.length > 1) {
       const queries = [];
       if (subcat === "Aggregate of Subsectors") {
         queries.push([choroplethQueryAggSub, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1] }]);
@@ -387,28 +387,28 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [subcat, scenarios, parameter, year, setChoropleth, fetchParallel]);
 
   const fetchBar = useCallback(async () => {
-    if (scenarios != "i") {
+    if (scenarios !== "i" && scenarios.length > 1) {
       const result = await fetchParallel([[barQuery, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
       setBar(result);
     }
   }, [scenarios, parameter, year, setBar, fetchParallel]);
 
   const fetchGuage = useCallback(async () => {
-    if (scenarios != "i") {
+    if (scenarios !== "i" && scenarios.length > 1 && scenarios.length > 1) {
       const result = await fetchParallel([[queryGuage, { start, end, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
       setGuage(result);
     }
   }, [scenarios, start, end, setGuage, fetchParallel]);
 
   const fetchDates = useCallback(async () => {
-    if (scenarios != "i") {
+    if (scenarios !== "i" && scenarios.length > 1) {
       const result = await fetchParallel([[queryDates, { param: parameter, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
       setDates(result);
     }
   }, [scenarios, parameter, setDates, fetchParallel]);
 
   const fetchAggSub = useCallback(async () => {
-    if (scenarios != "i") {
+    if (scenarios !== "i" && scenarios.length > 1) {
       const result = await fetchParallel([[aggSubQuery, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
       setAggSub(result);
       setCountries(filterRegion(getScenerio(result, scenarios[0])));
@@ -416,14 +416,14 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [scenarios, parameter, year, setAggSub, setCountries, fetchParallel]);
 
   const fetchAggReg = useCallback(async () => {
-    if (scenarios != "i") {
+    if (scenarios !== "i" && scenarios.length > 1) {
       const result = await fetchParallel([[aggRegQuery, { param: parameter, date: year, scenario1: scenarios[0] }]]);
       setSubcategories(filterSubcat(result));
     }
   }, [scenarios, parameter, year, setSubcategories, fetchParallel]);
 
   useEffect(() => {
-    if (URLLoaded && scenarios != "i") {
+    if (URLLoaded && scenarios !== "i" && scenarios.length > 1) {
       const abortController = new AbortController();
       setLine("i");
       fetchLine(abortController.signal);
@@ -432,7 +432,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [scenarios, parameter, region, subcat, setLine, fetchLine, URLLoaded]);
 
   useEffect(() => {
-    if (URLLoaded && scenarios != "i") {
+    if (URLLoaded && scenarios !== "i" && scenarios.length > 1) {
       const abortController = new AbortController();
       setChoropleth("i");
       fetchChoropleth(abortController.signal);
@@ -441,7 +441,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth, URLLoaded]);
 
   useEffect(() => {
-    if (URLLoaded && scenarios != "i") {
+    if (URLLoaded && scenarios !== "i" && scenarios.length > 1) {
       const abortController = new AbortController();
       setBar("i");
       fetchBar(abortController.signal);
@@ -450,7 +450,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [scenarios, parameter, year, setBar, fetchBar, URLLoaded]);
 
   useEffect(() => {
-    if (scenarios != "i") {
+    if (scenarios !== "i" && scenarios.length > 1) {
       const abortController = new AbortController();
       setGuage("i");
       fetchGuage(abortController.signal);
@@ -459,7 +459,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [scenarios, start, end, setGuage, fetchGuage]);
 
   useEffect(() => {
-    if (scenarios != "i") {
+    if (scenarios !== "i" && scenarios.length > 1) {
       const abortController = new AbortController();
       setDates("i");
       fetchDates(abortController.signal);
@@ -468,7 +468,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [scenarios, parameter, setDates, fetchDates]);
 
   useEffect(() => {
-    if (URLLoaded && scenarios != "i") {
+    if (URLLoaded && scenarios !== "i" && scenarios.length > 1) {
       const abortController = new AbortController();
       setAggSub("i");
       fetchAggSub(abortController.signal);
@@ -477,13 +477,13 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [scenarios, parameter, year, setAggSub, fetchAggSub, URLLoaded]);
 
   useEffect(() => {
-    if (scenarios != "i") {
+    if (URLLoaded && scenarios !== "i" && scenarios.length > 1) {
       const abortController = new AbortController();
       setSubcategories("i");
       fetchAggReg(abortController.signal);
       return () => abortController.abort();
     }
-  }, [scenarios, parameter, year, setSubcategories, fetchAggReg]);
+  }, [scenarios, parameter, year, setSubcategories, fetchAggReg, URLLoaded]);
 }
 
 function mapStateToProps(state) {

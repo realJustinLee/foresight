@@ -1,5 +1,6 @@
 import React from "react";
 import { ResponsiveLine } from '@nivo/line'
+import { updateHash } from "../sharing/DashboardUrl";
 const Line = ({ data, setDate, unit }) => (
     <div className="line_container">
         <div className="nivo-wrapper grid-border">
@@ -24,6 +25,7 @@ const Line = ({ data, setDate, unit }) => (
                     setDate(
                         parseInt(`${data["data"]["x"]}`)
                     );
+                    updateHash("year", parseInt(`${data["data"]["x"]}`));
                 }}
                 theme={{
                     "text": {

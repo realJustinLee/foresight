@@ -66,7 +66,8 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
   }
 
   function getColor(value, data, country) {
-    return value ? getScaleValuesTest(getRelativeDataValue(value), getRank(data, country), Object.keys(data).length) : "#333333";
+    console.log("**", getRelativeDataValue(value), getRank(data, country));
+    return (value && data.length > 0 && data[0].value) ? getScaleValuesTest(getRelativeDataValue(value), getRank(data, country), Object.keys(data).length) : "#333333";
   }
 
   // Map refs:

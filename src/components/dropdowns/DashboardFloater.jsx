@@ -5,9 +5,10 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { setdashboardSelection, setDashDate, setDashReg, setDashSubs } from "../Store";
 import { connect } from 'react-redux';
 import { getIcon } from "../Dashboard";
-import { findUnitsByTitle } from "../../assets/data/DataManager";
+import { findClosestDate, findUnitsByTitle } from "../../assets/data/DataManager";
+import { updateHash } from "../sharing/DashboardUrl";
 
-function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs }) {
+function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, data }) {
     const [width, setWidth] = useState(window.innerWidth);
     useEffect(() => {
         const handleResize = () => {
@@ -22,13 +23,20 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     }, []);
 
     function resetParams() {
-        dashDate(2020);
-        dashReg("Global");
-        dashSubs("Aggregate of Subsectors");
+        if (data.length > 0) {
+            let date = findClosestDate(data, 2020);
+            dashDate(date);
+            dashReg("Global");
+            dashSubs("Aggregate of Subsectors");
+            updateHash("year", date);
+            updateHash("region", "Global");
+            updateHash("class", "Aggregate of Subsectors");
+        }
     }
 
     function updateScenerio(scenerio) {
         resetParams();
+        updateHash("selectedParam", scenerio);
         updateGuage(scenerio);
     }
 
@@ -44,7 +52,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     return (
         <>
             <div>
-                SELECTED:    { findUnitsByTitle(openGuages, selection).toUpperCase()}   {getIcon(selection, openGuages)}
+                SELECTED:    {findUnitsByTitle(openGuages, selection).toUpperCase()}   {getIcon(selection, openGuages)}
                 <Dropdown as={ButtonGroup}>
                     <Dropdown.Toggle
                         split
