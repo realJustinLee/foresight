@@ -10,18 +10,18 @@ import { BarTooltip } from "./NivoTooltips.tsx";
 // website examples showcase many properties,
 // you'll often use just a few of them.
 
-const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, csv2, countries }) => {
-    //console.log("!!!!", csv, csv2, listKeys); 
+const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, countries }) => {
+    //console.log("!!!!", csv, listKeys); 
     const [scenerioName, setScenerio] = useState(scenerio);
-    const [barData, setData] = useState(getBarHorizontal(countries, csv, csv2, scenerio));
+    const [barData, setData] = useState(getBarHorizontal(countries, csv, scenerio));
     useEffect(() => {
         setScenerio(scenerio);
         //console.log("Scenario:", scenerio);
     }, [scenerio])
     useEffect(() => {
-        setData(getBarHorizontal(countries, csv, csv2, scenerio));
-        //console.log("BAR DATA:", getBarHorizontal(countries, csv, csv2, scenerio, selectedGuage, curYear));
-    }, [countries, csv, csv2, scenerio])
+        setData(getBarHorizontal(countries, csv, scenerio));
+        console.log("BAR DATA:", barData);
+    }, [countries, csv, scenerio])
     return (
         <div className="bar-wrapper">
             <div className="double-bar-text-wrapper">  {scenerioName} </div>
@@ -77,6 +77,16 @@ const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, csv2,
                 }}
                 enableLabel={false}
                 legends={[]}
+                markers={[
+                    {
+                        axis: 'x',
+                        value: 0,
+                        lineStyle: {
+                            stroke: 'white',
+                        },
+                    },
+                ]}
+                the value determine 
                 role="application"
                 theme={{
                     "text": {

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
-import BarHorizontal from "./charts/BarHorizontal";
+import BarHorizontal from "../charts/BarHorizontal";
 import { connect } from 'react-redux';
-import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits } from '../assets/data/DataManager';
-import Line from './charts/Line';
-import BarCountryControl from './dropdowns/BarCountryControl';
-import { getBarColors } from '../assets/data/GcamColors';
-import { setDashDate, setDashReg, setDashSubs } from './Store';
-import LeafletSync from "./maps/LeafletSync";
+import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits } from '../../assets/data/DataManager';
+import Line from '../charts/Line';
+import BarCountryControl from '../dropdowns/BarCountryControl';
+import { getBarColors } from '../../assets/data/GcamColors';
+import { setDashDate, setDashReg, setDashSubs } from '../Store';
+import LeafletSync from "../maps/LeafletSync";
 
 function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs }) {
   const [width, setWidth] = useState(window.innerWidth);
@@ -29,7 +29,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
   }, [dashSubcategory]);
 
   useEffect(() => {
-    //console.log("SCENERIO CHANGE");
+    console.log("SCENERIO CHANGE");
   }, [openedScenerios]);
 
   useEffect(() => {
@@ -106,8 +106,8 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
   ) : (
     <div className='bar-grid grid-border'>
       <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={dashYear} className="choropleth-control" />
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub = {setSubcategory}/>
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub = {setSubcategory}/>
+      <BarHorizontal csv={barData} csv2={aggSub} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub = {setSubcategory}/>
+      <BarHorizontal csv={barData} csv2={aggSub} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub = {setSubcategory}/>
     </div>
   )
 

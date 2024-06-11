@@ -40,9 +40,6 @@ root.render(
         <Route path="/land" element={<Land />} />    
         <Route path="/test" element={<Test />} />  
         <Route path="/dashboard" element={<Dashboard />} />     
-        <Route path="/charts" element={<Charts />} />      
-        <Route path="/maps" element={<Maps />} />    
-        <Route path="/globes" element={<Globes />} />
         <Route path="/about" element={<About />} />
         <Route path="/team" element={<Team />} />
         <Route path="/help" element={<Help />} />

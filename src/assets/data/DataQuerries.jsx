@@ -265,7 +265,9 @@ query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: Str
 }
 `;
 
-function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate }) {
+
+function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded }) {
+
   const [scenarios, setScenarios] = useState(scenerios.map(obj => obj.title));
 
   useEffect(() => {
@@ -421,31 +423,31 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [scenarios, parameter, year, setSubcategories, fetchParallel]);
 
   useEffect(() => {
-    if (scenarios != "i") {
+    if (URLLoaded && scenarios != "i") {
       const abortController = new AbortController();
       setLine("i");
       fetchLine(abortController.signal);
       return () => abortController.abort();
     }
-  }, [scenarios, parameter, region, subcat, setLine, fetchLine]);
+  }, [scenarios, parameter, region, subcat, setLine, fetchLine, URLLoaded]);
 
   useEffect(() => {
-    if (scenarios != "i") {
+    if (URLLoaded && scenarios != "i") {
       const abortController = new AbortController();
       setChoropleth("i");
       fetchChoropleth(abortController.signal);
       return () => abortController.abort();
     }
-  }, [scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth]);
+  }, [scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth, URLLoaded]);
 
   useEffect(() => {
-    if (scenarios != "i") {
+    if (URLLoaded && scenarios != "i") {
       const abortController = new AbortController();
       setBar("i");
       fetchBar(abortController.signal);
       return () => abortController.abort();
     }
-  }, [scenarios, parameter, year, setBar, fetchBar]);
+  }, [scenarios, parameter, year, setBar, fetchBar, URLLoaded]);
 
   useEffect(() => {
     if (scenarios != "i") {
@@ -466,13 +468,13 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [scenarios, parameter, setDates, fetchDates]);
 
   useEffect(() => {
-    if (scenarios != "i") {
+    if (URLLoaded && scenarios != "i") {
       const abortController = new AbortController();
       setAggSub("i");
       fetchAggSub(abortController.signal);
       return () => abortController.abort();
     }
-  }, [scenarios, parameter, year, setAggSub, fetchAggSub]);
+  }, [scenarios, parameter, year, setAggSub, fetchAggSub, URLLoaded]);
 
   useEffect(() => {
     if (scenarios != "i") {
@@ -494,6 +496,7 @@ function mapStateToProps(state) {
     region: state.dashboardRegion,
     subcat: state.dashboardSubsector,
     dataLine: state.parsedDataLine,
+    URLLoaded: state.urlLoaded
   };
 }
 
