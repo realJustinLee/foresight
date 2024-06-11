@@ -118,23 +118,24 @@ function DataQuerries({ dataset, userUploadedData, scenerios, start, end, parame
     setChoropleth("i");
     let choroplethData = [];
     if (subcat === "Aggregate of Subsectors") {
-      choroplethData = data.aggParam_regions.filter(item => item.param === parameter && parseInt(item.x) === year && scenarios.includes(item.scenario));
+      choroplethData = data.aggParam_regions.filter(item => item.param === parameter && item.x.toString() === year.toString() && scenarios.includes(item.scenario));
     } else {
-      choroplethData = data.aggClass1_regions.filter(item => item.param === parameter && parseInt(item.x) === year && scenarios.includes(item.scenario) && item.class === subcat);
+      choroplethData = data.aggClass1_regions.filter(item => item.param === parameter && item.x.toString() === year.toString() && scenarios.includes(item.scenario) && item.class === subcat);
     }
+    console.log(data, scenarios, parameter, year, subcat);
     setChoropleth(choroplethData);
     setRegions(listRegions(choroplethData));
   }, [scenarios, parameter, year, subcat, setChoropleth]);
 
   useEffect(() => {
     setBar("i");
-    let barData = data.aggClass1_regions.filter(item => item.param === parameter && parseInt(item.x) === year && scenarios.includes(item.scenario));
+    let barData = data.aggClass1_regions.filter(item => item.param === parameter && item.x.toString() === year.toString() && scenarios.includes(item.scenario));
     setBar(barData);
   }, [scenarios, parameter, year, setBar]);
 
   useEffect(() => {
     setGuage("i");
-    let guageData = data.aggParam_global.filter(item => (parseInt(item.x) === start || parseInt(item.x) === end) && scenarios.includes(item.scenario));
+    let guageData = data.aggParam_global.filter(item => (item.x.toString() === start.toString() || item.x.toString() === end.toString()) && scenarios.includes(item.scenario));
     setGuage(guageData);
   }, [scenarios, start, end, setGuage]);
 
@@ -146,14 +147,14 @@ function DataQuerries({ dataset, userUploadedData, scenerios, start, end, parame
 
   useEffect(() => {
     setAggSub("i");
-    let aggSubData = data.aggParam_regions.filter(item => item.param === parameter && parseInt(item.x) === year && scenarios.includes(item.scenario));
+    let aggSubData = data.aggParam_regions.filter(item => item.param === parameter && item.x.toString() === year.toString() && scenarios.includes(item.scenario));
     setAggSub(aggSubData);
     setCountries(filterRegion(getScenerio(aggSubData, scenarios[0])));
   }, [scenarios, parameter, year, setAggSub, setCountries]);
 
   useEffect(() => {
     setSubcategories("i");
-    let aggRegData = data.aggClass1_global.filter(item => item.param === parameter && parseInt(item.x) === year && item.scenario === scenarios[0]);
+    let aggRegData = data.aggClass1_global.filter(item => item.param === parameter && item.x.toString() === year.toString() && item.scenario === scenarios[0]);
     setSubcategories(aggRegData);
   }, [scenarios, parameter, year, setSubcategories]);
 }

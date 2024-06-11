@@ -66,7 +66,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
   }
 
   function getColor(value, data, country) {
-    console.log("**", getRelativeDataValue(value), getRank(data, country));
+    //console.log("**", getRelativeDataValue(value), getRank(data, country));
     return (value && data.length > 0 && data[0].value) ? getScaleValuesTest(getRelativeDataValue(value), getRank(data, country), Object.keys(data).length) : "#333333";
   }
 
@@ -93,7 +93,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
         <div className="image-container">
           <div className="choropleth-data-info">
             {country}
-            {country === "" ? "" : " - " + countryValue.toFixed(2)}
+            {country === "" ? "" : " - " + parseInt(countryValue).toFixed(2)}
           </div>
           <ChoroplethControl
             palette={choroplethColorPalette}
