@@ -30,3 +30,21 @@
 .text-left {
   text-align: left ;
 }
+
+.region-button-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  column-gap: 4px;
+  margin-top: 2%;
+  margin-bottom: 2%;
+  justify-items: center;
+}
+
+.region-button {
+  width: 100%;
+  height: 100%;
+}
+
+.upload-page-gap {
+  margin-top: 30px !important;
+}
