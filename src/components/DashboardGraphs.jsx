@@ -79,7 +79,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
     <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date = {dashYear} setDate = {setYear} />
   )
 
-  console.log(lineData, barData, choroplethData);
+  //console.log(lineData, barData, choroplethData);
   // Choropleth Visualization
   const choropleth = (choroplethData === 'i') ? (
     <div className = "grid-border-hidden text-centered">

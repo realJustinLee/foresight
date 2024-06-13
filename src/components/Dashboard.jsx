@@ -16,39 +16,6 @@ import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
 import DashboardUrl from "./sharing/DashboardUrl.jsx";
 import UserDataQuerries from "../assets/data/UserDataQuerries.jsx";
 
-//Gets the icon of each category by name. Shows up next to the guages and the selection.
-export const getIcon = (selection, openGuages) => {
-  const found = openGuages.find(gauge => gauge.title === selection);
-  const guageCategory = found ? found.group : "error"
-
-  switch (guageCategory) {
-    case "socioeconomics":
-      return <TbCoins />;
-    case "population":
-      return <MdGroups />;
-    case "transport":
-      return <FaTruckMoving />;
-    case "water":
-      return <GiWaterDrop />;
-    case "agriculture":
-      return <GiCorn />;
-    case "livestock":
-      return <GiCow />;
-    case "land":
-      return <MdFilterHdr />
-    case "emissions":
-      return <GiFactory />;
-    case "electricity":
-      return <MdElectricBolt />;
-    case "energy":
-      return <MdOutlineWindPower />;
-    case "User Test":
-      return <MdOutlineDesignServices />;
-    default:
-      return <MdError />;
-  }
-}
-
 function Dashboard({ open, dataset, scenarios }) {  
   const [guageData, setGuageData] = useState("i");
   const [datesData, setDatesData] = useState("i");

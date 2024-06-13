@@ -27,10 +27,8 @@ function DataQuerries({ dataset, userUploadedData, scenerios, start, end, parame
     setScenariosTotal(currentScenarios);
 
     // Prepare guages
-    const guages = data.parameters.map((guage) => {
-      let units = getUnits(data.aggClass1_global, guage);
-      units = units.slice(0, units.indexOf("(")).trim();
-      return { title: guage, units: units, group: "User Test"}});
+    const guages = data.parameters
+    const guageNames = data.parameters.map((param) => param.title);
     console.log("STORE ALL GUAGES:", guages);
     setGuagesTotal(guages);
     // Prepare opened guages
@@ -38,14 +36,14 @@ function DataQuerries({ dataset, userUploadedData, scenerios, start, end, parame
     console.log("STORE CURRENT GUAGES:", currentGuages);
     setGuagesCurrent(currentGuages);
     // Prepared selected guage
-    const selectedGuage = data.parameters[0];
+    const selectedGuage = guages[0].title;
     console.log("STORE SELECTED GUAGE:", selectedGuage);
     setGuageSelected(selectedGuage);
 
     // Prepare Start Date
-    const start = findClosestDateAllParamsAbove(data.aggParam_global, data.parameters, 2015);
-    const end = findClosestDateAllParamsAbove(data.aggParam_global, data.parameters, 2100);
-    const dashboardDate = findClosestDateAllParamsAbove(data.aggParam_global, data.parameters, 2020);
+    const start = findClosestDateAllParamsAbove(data.aggParam_global, guageNames, 2015);
+    const end = findClosestDateAllParamsAbove(data.aggParam_global, guageNames, 2100);
+    const dashboardDate = findClosestDateAllParamsAbove(data.aggParam_global, guageNames, 2020);
     console.log("START DATE:", start);
     setStart(start);
     console.log("END DATE:", end);
@@ -68,7 +66,6 @@ function DataQuerries({ dataset, userUploadedData, scenerios, start, end, parame
     } else {
       lineData = data.aggClass1_regions.filter(item => item.param === selectedGuage && opened.includes(item.scenario) && item.region === region && item.class === subcat);
     }
-
     let choroplethData = [];
     if (subcat === "Aggregate of Subsectors") {
       choroplethData = data.aggParam_regions.filter(item => item.param === selectedGuage && parseInt(item.x) === dashboardDate && opened.includes(item.scenario));

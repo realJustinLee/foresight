@@ -12,7 +12,7 @@ import { updateHash } from "../sharing/DashboardUrl.jsx";
 // you'll often use just a few of them.
 
 const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, countries }) => {
-    //console.log("!!!!", csv, listKeys); 
+    //console.log("!!!!", listKeys); 
     const [scenerioName, setScenerio] = useState(scenerio);
     const [barData, setData] = useState(getBarHorizontal(countries, csv, scenerio));
     useEffect(() => {
@@ -21,7 +21,7 @@ const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, count
     }, [scenerio])
     useEffect(() => {
         setData(getBarHorizontal(countries, csv, scenerio));
-        console.log("BAR DATA:", barData);
+        //console.log("BAR DATA:", barData);
     }, [countries, csv, scenerio])
     return (
         <div className="bar-wrapper">

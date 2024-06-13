@@ -80,10 +80,22 @@ export const findClosestDate = (data, targetDate) => {
     return closest ? closest.x : -1
 };
 
+export const dateInAllParams = (data, params, date) => {
+    params.forEach((param) => {
+        if(data.filter(item => item.param === param && item.x === date).length === 0)
+            return false;
+    })
+    return true;
+}
+
 export const findClosestDateAllParamsAbove = (data, params, targetDate) => {
-    let date = Infinity;
-    params.forEach((param) => {date = Math.min(date, findClosestDate(data.filter(item => item.param === param), targetDate))});
-    return date;
+    if(data.length === 0) return -1; 
+    console.log(data, params);
+    let firstParamData = data.filter(item => item.param === params[0]);
+    const closest = firstParamData.reduce((prev, curr) => {
+        return (Math.abs(parseInt(curr.x) - targetDate) < Math.abs(parseInt(prev.x) - targetDate) && dateInAllParams(data, params, curr.x)) ? curr : prev;
+    });
+    return closest ? closest.x : -1
 };
 
 export const findClosestDateAllParamsBelow = (data, params, targetDate) => {
@@ -229,11 +241,13 @@ export const getBarHorizontal = (countries, data, scenerio) => {
     return output
 };
 
-export const lineGraphReduce = (data, param, scenarios, subcat) =>
-    scenarios.map(scenario => ({
+export const lineGraphReduce = (data, param, scenarios, subcat) => {
+    data.sort((a, b) => a.x - b.x);
+    return scenarios.map(scenario => ({
         id: scenario.title,
         data: getLineGraphReduce(getScenerio(data, scenario.title), param, subcat)
-    }));
+    }))
+};
 
 export const getLineGraphReduce = (data, param, subcat) => {
     if (param === "landAlloc" && subcat === "Aggregate of Subsectors") {

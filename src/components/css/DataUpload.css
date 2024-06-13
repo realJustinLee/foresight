@@ -48,3 +48,25 @@
 .upload-page-gap {
   margin-top: 30px !important;
 }
+
+.param-edit-background {
+  align-items: center;
+  margin: 10px auto 10px auto;
+  background-color: rgb(60, 60, 60);
+  border-radius: 5px;
+  text-align: center;
+  padding: 10px;
+}
+
+.upload-data-variable-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  margin: auto 30% auto 30%;
+}
+
+.inline-success {
+  padding-top: 5px;
+  margin-left: 10px;
+  display:inline;
+  color:green;
+}
