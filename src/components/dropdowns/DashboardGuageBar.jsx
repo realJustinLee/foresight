@@ -85,7 +85,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
 
 
   // This function resets and updates each selected parameter apon a new parameter being
-  // chosen.
+  // chosen. 
   function resetAndUpdate(title) {
     dashDate(2020);
     dashReg("Global");
