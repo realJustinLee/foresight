@@ -1,22 +1,18 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import SidebarDashboard from "./SidebarDashboard.jsx";
 import DataQuerries from "../assets/data/DataQuerries.jsx";
 import { connect } from "react-redux";
 import DateDropdown from "./dropdowns/DashboardDate";
 import DashboardGraphs from "./DashboardGraphs.jsx";
-import { MdError, MdElectricBolt, MdGroups, MdFilterHdr, MdOutlineWindPower, MdOutlineDesignServices  } from "react-icons/md";
-import { GiCorn, GiFactory, GiWaterDrop, GiCow } from "react-icons/gi";
-import { TbCoins } from "react-icons/tb";
-import { FaTruckMoving } from "react-icons/fa";
-import { setdashboardSelection, setStartDate, setEndDate} from "./Store";
+import { setdashboardSelection, setStartDate, setEndDate } from "./Store";
 import './css/Dashboard.css';
 import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
 import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
 import DashboardUrl from "./sharing/DashboardUrl.jsx";
 import UserDataQuerries from "../assets/data/UserDataQuerries.jsx";
 
-function Dashboard({ open, dataset, scenarios }) {  
+function Dashboard({ open, dataset, scenarios }) {
   const [guageData, setGuageData] = useState("i");
   const [datesData, setDatesData] = useState("i");
   const [lineData, setLineData] = useState("i");
@@ -37,43 +33,36 @@ function Dashboard({ open, dataset, scenarios }) {
     setSubcategoriesList("i");
   }
 
-//<DashboardScenerioRows
-//Scenarios={scenarios}
-///>
+  //<DashboardScenerioRows
+  //Scenarios={scenarios}
+  ///>
   return (
     <div className="body-page-dark">
       <SidebarDashboard></SidebarDashboard>
-      <DashboardUrl
-        dataDate = {datesData}
-        guageData = {guageData}
-        regionList = {regionList}
-        subcategoriesList = {subcategoriesList}
-        Scenarios={scenarios}
-      />
       {(dataset !== "foresight_v1") ? (
-      <UserDataQuerries
-        dataset = {dataset}
-        setGuage = {setGuageData}
-        setDates = {setDatesData}
-        setLine = {setLineData}
-        setChoropleth = {setChoroplethData}
-        setBar = {setBarData}
-        setAggSub = {setAggSub}
-        setRegions = {setRegionList}
-        setSubcategories = {setSubcategoriesList}
-      />
+        <UserDataQuerries
+          dataset={dataset}
+          setGuage={setGuageData}
+          setDates={setDatesData}
+          setLine={setLineData}
+          setChoropleth={setChoroplethData}
+          setBar={setBarData}
+          setAggSub={setAggSub}
+          setRegions={setRegionList}
+          setSubcategories={setSubcategoriesList}
+        />
       ) : (
-      <DataQuerries 
-        dataset = {dataset}
-        setGuage = {setGuageData}
-        setDates = {setDatesData}
-        setLine = {setLineData}
-        setChoropleth = {setChoroplethData}
-        setBar = {setBarData}
-        setAggSub = {setAggSub}
-        setRegions = {setRegionList}
-        setSubcategories = {setSubcategoriesList}
-      />
+        <DataQuerries
+          dataset={dataset}
+          setGuage={setGuageData}
+          setDates={setDatesData}
+          setLine={setLineData}
+          setChoropleth={setChoroplethData}
+          setBar={setBarData}
+          setAggSub={setAggSub}
+          setRegions={setRegionList}
+          setSubcategories={setSubcategoriesList}
+        />
       )}
       <div className={open ? "dashboard" : "dashboardClosed"}>
         <Container fluid>
@@ -106,12 +95,12 @@ function Dashboard({ open, dataset, scenarios }) {
             reset={resetData}
           />
           <Row className="selection-divider">
-            <DashboardFloater 
-              data = {datesData}
+            <DashboardFloater
+              data={datesData}
             />
           </Row>
           <Row>
-            <DashboardGraphs 
+            <DashboardGraphs
               lineData={lineData}
               choroplethData={choroplethData}
               barData={barData}

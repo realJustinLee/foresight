@@ -33,7 +33,7 @@ function Navigation({ dataset, datasets, updateDataset }) {
   };
 
   let datasetList = [];
-  console.log(datasets)
+  //console.log(datasets)
   for (let i = 0; i < datasets.length; i++) {
     let data = datasets.at(i);
     datasetList.push(

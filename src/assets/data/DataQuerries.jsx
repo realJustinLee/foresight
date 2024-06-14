@@ -3,6 +3,7 @@ import { API, graphqlOperation } from "aws-amplify";
 import { connect } from 'react-redux';
 import { setAllScenarios, setSceneriosNoUpdate, setGuageList, setdashboardGuages, setdashboardSelection, setStartDate, setEndDate, setDashDate, setBarCountries } from '../../components/Store';
 import { getUnits, findClosestDateAllParamsAbove, getScenerio, filterRegion, listRegions, filterSubcat } from './DataManager';
+import { loadDataURL } from '../../components/sharing/DashboardUrl';
 
 
 export const lineQuery = `
@@ -266,7 +267,7 @@ query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: Str
 `;
 
 
-function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded }) {
+function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded }) {
 
   const [scenarios, setScenarios] = useState(scenerios.map(obj => obj.title));
 
@@ -312,45 +313,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
 
   const fetchDashboard = useCallback(async () => {
     const result = await fetchParallel([[queryDataset]]);
-    //console.log("Dashboard:", result);
-    const scenarios = [...new Set(result.map(item => item.scenario))];
-    //Prepare total scenarios
-    //console.log("STORE SCENARIOS:", scenarios);
-    setAllScenarios(scenarios.map(obj => ({title: obj})));
-    //Prepare opened scenarios
-    const currentScenarios = [];
-    const opened = scenarios.slice(0, 2);
-    opened.forEach((scenario, index) => {
-      currentScenarios.push({ title: scenario, pos: index + 1 });
-    });
-    //console.log("STORE CURRENT SCENARIOS:", currentScenarios);
-    setScenariosTotal(currentScenarios);
-
-    const params = [...new Set(result.map(item => item.param))];
-    const guages = params.map((guage) => {
-      let units = getUnits(result, guage);
-      units = units.slice(0, units.indexOf("(")).trim();
-      return { title: guage, units: units, group: "water"}});
-    //console.log("STORE ALL GUAGES:", guages);
-    setGuagesTotal(guages);
-    // Prepare opened guages
-    const currentGuages = guages.slice(0, 5);
-    //console.log("STORE CURRENT GUAGES:", currentGuages);
-    setGuagesCurrent(currentGuages);
-    // Prepared selected guage
-    const selectedGuage = params[0];
-    //console.log("STORE SELECTED GUAGE:", selectedGuage);
-    setGuageSelected(selectedGuage);
-
-    const start = findClosestDateAllParamsAbove(result, params, 2015);
-    const end = findClosestDateAllParamsAbove(result, params, 2100);
-    const dashboardDate = findClosestDateAllParamsAbove(result, params, 2020);
-    //console.log("START DATE:", start);
-    setStart(start);
-    //console.log("END DATE:", end);
-    setEnd(end);
-    console.log("DASHBOARD DATE:", dashboardDate);
-    setCurrentDate(dashboardDate);
+    loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded);
   }, [fetchParallel]);
 
   const fetchLine = useCallback(async () => {
@@ -511,6 +474,7 @@ function mapDispatchToProps(dispatch) {
     setEnd: (end) => dispatch(setEndDate(end)),
     setCurrentDate: (current) => dispatch(setDashDate(current)),
     setCountries: (countryList) => dispatch(setBarCountries(countryList)),
+    toggleURLLoaded: () => dispatch({ type: 'toggleURLLoaded' })
   };
 }
 

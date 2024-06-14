@@ -55,7 +55,7 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
       return {
         title: param,
         units: units.slice(0, units.indexOf("(")).trim(),
-        group: "custom"
+        group: autoFillIcons(param)
       }
     });
     //console.log('Unique Params:', uniqueParams);
@@ -194,6 +194,37 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
     let temp = structuredClone(tempDataStore);
     temp.parameters[index].group = category;
     setDataStore(temp);
+  }
+
+  const autoFillIcons = (string) => {
+    let test = string.toLowerCase().trim();
+    if(test.includes("energy") || test.includes("fuel"))
+      return "energy";
+    if(test.includes("wat") || test.includes("irr") || test.includes("basin") || test.includes("runoff"))
+      return "water";
+    if(test.includes("elec") || test.includes("fuel"))
+      return "electricity";
+    if(test.includes("emiss") || test.includes("ghg") || test.includes("co2") || test.includes("methane"))
+      return "emissions";
+    if(test.includes("land"))
+      return "land";
+    if(test.includes("agprod"))
+      return "agriculture";
+    if(test.includes("livestock") || test.includes("meat") || test.includes("dairy"))
+      return "livestock";
+    if(test.includes("transport") || test.includes("pass") || test.includes("freight"))
+      return "transport";
+    if(test.includes("build") || test.includes("floor"))
+      return "buildings";
+    if(test.includes("indus"))
+      return "industry";
+    if(test.includes("gdp"))
+      return "socioeconomic - gdp";
+    if(test.includes("pop"))
+      return "socioeconomic - population";
+    if(test.includes("hydrogen"))
+      return "hydrogen";
+    return "custom"
   }
 
   return (
