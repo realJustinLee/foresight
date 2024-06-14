@@ -94,6 +94,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
   // This function resets and updates each selected parameter apon a new parameter being
   // chosen.
   function resetAndUpdate(title) {
+    if (!dateData || dateData == "i") return; 
     let date = findClosestDate(dateData, 2020);
 
     dashDate(date);
