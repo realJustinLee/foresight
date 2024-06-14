@@ -76,5 +76,9 @@
     "redux": "^4.2.1",
     "styled-components": "^6.0.8",
     "web-vitals": "^3.3.1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/parser": "^5.62.0",
+    "typescript": "^4.9.5"
   }
 }
