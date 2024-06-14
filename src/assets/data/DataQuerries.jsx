@@ -353,6 +353,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
     if (scenarios !== "i" && scenarios.length > 1) {
       const result = await fetchParallel([[barQuery, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
       setBar(result);
+      console.log(parameter);
     }
   }, [scenarios, parameter, year, setBar, fetchParallel]);
 
