@@ -1,5 +1,6 @@
 import React from "react";
 import { ResponsiveLine } from '@nivo/line'
+import { MdOutlineWarning } from "react-icons/md";
 const Line = ({ data, setDate, unit }) => (
     <div className="line_container">
         <div className="nivo-wrapper grid-border">
@@ -194,6 +195,14 @@ const Line = ({ data, setDate, unit }) => (
                 ]}
             />
         </div >
+        {(data[0].data.length === 0) ? (
+            <div className="line-graph-no-data">
+                <div><MdOutlineWarning /> No Data <MdOutlineWarning /></div>
+                <div>Please pick another region.</div>
+            </div>
+        ) : (
+            <div />
+        )}
     </div>
 )
 

@@ -49,10 +49,10 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
   // Display label text. Setting default display text for aggregates.
   let subcatDisplay = "";
   let regionDisplay = "";
-  if (dashSubcategory !== "Aggregate of Subsectors")
-    subcatDisplay = " " + dashSubcategory;
-  if (dashRegion !== "class1")
-    regionDisplay = dashRegion;
+  if (subcat !== "Aggregate of Subsectors")
+    subcatDisplay = " " + subcat;
+  if (region !== "class1")
+    regionDisplay = region;
 
 
   // Load Units for Display
@@ -63,51 +63,50 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
 
 
   // Labels
-  const lineChartLabel = (<div className="text-centered">{regionDisplay} {subcatDisplay} Trends</div>)
-  const choroplethLabel = (<div className="text-centered">
-    <div>Spatial Composition {"(" + dashYear + subcatDisplay + ")"}</div>
+  let lineChartLabel = (<div className="text-centered">{regionDisplay} {subcatDisplay} Trends</div>)
+  let choroplethLabel = (<div className="text-centered">
+    <div>Spatial Composition {"(" + curYear + subcatDisplay + ")"}</div>
     <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
   </div>)
-  const barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + dashYear + ")"} -- By Subsector</div>)
-
+  let barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + curYear + ")"} -- By Subsector</div>)
 
   // Line Chart Visualization
   const lineChart = (lineData === 'i') ? (
-    <div className = "grid-border-hidden text-centered">
+    <div className="grid-border-hidden text-centered">
       Loading Dataset...
     </div>
   ) : (
-    <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date = {dashYear} setDate = {setYear} />
+    <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date={dashYear} setDate={setYear} />
   )
 
 
   // Choropleth Visualization
   const choropleth = (choroplethData === 'i') ? (
-    <div className = "grid-border-hidden text-centered">
+    <div className="grid-border-hidden text-centered">
       Loading Dataset...
     </div>
   ) : (
     <LeafletSync
-      setRegion = {setRegion}
-      choroplethData = {choroplethData}
-      Scenerios = {Scenerios}
-      data = {choroplethReduce(choroplethData, Scenerios.at(0).title)}
-      data2 = {choroplethReduce(choroplethData, Scenerios.at(1).title)}
-      uniqueValue = {"Dashboard_Big"}
+      setRegion={setRegion}
+      choroplethData={choroplethData}
+      Scenerios={Scenerios}
+      data={choroplethReduce(choroplethData, Scenerios.at(0).title)}
+      data2={choroplethReduce(choroplethData, Scenerios.at(1).title)}
+      uniqueValue={"Dashboard_Big"}
     />
   )
 
 
   // Bar Chart Visualization
   const barChart = (barData === "i" || aggSub === 'i') ? (
-    <div className = "grid-border-hidden text-centered">
+    <div className="grid-border-hidden text-centered">
       Loading Dataset...
     </div>
   ) : (
     <div className='bar-grid grid-border'>
       <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={dashYear} className="choropleth-control" />
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub = {setSubcategory}/>
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub = {setSubcategory}/>
+      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub={setSubcategory} />
+      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub={setSubcategory} />
     </div>
   )
 
