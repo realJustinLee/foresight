@@ -4,8 +4,8 @@ import { updateHash } from './sharing/DashboardUrl';
 const initialState = {
   open: 2,
   urlLoaded: false,
-  dataset: "foresight_v1",
-  datasets: ["foresight_v1"],
+  dataset: "gcamv7p0",
+  datasets: ["gcamv7p0"],
   userUploadedData: {},
   startDate: -1,
   endDate: -1,

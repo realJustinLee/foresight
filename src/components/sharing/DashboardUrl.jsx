@@ -74,7 +74,7 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
 }
 
 const checkScenarioURL = (urlLoaded, scenarios) => {
-  if (scenarios.length < 2) return "Error: Not Enoguh Scenarios in this Dataset to load in the Dashboard.";
+  if (scenarios.length < 2) return "Error: Not Enough Scenarios in this Dataset to load in the Dashboard.";
   let searchParams = new URLSearchParams(window.location.hash.substring(1));
   let scenarioList = scenarios.slice(0, 2);
   let scenarioOutput = [];

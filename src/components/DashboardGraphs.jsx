@@ -16,28 +16,6 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
   const [dashRegion, setRegion] = useState(region);
   const [dashSubcategory, setSubcategory] = useState(subcat);
 
-  const Scenerios = openedScenerios.length > 1 ? openedScenerios : [{title: "ERR"}, {title: "ERR"}];
-
-  // Display label text. Setting default display text for aggregates.
-  let subcatDisplay = "";
-  let regionDisplay = "";
-  if (dashSubcategory !== "Aggregate of Subsectors")
-    subcatDisplay = " " + dashSubcategory;
-  if (dashRegion !== "class1")
-    regionDisplay = dashRegion;
-
-  // Labels
-  let lineChartLabel = (<div className="text-centered">{regionDisplay} {subcatDisplay} Trends</div>)
-  let choroplethLabel = (<div className="text-centered">
-    <div>Spatial Composition {"(" + dashYear + subcatDisplay + ")"}</div>
-    <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
-  </div>)
-  let barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + dashYear + ")"} -- By Subsector</div>)
-
-  useEffect(() => {
-    setYear(curYear)
-  }, [curYear]);
-
   useEffect(() => {
     setDashboardDate(dashYear)
   }, [dashYear]);
@@ -51,6 +29,10 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
   }, [dashSubcategory]);
 
   useEffect(() => {
+    //console.log("SCENERIO CHANGE");
+  }, [openedScenerios]);
+
+  useEffect(() => {
     const handleResize = () => {
       setWidth(window.innerWidth);
     };
@@ -62,12 +44,32 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
     };
   }, []);
 
+  const Scenerios = (openedScenerios && openedScenerios.length > 1) ? openedScenerios : [{ title: "ERR" }, { title: "ERR" }];
+
+  // Display label text. Setting default display text for aggregates.
+  let subcatDisplay = "";
+  let regionDisplay = "";
+  if (dashSubcategory !== "Aggregate of Subsectors")
+    subcatDisplay = " " + dashSubcategory;
+  if (dashRegion !== "class1")
+    regionDisplay = dashRegion;
+
 
   // Load Units for Display
   let units = "ERROR: Units not loaded";
   if (guageData !== "i") {
     units = getUnits(guageData, selectedGuage);
   }
+
+
+  // Labels
+  const lineChartLabel = (<div className="text-centered">{regionDisplay} {subcatDisplay} Trends</div>)
+  console.log(Scenerios.at(0), Scenerios.at(1));
+  const choroplethLabel = (<div className="text-centered">
+    <div>Spatial Composition {"(" + dashYear + subcatDisplay + ")"}</div>
+    <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
+  </div>)
+  const barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + dashYear + ")"} -- By Subsector</div>)
 
 
   // Line Chart Visualization
@@ -79,7 +81,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
     <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date = {dashYear} setDate = {setYear} />
   )
 
-  //console.log(lineData, barData, choroplethData);
+
   // Choropleth Visualization
   const choropleth = (choroplethData === 'i') ? (
     <div className = "grid-border-hidden text-centered">

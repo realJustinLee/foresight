@@ -39,7 +39,7 @@ function Dashboard({ open, dataset, scenarios }) {
   return (
     <div className="body-page-dark">
       <SidebarDashboard></SidebarDashboard>
-      {(dataset !== "foresight_v1") ? (
+      {(dataset !== "gcamv7p0") ? (
         <UserDataQuerries
           dataset={dataset}
           setGuage={setGuageData}
