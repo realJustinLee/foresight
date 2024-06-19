@@ -6,13 +6,12 @@ import { getScenerio, filterRegion, listRegions, filterSubcat } from './DataMana
 
 
 export const lineQuery = `
-query BarQuery($param: String!, $reg: String!, $sub: String!, $nextToken: String, $scenario1: String!, $scenario2: String!) {
-  listGcamDataTableAggClass1Regions(
+query BarQuery($reg: String!, $sub: String!, $nextToken: String, $id: String!) {
+  queryGcamDataTableAggClass1Regions(
+    id: $id,
     filter: {
       region: {eq: $reg},
-      class: {eq: $sub},
-      param: {eq: $param},
-      scenario: { in: [$scenario1, $scenario2] }
+      class: {eq: $sub}
     },
     limit: 100000, 
     nextToken: $nextToken
@@ -29,13 +28,10 @@ query BarQuery($param: String!, $reg: String!, $sub: String!, $nextToken: String
 
 
 export const lineQueryAggReg = `
-query BarQuery($param: String!, $sub: String!, $nextToken: String, $scenario1: String!, $scenario2: String!) {
-  listGcamDataTableAggClass1Globals(
-    filter: {
-      class: {eq: $sub},
-      param: {eq: $param},
-      scenario: { in: [$scenario1, $scenario2] }
-    },
+query BarQuery($sub: String!, $nextToken: String, $id: String!) {
+  queryGcamDataTableAggClass1Globals(
+    id: $id,
+    date: $sub,
     limit: 100000, 
     nextToken: $nextToken
   ) {
@@ -51,12 +47,11 @@ query BarQuery($param: String!, $sub: String!, $nextToken: String, $scenario1: S
 
 
 export const lineQueryAggSub = `
-query BarQuery($param: String!, $reg: String!, $nextToken: String, $scenario1: String!, $scenario2: String!) {
-  listGcamDataTableAggParamRegions(
+query BarQuery($reg: String!, $nextToken: String, $id: String!) {
+  queryGcamDataTableAggParamRegions(
+    id: $id,
     filter: {
-      region: {eq: $reg},
-      param: {eq: $param},
-      scenario: { in: [$scenario1, $scenario2] }
+      region: {eq: $reg}
     },
     limit: 100000, 
     nextToken: $nextToken
@@ -73,12 +68,10 @@ query BarQuery($param: String!, $reg: String!, $nextToken: String, $scenario1: S
 
 
 export const lineQueryAggRegSub = `
-query BarQuery($param: String!, $nextToken: String, $scenario1: String!, $scenario2: String!) {
-  listGcamDataTableAggParamGlobals(
-    filter: {
-      param: {eq: $param},
-      scenario: { in: [$scenario1, $scenario2] }
-    },
+query BarQuery($param: String!, $nextToken: String, $id: String!) {
+  queryGcamDataTableAggParamGlobals(
+    id: $id,
+    date: $param,
     limit: 100000, 
     nextToken: $nextToken
   ) {
@@ -94,13 +87,12 @@ query BarQuery($param: String!, $nextToken: String, $scenario1: String!, $scenar
 
 
 export const choroplethQuery = `
-query BarQuery($param: String!, $nextToken: String, $scenario1: String!, $scenario2: String!, $date: Int!, $sub: String!) {
-  listGcamDataTableAggClass1Regions(
+query BarQuery($nextToken: String, $id: String!, $date: String!, $sub: String!) {
+  queryGcamDataTableAggClass1Regions(
+    id: $id,
+    date: $date,
     filter: {
-      class: {eq: $sub},
-      param: {eq: $param},
-      x: {eq: $date},
-      scenario: { in: [$scenario1, $scenario2] }
+      class: {eq: $sub}
     },
     limit: 100000, 
     nextToken: $nextToken
@@ -117,13 +109,10 @@ query BarQuery($param: String!, $nextToken: String, $scenario1: String!, $scenar
 
 
 export const choroplethQueryAggSub = `
-query BarQuery($param: String!, $nextToken: String, $scenario1: String!, $scenario2: String!, $date: Int!) {
-  listGcamDataTableAggParamRegions(
-    filter: {
-      param: {eq: $param},
-      x: {eq: $date},
-      scenario: { in: [$scenario1, $scenario2] }
-    },
+query BarQuery($nextToken: String, $id: String!, $sort: String!) {
+  queryGcamDataTableAggParamRegions(
+    id: $id,
+    date: $sort,
     limit: 100000, 
     nextToken: $nextToken
   ) {
@@ -139,14 +128,11 @@ query BarQuery($param: String!, $nextToken: String, $scenario1: String!, $scenar
 
 
 export const barQuery = `
-query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: String!, $scenario2: String!) {
-  listGcamDataTableAggClass1Regions(
-    filter: {
-      x: {eq: $date}, 
-      param: {eq: $param},
-      scenario: { in: [$scenario1, $scenario2] }
-    },
-    limit: 50000, 
+query BarQuery($date: String!, $nextToken: String, $id: String!) {
+  queryGcamDataTableAggClass1Regions(
+    id: $id,
+    date: $date,
+    limit: 100000,
     nextToken: $nextToken
   ) {
     items {
@@ -163,11 +149,11 @@ query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: Str
 
 
 const queryGuage = `
-query MyQuery($nextToken: String, $start: Int!, $end: Int!, $scenario1: String!, $scenario2: String!) {
-  listGcamDataTableAggParamGlobals(
+query MyQuery($nextToken: String, $start: Int!, $end: Int!, $id: String!) {
+  queryGcamDataTableAggParamGlobals(
+    id: $id,
     filter: {
-      x: { in: [$start, $end] },
-      scenario: { in: [$scenario1, $scenario2] }
+      x: { in: [$start, $end] }
     },
     limit: 100000,
     nextToken: $nextToken
@@ -185,12 +171,10 @@ query MyQuery($nextToken: String, $start: Int!, $end: Int!, $scenario1: String!,
 `
 
 const queryDates = `
-query MyQuery($nextToken: String, $param: String!, $scenario1: String!, $scenario2: String!) {
-  listGcamDataTableAggParamGlobals(
-    filter: {
-      param: {eq: $param},
-      scenario: { in: [$scenario1, $scenario2] }
-    },
+query MyQuery($nextToken: String, $param: String!, $id: String!) {
+  queryGcamDataTableAggParamGlobals(
+    id: $id,
+    date: $param,
     limit: 100000,
     nextToken: $nextToken
   ) {
@@ -203,13 +187,10 @@ query MyQuery($nextToken: String, $param: String!, $scenario1: String!, $scenari
 `
 
 export const aggSubQuery = `
-query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: String!, $scenario2: String!) {
-  listGcamDataTableAggParamRegions(
-    filter: {
-      x: {eq: $date}, 
-      param: {eq: $param},
-      scenario: { in: [$scenario1, $scenario2] }
-    },
+query BarQuery($date: String!, $nextToken: String, $id: String!) {
+  queryGcamDataTableAggParamRegions(
+    id: $id,
+    date: $date,
     limit: 100000, 
     nextToken: $nextToken
   ) {
@@ -225,12 +206,11 @@ query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: Str
 `;
 
 export const aggRegQuery = `
-query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: String!) {
-  listGcamDataTableAggClass1Globals(
+query BarQuery($date: Int!, $nextToken: String, $id: String!) {
+  queryGcamDataTableAggClass1Globals(
+    id: $id,
     filter: {
-      x: {eq: $date}, 
-      param: {eq: $param},
-      scenario: {eq: $scenario1 }
+      x: {eq: $date}
     },
     limit: 100000, 
     nextToken: $nextToken
@@ -247,7 +227,7 @@ query BarQuery($param: String!, $date: Int!, $nextToken: String, $scenario1: Str
 }
 `;
 
-function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, URLLoaded }) {
+function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, URLLoaded }) {
   const [scenarios, setScenarios] = useState(scenerios.map(obj => obj.title));
 
 
@@ -289,62 +269,95 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
   }, []);
 
   const fetchLine = useCallback(async () => {
-    const queries = [];
-    if (subcat === "Aggregate of Subsectors" || subcat === "class1") {
-      if (region === "Global") {
-        queries.push([lineQueryAggRegSub, { param: parameter, scenario1: scenarios[0], scenario2: scenarios[1] }]);
+    if (scenarios !== "i" && scenarios.length > 1) {
+      const queries = [];
+      if (subcat === "Aggregate of Subsectors" || subcat === "class1") {
+        if (region === "Global") {
+          queries.push([lineQueryAggRegSub, { param: parameter, id: dataset + "|" + scenarios[0] }]);
+          queries.push([lineQueryAggRegSub, { param: parameter, id: dataset + "|" + scenarios[1] }]);
+        } else {
+          queries.push([lineQueryAggSub, { id: dataset + "|" + scenarios[0] + "|" + parameter, reg: region }]);
+          queries.push([lineQueryAggSub, { id: dataset + "|" + scenarios[1] + "|" + parameter, reg: region }]);
+        }
+      } else if (region === "Global") {
+        queries.push([lineQueryAggReg, { id: dataset + "|" + scenarios[0] + "|" + parameter, sub: subcat }]);
+        queries.push([lineQueryAggReg, { id: dataset + "|" + scenarios[1] + "|" + parameter, sub: subcat }]);
       } else {
-        queries.push([lineQueryAggSub, { param: parameter, scenario1: scenarios[0], scenario2: scenarios[1], reg: region }]);
+        queries.push([lineQuery, { id: dataset + "|" + scenarios[0] + "|" + parameter, reg: region, sub: subcat }]);
+        queries.push([lineQuery, { id: dataset + "|" + scenarios[1] + "|" + parameter, reg: region, sub: subcat }]);
       }
-    } else if (region === "Global") {
-      queries.push([lineQueryAggReg, { param: parameter, scenario1: scenarios[0], scenario2: scenarios[1], sub: subcat }]);
-    } else {
-      queries.push([lineQuery, { param: parameter, scenario1: scenarios[0], scenario2: scenarios[1], reg: region, sub: subcat }]);
+      const result = await fetchParallel(queries);
+      setLine(result);
     }
-    const result = await fetchParallel(queries);
-    setLine(result);
-  }, [region, subcat, scenarios, parameter, setLine, fetchParallel]);
+  }, [dataset, region, subcat, scenarios, parameter, setLine, fetchParallel]);
 
   const fetchChoropleth = useCallback(async () => {
-    const queries = [];
-    if (subcat === "Aggregate of Subsectors") {
-      queries.push([choroplethQueryAggSub, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1] }]);
-    } else {
-      queries.push([choroplethQuery, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1], sub: subcat }]);
+    if (scenarios !== "i" && scenarios.length > 1) {
+      const queries = [];
+      if (subcat === "Aggregate of Subsectors") {
+        queries.push([choroplethQueryAggSub, { sort: year.toString(), id: dataset + "|" + scenarios[0] + "|" + parameter }]);
+        queries.push([choroplethQueryAggSub, { sort: year.toString(), id: dataset + "|" + scenarios[1] + "|" + parameter }]);
+      } else {
+        queries.push([choroplethQuery, { id: dataset + "|" + scenarios[0] + "|" + parameter, date: year.toString(), sub: subcat }]);
+        queries.push([choroplethQuery, { id: dataset + "|" + scenarios[1] + "|" + parameter, date: year.toString(), sub: subcat }]);
+      }
+      const result = await fetchParallel(queries);
+      setChoropleth(result);
+      setRegions(listRegions(result));
     }
-    const result = await fetchParallel(queries);
-    setChoropleth(result);
-    setRegions(listRegions(result));
   }, [subcat, scenarios, parameter, year, setChoropleth, fetchParallel]);
 
   const fetchBar = useCallback(async () => {
-    const result = await fetchParallel([[barQuery, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
-    setBar(result);
+    if (scenarios !== "i" && scenarios.length > 1) {
+      const queries = [];
+      queries.push([barQuery, { id: dataset + "|" + scenarios[0] + "|" + parameter, date: year.toString() }]);
+      queries.push([barQuery, { id: dataset + "|" + scenarios[1] + "|" + parameter, date: year.toString() }]);
+      const result = await fetchParallel(queries);
+      setBar(result);
+      console.log(parameter);
+    }
   }, [scenarios, parameter, year, setBar, fetchParallel]);
 
   const fetchGuage = useCallback(async () => {
-    const result = await fetchParallel([[queryGuage, { start, end, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
-    setGuage(result);
+    if (scenarios !== "i" && scenarios.length > 1 && scenarios.length > 1) {
+      const queries = [];
+      queries.push([queryGuage, { start, end, id: dataset + "|" + scenarios[0] }]);
+      queries.push([queryGuage, { start, end, id: dataset + "|" + scenarios[1] }]);
+      const result = await fetchParallel(queries);
+      setGuage(result);
+    }
   }, [scenarios, start, end, setGuage, fetchParallel]);
 
   const fetchDates = useCallback(async () => {
-    const result = await fetchParallel([[queryDates, { param: parameter, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
-    setDates(result);
+    if (scenarios !== "i" && scenarios.length > 1) {
+      const queries = [];
+      queries.push([queryDates, { param: parameter, id: dataset + "|" + scenarios[0] }]);
+      queries.push([queryDates, { param: parameter, id: dataset + "|" + scenarios[1] }]);
+      const result = await fetchParallel(queries);
+      setDates(result);
+    }
   }, [scenarios, parameter, setDates, fetchParallel]);
 
   const fetchAggSub = useCallback(async () => {
-    const result = await fetchParallel([[aggSubQuery, { param: parameter, date: year, scenario1: scenarios[0], scenario2: scenarios[1] }]]);
-    setAggSub(result);
-    setCountries(filterRegion(getScenerio(result, scenarios[0])));
+    if (scenarios !== "i" && scenarios.length > 1) {
+      const queries = [];
+      queries.push([aggSubQuery, { date: year.toString(), id: dataset + "|" + scenarios[0] + "|" + parameter }]);
+      queries.push([aggSubQuery, { date: year.toString(), id: dataset + "|" + scenarios[1] + "|" + parameter }]);
+      const result = await fetchParallel(queries);
+      setAggSub(result);
+      setCountries(filterRegion(getScenerio(result, scenarios[0])));
+    }
   }, [scenarios, parameter, year, setAggSub, setCountries, fetchParallel]);
 
   const fetchAggReg = useCallback(async () => {
-    const result = await fetchParallel([[aggRegQuery, { param: parameter, date: year, scenario1: scenarios[0] }]]);
-    setSubcategories(filterSubcat(result));
+    if (scenarios !== "i" && scenarios.length > 1) {
+      const result = await fetchParallel([[aggRegQuery, { date: year, id: dataset + "|" + scenarios[0] + "|" + parameter }]]);
+      setSubcategories(filterSubcat(result));
+    }
   }, [scenarios, parameter, year, setSubcategories, fetchParallel]);
 
   useEffect(() => {
-    if (URLLoaded) {
+    if (URLLoaded && dataset) {
       const abortController = new AbortController();
       setLine("i");
       fetchLine(abortController.signal);
@@ -353,7 +366,7 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
   }, [scenarios, parameter, region, subcat, setLine, fetchLine, URLLoaded]);
 
   useEffect(() => {
-    if (URLLoaded) {
+    if (URLLoaded && dataset) {
       const abortController = new AbortController();
       setChoropleth("i");
       fetchChoropleth(abortController.signal);
@@ -362,7 +375,7 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
   }, [scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth, URLLoaded]);
 
   useEffect(() => {
-    if (URLLoaded) {
+    if (URLLoaded && dataset) {
       const abortController = new AbortController();
       setBar("i");
       fetchBar(abortController.signal);
@@ -385,7 +398,7 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
   }, [scenarios, parameter, setDates, fetchDates]);
 
   useEffect(() => {
-    if (URLLoaded) {
+    if (URLLoaded && dataset) {
       const abortController = new AbortController();
       setAggSub("i");
       fetchAggSub(abortController.signal);
@@ -403,6 +416,7 @@ function DataQuerries({ scenerios, start, end, parameter, year, region, subcat, 
 
 function mapStateToProps(state) {
   return {
+    dataset: state.dataset,
     start: parseInt(state.startDate),
     end: parseInt(state.endDate),
     scenerios: state.scenerios,
