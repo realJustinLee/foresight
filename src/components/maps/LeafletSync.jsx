@@ -12,14 +12,13 @@ import { getColorsFromPalette } from '../../assets/data/GcamColors';
 import ChoroplethLegend from '../dropdowns/ChoroplethLegend';
 import DashboardLeaflet from './DashboardLeaflet';
 
-const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
+const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, data, data2, uniqueValue, setRegion }) => {
   //Map Instances
   const [mapInstance, setMapInstance] = useState(null);
   const [mapInstance2, setMapInstance2] = useState(null);
 
   //Choropleth Visualization Settings
-  const [choroplethColorPalette, setChoroplethColorPalette] = useState("pal_green");
-  const [choroplethInterpolation, setInterpolation] = useState("VALUE - LOG");
+  
   const divisions = 7;
 
   const [country, setCountryDisplay] = useState("");

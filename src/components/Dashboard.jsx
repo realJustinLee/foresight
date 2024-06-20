@@ -57,6 +57,9 @@ function Dashboard({ open }) {
   const [regionList, setRegionList] = useState("i");
   const [subcategoriesList, setSubcategoriesList] = useState("i");
 
+  const [choroplethColorPalette, setChoroplethColorPalette] = useState("pal_green");
+  const [choroplethInterpolation, setInterpolation] = useState("VALUE - LOG");
+
   const resetData = () => {
     setGuageData("i");
     setDatesData("i");
@@ -130,6 +133,10 @@ function Dashboard({ open }) {
               barData={barData}
               aggSub={aggSub}
               guageData={guageData}
+              choroplethColorPalette={choroplethColorPalette}
+              setChoroplethColorPalette={setChoroplethColorPalette}
+              choroplethInterpolation={choroplethInterpolation}
+              setInterpolation={setInterpolation}
             />
           </Row>
         </Container>

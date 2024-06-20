@@ -9,7 +9,7 @@ import { getBarColors } from '../assets/data/GcamColors';
 import { setDashDate, setDashReg, setDashSubs } from './Store';
 import LeafletSync from "./maps/LeafletSync";
 
-function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs }) {
+function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation }) {
   const [width, setWidth] = useState(window.innerWidth);
 
   const [dashYear, setYear] = useState(curYear);
@@ -93,6 +93,10 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
       data={choroplethReduce(choroplethData, Scenerios.at(0).title)}
       data2={choroplethReduce(choroplethData, Scenerios.at(1).title)}
       uniqueValue={"Dashboard_Big"}
+      choroplethColorPalette={choroplethColorPalette}
+      setChoroplethColorPalette={setChoroplethColorPalette}
+      choroplethInterpolation={choroplethInterpolation}
+      setInterpolation={setInterpolation}
     />
   )
 
