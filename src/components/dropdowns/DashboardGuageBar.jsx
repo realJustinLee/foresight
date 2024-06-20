@@ -10,6 +10,7 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { getIcon } from "../Dashboard";
 import { getGuage } from '../../assets/data/DataManager';
 import { updateListHash } from '../sharing/DashboardUrl';
+import { DropdownButton } from 'react-bootstrap';
 
 function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParameters, SelectedParameter, startDate, endDate, data, updateSelection, updateScenerios, dashDate, dashReg, dashSubs, reset }) {
   const [OpenedScenarios, setValueScenario] = useState(OpenScenarios);
@@ -99,17 +100,9 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
   const scenarioSelectionCol = () => {
     return (
       OpenedScenarios.map((scenario, index) => (
-        <Dropdown as={ButtonGroup} key={index} className={"dashboard-scenerio-selector"}>
-          <Button variant="outline-light">{scenario.title}</Button>
-          <Dropdown.Toggle
-            split
-            variant="outline-warning"
-            id="dropdown-split-basic"
-          />
-          <Dropdown.Menu>
-            {scenarioDropdownList(index)}
-          </Dropdown.Menu>
-        </Dropdown>
+        <DropdownButton variant="outline-light" className="dashboard-scenerio-button" title={scenario.title}>
+          {scenarioDropdownList(index)}
+        </DropdownButton>
       ))
     )
   };

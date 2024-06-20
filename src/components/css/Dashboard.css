@@ -161,6 +161,18 @@
   position: static
 }
 
+.dashboard-scenerio-button .dropdown-toggle::after {
+  color: rgb(187, 155, 49);
+  margin-left: 10%;
+  margin-right: 15%;
+}
+
+.dashboard-scenerio-button {
+  margin: 0;
+  position: relative;
+  top: 35%;
+}
+
 .dashboard-guage-grid {
   display: grid;
   color: rgb(218, 218, 218);
@@ -244,9 +256,9 @@
     padding-left: 25%;
   }
 
-  @media screen and (max-width: 575px) {
-    .dashboard-scenerio-selector {
-      padding-left: 10%;
+  @media screen and (max-width: 700px) {
+    .dashboard-scenerio-button {
+      justify-self: center;
     }
   }
 
