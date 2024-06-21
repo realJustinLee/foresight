@@ -531,7 +531,6 @@
 
 .choropleth-legend-container {
   position: absolute;
-  padding-bottom: 5px;
   padding-right: 8px;
   left: 0px;
   bottom: 0px;
@@ -547,26 +546,34 @@
 }
 
 .choropleth-legend-color {
-  width: 100%;
-  height: 100%;
+  width: 50%;
+  aspect-ratio: 1 / 1;
+  justify-self: center;
+  align-self: center;
   border-radius: 7%;
 }
 
 .choropleth-legend-arrow {
   cursor: pointer;
-  width: 100%;
+  justify-self: center;
+  align-self: center;
+  width: 90%;
+  height: 80%;
+  margin-bottom: 5%;
 }
 
 .choropleth-legend-arrow-closed {
   cursor: pointer;
-  width: 100%;
-  height: 100%;
+  justify-self: center;
+  align-self: top;
+  width: 65%;
+  height: 65%;
 }
 
 .choropleth-legend-text {
-  font-size: 60%;
+  font-size: 57%;
   text-align: left;
-  padding-left: 5%;
+  padding-left: 2%;
   width: 100%;
 }
 
@@ -600,4 +607,12 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
+}
+
+.dashboard-guage-hr {
+  height: 2px;
+  width: 85%;
+  margin: 0 auto;
+  border-top: 2px solid rgb(255, 255, 255) !important;
+  z-index: 2 !important;
 }

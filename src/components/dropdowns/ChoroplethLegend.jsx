@@ -21,13 +21,13 @@ export default function ChoroplethLegend({ data, color, scale, divisions }) {
   const rows = () => {
     let rowHTML = [];
     let min = 0;
-    rowHTML.push(opened?(<div key = {"choroplethlegend00"} className="choropleth-legend-arrow" onClick={() => setOpened(opened?false:true)}/>):(<MdArrowUpward className="choropleth-legend-arrow-closed" onClick={() => setOpened(true)}/>))
-    rowHTML.push(opened?(<MdArrowDownward key = {"choroplethlegend01"} className="choropleth-legend-arrow" onClick={() => setOpened(false)}/>):(<div className= "choropleth-legend-text-closed" onClick={() => setOpened(true)}> Legend </div>))
+    rowHTML.push(opened?(<MdArrowDownward className="choropleth-legend-arrow-closed" onClick={() => setOpened(false)}/>):(<MdArrowUpward key = {"choroplethlegend01"} className="choropleth-legend-arrow" onClick={() => setOpened(true)}/>))
+    rowHTML.push(opened?(<div className= "choropleth-legend-text-closed" onClick={() => setOpened(false)}> Legend </div>):(<div className= "choropleth-legend-text-closed" onClick={() => setOpened(true)}> Legend </div>))
     for (let index = divisions; index >= 0; index--) {
       let max = getMaxValueByColor(getColorValues(color, index, divisions));
       if(max !== -Infinity) {
         rowHTML.push(<div key = {index + "2choroplethlegend"} className= {opened?"choropleth-legend-color":"choropleth-legend-closed"} style={{ backgroundColor: getColorValues(color, index, divisions) }}></div>);
-        rowHTML.push(<div key = {index + "3choroplethlegend"} className= {opened?"choropleth-legend-text":"choropleth-legend-closed"}> {min} - {max} </div>);
+        rowHTML.push(<div key = {index + "3choroplethlegend"} className= {opened?"choropleth-legend-text":"choropleth-legend-closed"}> <strong>{min}</strong> to <strong>{max}</strong> </div>);
         min = max;
       }
     }
