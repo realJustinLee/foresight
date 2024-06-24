@@ -360,7 +360,7 @@
   font-weight: 600;
   color: rgb(187, 155, 49);
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 5vw min(50vw, 40vh);
+  grid-template-rows: 5vw max(400px, min(50vw, 40vh));
   column-gap: 4px;
   margin: 0;
   margin-top: 1%;
@@ -374,7 +374,7 @@
   min-width: 0;
   position: relative;
   width: 100%;
-  height: min(150vw, 60vh);
+  height: max(400px, min(150vw, 60vh));
   font-size: max(var(--bs-body-font-size), 2vw);
   font-weight: 600;
   color: rgb(187, 155, 49);
@@ -426,7 +426,7 @@
 .bar-wrapper {
   min-width: 0;
   width: 100%;
-  height: min(48vw, 38vh);
+  height: max(390px, min(48vw, 38vh));
 }
 
 .grid-border {
@@ -447,16 +447,16 @@
 
 .map-wrapper {
   position: relative;
-  height: min(50vw, 40vh);
+  height: max(400px, min(50vw, 40vh));
 }
 
 @media screen and (max-width: 1000px) {
   .map-wrapper {
-    height: min(150vw, 60vh);
+    height: max(400px, min(150vw, 60vh));
   }
 
   .bar-wrapper {
-    height: min(148vw, 48vh);
+    height:max(390px,  min(148vw, 48vh));
   }
 }
 
@@ -594,6 +594,9 @@
   background: #dce4e8;
   right: 0px;
   z-index: 100;
+  font-size: 65%;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .dropdown-menu {
