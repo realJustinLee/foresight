@@ -90,7 +90,7 @@ const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, chorop
       <div className="slider-container">
         <div className="image-container">
           <div className="choropleth-data-info">
-            {country+": "}
+            {country === "" ? "" : country+": "}
             <strong>{country === "" ? "" : countryValue.toFixed(2)}</strong>
           </div>
           <ChoroplethControl
