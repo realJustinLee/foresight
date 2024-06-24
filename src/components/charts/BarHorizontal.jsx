@@ -20,7 +20,7 @@ const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, count
     }, [scenerio])
     useEffect(() => {
         setData(getBarHorizontal(countries, csv, scenerio));
-        console.log("BAR DATA:", barData);
+        //console.log("BAR DATA:", barData);
     }, [countries, csv, scenerio])
     return (
         <div className="bar-wrapper">

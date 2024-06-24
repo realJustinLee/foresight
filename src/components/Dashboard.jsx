@@ -124,7 +124,11 @@ function Dashboard({ open }) {
             reset={resetData}
           />
           <Row className="selection-divider">
-            <DashboardFloater />
+            <DashboardFloater 
+              dates={datesData}
+              regions={regionList}
+              subcats={subcategoriesList}
+            />
           </Row>
           <Row>
             <DashboardGraphs 

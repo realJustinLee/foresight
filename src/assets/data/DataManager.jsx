@@ -194,7 +194,7 @@ export const getBarHorizontal = (countries, data, scenerio) => {
     let barData = getScenerio(data, scenerio);
     let subcatList = filterSubcat(barData);
     subcatList.sort((a, b) => a.toLowerCase() - b.toLowerCase());
-    console.log(subcatList);
+    //console.log(subcatList);
     for (let i = 0; i < countries.length; i++) {
         let countryData = getRegion(barData, countries[i]);
         let obj = {

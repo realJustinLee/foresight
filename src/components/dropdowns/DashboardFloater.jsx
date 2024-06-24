@@ -6,8 +6,9 @@ import { setdashboardSelection, setDashDate, setDashReg, setDashSubs } from "../
 import { connect } from 'react-redux';
 import { getIcon } from "../Dashboard";
 import { findUnitsByTitle } from "../../assets/data/DataManager";
+import { DropdownButton } from "react-bootstrap";
 
-function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs }) {
+function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions }) {
     const [width, setWidth] = useState(window.innerWidth);
     useEffect(() => {
         const handleResize = () => {
@@ -41,10 +42,45 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
         </div >
     ))
 
+    let uniqueDates = dates != "i" ? new Set(dates.map(obj => obj.x)) : "i";
+    let uniqueRegions = regions != "i" ? new Set(regions) : "i";
+    let uniqueSubcats = subcats != "i" ? new Set(subcats) : "i";
+    if (uniqueRegions != "i")
+        uniqueRegions.add("Global");
+    if (uniqueSubcats != "i")
+        uniqueSubcats.add("Aggregate of Subsectors");
+    //console.log(uniqueDates, uniqueRegions, uniqueSubcats);
+
+    const date_links = uniqueDates !== "i" ? Array.from(uniqueDates).map((date) => (
+        <div key={date}>
+            <Dropdown.Item as="button" active={year === date ? true : false}
+                onClick={() => dashDate(date)}>
+                {date}
+            </Dropdown.Item>
+        </div >
+    )) : <div></div>
+
+    const region_links = uniqueDates !== "i" ? Array.from(uniqueRegions).map((listedRegion) => (
+        <div key={listedRegion}>
+            <Dropdown.Item as="button" active={region === listedRegion ? true : false}
+                onClick={() => dashReg(listedRegion)}>
+                {listedRegion}
+            </Dropdown.Item>
+        </div >
+    )) : <div></div>
+
+    const subcat_links = uniqueSubcats !== "i" ? Array.from(uniqueSubcats).map((listedSubcat) => (
+        <div key={listedSubcat}>
+            <Dropdown.Item as="button" active={subsector === listedSubcat ? true : false}
+                onClick={() => dashSubs(listedSubcat)}>
+                {listedSubcat.charAt(0).toUpperCase() + listedSubcat.slice(1).trim()}
+            </Dropdown.Item>
+        </div >
+    )) : <div></div>
     return (
         <>
             <div>
-                SELECTED:    { findUnitsByTitle(openGuages, selection).toUpperCase()}   {getIcon(selection, openGuages)}
+                SELECTED:    {findUnitsByTitle(openGuages, selection).toUpperCase()}   {getIcon(selection, openGuages)}
                 <Dropdown as={ButtonGroup}>
                     <Dropdown.Toggle
                         split
@@ -56,9 +92,17 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                     </Dropdown.Menu>
                 </Dropdown>
             </div>
-            {(width >= 740) ? (
+            {(width >= 875) ? (
                 <div>
-                    Year: {year}     Region: {region}     Subsector: {subsector.charAt(0).toUpperCase() + subsector.slice(1)}
+                    <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Year: " + year}>
+                        {date_links}
+                    </DropdownButton>
+                    <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Region: " + region}>
+                        {region_links}
+                    </DropdownButton>
+                    <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Subsector: " + subsector.trim()}>
+                        {subcat_links}
+                    </DropdownButton>
                     <Button
                         className="floater-button"
                         variant="danger"
@@ -66,28 +110,22 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                         Reset
                     </Button>
                 </div>
-            ) : ((width >= 660) ? (
-                <>
-                    <div>
-                        Year: {year}     Region: {region}     Subsector: {subsector.charAt(0).toUpperCase() + subsector.slice(1)}
-                    </div>
-                    <Button
-                        className="floater-button reset-button"
-                        variant="danger"
-                        onClick={() => resetParams()}>
-                        Reset
-                    </Button>
-                </>
             ) : (
                 <>
                     <div>
-                        Year: {year}
+                        <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Year: " + year}>
+                            {date_links}
+                        </DropdownButton>
                     </div>
                     <div>
-                        Region: {region}
+                        <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Region: " + region}>
+                            {region_links}
+                        </DropdownButton>
                     </div>
                     <div>
-                        Subsector: {subsector.charAt(0).toUpperCase() + subsector.slice(1)}
+                        <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Subsector: " + subsector.trim()}>
+                            {subcat_links}
+                        </DropdownButton>
                     </div>
                     <Button
                         className="floater-button reset-button"
@@ -96,7 +134,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                         Reset
                     </Button>
                 </>
-            ))}
+            )}
         </>
     );
 }
