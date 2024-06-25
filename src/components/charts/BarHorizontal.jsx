@@ -10,7 +10,7 @@ import { BarTooltip } from "./NivoTooltips.tsx";
 // website examples showcase many properties,
 // you'll often use just a few of them.
 
-const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, countries }) => {
+const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left, countries, subcat }) => {
     //console.log("!!!!", csv, listKeys); 
     const [scenerioName, setScenerio] = useState(scenerio);
     const [barData, setData] = useState(getBarHorizontal(countries, csv, scenerio));
@@ -86,7 +86,6 @@ const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, count
                         },
                     },
                 ]}
-                the value determine 
                 role="application"
                 theme={{
                     "text": {
@@ -195,17 +194,87 @@ const MyResponsiveBar = ({csv, color, listKeys, scenerio, setdashboardSub, count
                         "tableCellValue": {}
                     }
                 }}
-                tooltip={BarTooltip}
+                tooltip={e => {
+                    return (
+                        <div
+                            style={(left) ? {
+                                pointerEvents: "none",
+                                position: "absolute",
+                                zIndex: "9999",
+                                top: "0px",
+                                left: "0px"
+                            } : {
+                                pointerEvents: "none",
+                                position: "absolute",
+                                zIndex: "9999",
+                                top: "0px",
+                                right: "0px"
+                            }}
+                        >
+                            <div
+                                style={{
+                                    background: "rgb(218, 218, 218)",
+                                    color: "inherit",
+                                    fontSize: "12px",
+                                    borderRadius: "2px",
+                                    boxShadow: "rgba(0, 0, 0, 0.25) 0px 1px 2px",
+                                    padding: "5px 9px"
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        whiteSpace: "pre",
+                                        display: "flex",
+                                        alignItems: "center"
+                                    }}
+                                >
+                                    <span style={{
+                                        display: "block",
+                                        width: "12px",
+                                        height: "12px",
+                                        background: e.color,
+                                        marginRight: "7px"
+                                    }} />
+                                    <span>
+                                        {e.label}:{" "}
+                                        <strong>{e.value.toFixed(2)}</strong>
+                                    </span>
+                                </div>
+                                {(subcat !== "Aggregate of Subsectors") ?
+                                    <div
+                                        style={{
+                                            whiteSpace: "pre",
+                                            display: "flex",
+                                            alignItems: "center"
+                                        }}
+                                    >
+                                        <span style={{
+                                            display: "block",
+                                            width: "12px",
+                                            height: "12px",
+                                            marginRight: "7px"
+                                        }} />
+                                        <span>
+                                            {(e.data[subcat] !== undefined) ? subcat + ": " + e.data[subcat].toFixed(2) : "No data for " + subcat}
+                                        </span>
+                                    </div> : <></>
+                                }
+
+                            </div>
+                        </div>
+                    );
+                }}
                 ariaLabel="Nivo bar chart demo"
                 barAriaLabel={e => e.id + ": " + e.formattedValue + " in country: " + e.indexValue}
             />
         </div>
-        
+
     );
 }
 
 function mapStateToProps(state) {
     return {
+        subcat: state.dashboardSubsector,
         countries: state.barCountries,
     };
 }

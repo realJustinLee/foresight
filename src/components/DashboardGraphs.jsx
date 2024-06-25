@@ -109,8 +109,8 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
   ) : (
     <div className='bar-grid grid-border'>
       <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={dashYear} className="choropleth-control" />
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub={setSubcategory} />
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub={setSubcategory} />
+      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub={setSubcategory} left={true}/>
+      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub={setSubcategory} left={false}/>
     </div>
   )
 
