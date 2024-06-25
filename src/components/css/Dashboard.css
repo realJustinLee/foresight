@@ -381,7 +381,7 @@
   position: relative;
   display: grid;
   width: 100%;
-  font-size: 1vw;
+  font-size: max(18px, 1vh);
   font-weight: 600;
   color: rgb(187, 155, 49);
   grid-template-columns: repeat(3, 1fr);
@@ -590,9 +590,9 @@
 .choropleth-legend-arrow-closed {
   cursor: pointer;
   justify-self: center;
-  align-self: top;
+  align-self: center;
   width: 65%;
-  height: 65%;
+  height: 80%;
 }
 
 .choropleth-legend-text {
