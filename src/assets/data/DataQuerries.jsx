@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { setAllScenarios, setSceneriosNoUpdate, setGuageList, setdashboardGuages, setdashboardSelection, setStartDate, setEndDate, setDashDate, setBarCountries } from '../../components/Store';
 import { getUnits, findClosestDateAllParamsAbove, getScenerio, filterRegion, listRegions, filterSubcat } from './DataManager';
 import { loadDataURL } from '../../components/sharing/DashboardUrl';
+import { datasets } from './Scenarios';
 
 
 export const lineQuery = `
@@ -252,7 +253,7 @@ query BarQuery($date: Int!, $nextToken: String, $id: String!) {
 
 function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded }) {
 
-  console.log(scenerios);
+  //console.log(scenerios);
   const [scenarios, setScenarios] = useState((scenerios.length > 1) ? scenerios.map(obj => obj.title) : "i");
 
   useEffect(() => {
@@ -297,7 +298,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
 
   const fetchDashboard = useCallback(async () => {
     const result = await fetchParallel([[queryDataset, { dataset: dataset }]]);
-    loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded);
+    loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, dataset);
   }, [fetchParallel]);
 
   const fetchLine = useCallback(async () => {
@@ -469,8 +470,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setAllScenarios: (scenarios) => dispatch(setAllScenarios(scenarios)),
-    setScenariosTotal: (scenarios) => dispatch(setSceneriosNoUpdate(scenarios)),
     setGuagesTotal: (guages) => dispatch(setGuageList(guages)),
+    setScenariosTotal: (scenarios) => dispatch(setSceneriosNoUpdate(scenarios)),
     setGuagesCurrent: (guages) => dispatch(setdashboardGuages(guages)),
     setGuageSelected: (guages) => dispatch(setdashboardSelection(guages)),
     setStart: (start) => dispatch(setStartDate(start)),

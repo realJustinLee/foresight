@@ -2,18 +2,32 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import "leaflet.sync";
 import landcells from "./data/landcells.json"
+import global from "./data/global.json"
+import regions_glu from "./data/regions_glu.json"
 import { getChoroplethValue } from '../../assets/data/DataManager';
 import { updateHash } from '../sharing/DashboardUrl';
 
 
 const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
   const mapData = data;
+  const getJson = (data) => {
+    if(data === 'i') return;
+    const firstCountry = data[0].id.toLowerCase();
+    console.log(firstCountry.includes("|"));
+    if(firstCountry === 'global')
+      return global;
+    else if(firstCountry.includes("|"))
+      return regions_glu;
+    return landcells;
+  }
   mapData.forEach(country => {
     country.color = getColor(country.value, data, country.id);
   });
+  console.log(mapData);
+  const mapJson = getJson(mapData);
 
   function style(feature) {
-    //console.log(feature.id, mapData.filter(item => item.index === feature.id).at(0))
+    console.log(feature.id, getColor(getChoroplethValue(mapData, feature.id), mapData, feature.id))
     return {
       fillColor: getColor(getChoroplethValue(mapData, feature.id), mapData, feature.id),
       weight: 2,
@@ -77,7 +91,7 @@ const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, set
     });
     var map_base = L.layerGroup([tileRef.current]);
     map_base.addTo(mapInstance);
-    L.geoJSON(landcells, { style: style, onEachFeature: onEachFeature }).addTo(mapInstance);
+    L.geoJSON(mapJson, { style: style, onEachFeature: onEachFeature }).addTo(mapInstance);
     //setMapInstance(mapInstance);
   }, [mapInstance, mapData, choroplethColorPalette, choroplethInterpolation]);
 

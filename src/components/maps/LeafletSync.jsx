@@ -52,6 +52,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
         bracket = divisions - Math.round(divisions * (-1 * Math.exp(-5 * (value)) + 1));
         break;
     }
+    //console.log(bracket, getColorValues(choroplethColorPalette, Math.min(Math.abs(bracket), divisions), divisions));
     return getColorValues(choroplethColorPalette, Math.min(Math.abs(bracket), divisions), divisions);
   }
 
@@ -66,7 +67,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
   }
 
   function getColor(value, data, country) {
-    //console.log("**", getRelativeDataValue(value), getRank(data, country));
+    //console.log("**", value, data.length, getRelativeDataValue(value), getRank(data, country));
     return (value && data.length > 0 && data[0].value) ? getScaleValuesTest(getRelativeDataValue(value), getRank(data, country), Object.keys(data).length) : "#333333";
   }
 

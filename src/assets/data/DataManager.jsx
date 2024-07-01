@@ -146,6 +146,7 @@ export const getSmallestChoropleth = (data) => {
 
 // getChoroplethValue gets the value for a choropleth region with the id given by id.
 export const getChoroplethValue = (data, id) => {
+    //console.log(data, id);
     const item = data.find(item => item.id === id);
     return item ? item.value : 0;
 };

@@ -165,7 +165,7 @@
 .dashboard-guage-grid {
   display: grid;
   color: rgb(218, 218, 218);
-  grid-template-columns: auto repeat(5, 1fr);
+  grid-template-columns: auto repeat(6, 1fr);
   column-gap: 4px;
   margin-top: 2%;
   margin-bottom: 2%;

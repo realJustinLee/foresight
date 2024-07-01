@@ -11,6 +11,7 @@ import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
 import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
 import DashboardUrl from "./sharing/DashboardUrl.jsx";
 import UserDataQuerries from "../assets/data/UserDataQuerries.jsx";
+import { datasets } from "../assets/data/Scenarios.jsx";
 
 function Dashboard({ open, dataset, scenarios }) {
   const [guageData, setGuageData] = useState("i");
@@ -39,8 +40,8 @@ function Dashboard({ open, dataset, scenarios }) {
   return (
     <div className="body-page-dark">
       <SidebarDashboard></SidebarDashboard>
-      {(dataset !== "gcamv7p0") ? (
-        <UserDataQuerries
+      {(datasets.some(e => e.dataset === dataset)) ? (
+        <DataQuerries
           dataset={dataset}
           setGuage={setGuageData}
           setDates={setDatesData}
@@ -52,7 +53,7 @@ function Dashboard({ open, dataset, scenarios }) {
           setSubcategories={setSubcategoriesList}
         />
       ) : (
-        <DataQuerries
+        <UserDataQuerries
           dataset={dataset}
           setGuage={setGuageData}
           setDates={setDatesData}

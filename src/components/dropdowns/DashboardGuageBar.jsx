@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { setdashboardSelection } from "../Store";
+import { setdashboardGuages, setdashboardSelection } from "../Store";
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { setDashDate, setDashReg, setDashSubs, setScenerios } from "../Store";
@@ -10,8 +10,10 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { findClosestDate, getGuage } from '../../assets/data/DataManager';
 import { updateHash, updateListHash } from '../sharing/DashboardUrl';
 import { getIconParam } from '../../assets/data/VariableCategories';
+import { GrAddCircle } from "react-icons/gr";
+import Form from 'react-bootstrap/Form';
 
-function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParameters, SelectedParameter, startDate, endDate, data, dateData, updateSelection, updateScenerios, dashDate, dashReg, dashSubs, reset }) {
+function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameters, SelectedParameter, startDate, endDate, data, dateData, updateSelection, updateScenerios, updateGuages, dashDate, dashReg, dashSubs, reset }) {
   const [OpenedScenarios, setValueScenario] = useState(OpenScenarios);
   const [OpenedParameters, setValueParameter] = useState(OpenParameters);
 
@@ -33,6 +35,20 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
     </div>
   ))
 
+  const paramDropdownList = () => Parameters.map((param) => (
+    <div key={param.title}>
+      <Form.Check
+        disabled={(!(OpenedParameters.map(obj => obj.title).includes(param.title)) && OpenedParameters.map(obj => obj.title).length >= 5) || ((OpenedParameters.map(obj => obj.title).includes(param.title)) && OpenedParameters.map(obj => obj.title).length === 1)}
+        checked={OpenedParameters.map(obj => obj.title).includes(param.title)}
+        type="switch"
+        key={param.title}
+        id={param.title}
+        label={param.title}
+        onChange={e => { handleParamChange(e.target.checked, param) }}
+      />
+    </div>
+  ))
+
 
   // Handles when a dropdown selection changes the scenario. The function
   // should be given the index of the row in which the scenario is being
@@ -47,6 +63,19 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
     updateScenerios(index, scenario, newScenarios);
   }
 
+
+  const handleParamChange = (checked, param) => {
+    console.log(OpenedParameters, Parameters, param);
+    let newParameters = structuredClone(OpenedParameters);
+    if(checked) //Add Guage
+      newParameters.push(param)
+    else { //Remove Guage
+      newParameters = newParameters.filter(obj => obj.title !== param.title)
+      if(SelectedParameter === param.title)
+        updateSelection(newParameters[newParameters.length-1].title)
+    }
+    updateGuages(newParameters);
+  }
 
   // This function gets data from the dataset for the guagues. It will return the result
   // for the percent change between a start and end date from a dataset given by data for a
@@ -94,7 +123,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
   // This function resets and updates each selected parameter apon a new parameter being
   // chosen.
   function resetAndUpdate(title) {
-    if (!dateData || dateData == "i") return; 
+    if (!dateData || dateData == "i") return;
     let date = findClosestDate(dateData, 2020);
 
     dashDate(date);
@@ -123,6 +152,26 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
           />
           <Dropdown.Menu>
             {scenarioDropdownList(index)}
+          </Dropdown.Menu>
+        </Dropdown>
+      ))
+    )
+  };
+
+
+  const guageSelectionCol = () => {
+    console.log(Parameters);
+    return (
+      OpenedScenarios.map((scenario, index) => (
+        <Dropdown as={ButtonGroup} key={index} className={"dashboard-scenerio-selector"}>
+          <Button variant="outline-light"><GrAddCircle /></Button>
+          <Dropdown.Toggle
+            split
+            variant="outline-warning"
+            id="dropdown-split-basic"
+          />
+          <Dropdown.Menu>
+            {paramDropdownList(index)}
           </Dropdown.Menu>
         </Dropdown>
       ))
@@ -166,6 +215,9 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
       {(data === 'i' || data.length === 0) ? (
         "Loading Dataset..."
       ) : (col())}
+      <div className="dashboard-guage-grid-columns">
+        {guageSelectionCol()}
+      </div>
     </div>
   );
 }
@@ -178,6 +230,7 @@ function mapStateToProps(state) {
     SelectedParameter: state.dashboardSelection,
     startDate: state.startDate,
     endDate: state.endDate,
+    Parameters: state.guageList,
   };
 }
 
@@ -186,6 +239,7 @@ function mapDispatchToProps(dispatch) {
   return {
     updateSelection: (openGuage) => dispatch(setdashboardSelection(openGuage)),
     updateScenerios: (newIndex, newTitle, openScenerio) => dispatch(setScenerios(newIndex, newTitle, openScenerio)),
+    updateGuages: (guages) => dispatch(setdashboardGuages(guages)),
     dashDate: (date) => dispatch(setDashDate(date)),
     dashReg: (reg) => dispatch(setDashReg(reg)),
     dashSubs: (sub) => dispatch(setDashSubs(sub))

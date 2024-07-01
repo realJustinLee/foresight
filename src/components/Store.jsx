@@ -16,6 +16,7 @@ const initialState = {
   barCountries: [],
   allScenarios: [],
   scenerios: [],
+  parameters: [],
   guages: [],
   guageList: []
 };
@@ -109,7 +110,7 @@ export function setdashboardGuages(guages) {
 
 export function setGuageList(guages) {
   //updateHash("selected", num);
-  return { type: 'setGuagesList', payload: guages };
+  return { type: 'setGuageList', payload: guages };
 }
 
 // Action creator function to update the dataset

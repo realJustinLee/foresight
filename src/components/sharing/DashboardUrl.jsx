@@ -1,4 +1,5 @@
 import { findClosestDateAllParamsAbove, getUnits } from "../../assets/data/DataManager";
+import { datasets } from "../../assets/data/Scenarios";
 
 // Updates the URL hash for single parameter hashes. Takes in the name and value of the hash.
 // Does not guarentee order of placement.
@@ -28,7 +29,7 @@ export const updateListHash = (name, index, value) => {
 // and guage settings for the dashboard. The functionality is different on the first load, as when the urlLoaded parameter
 // is false, which only happens on the first load, loadDataURL will search for URL values and replace the default parameters
 // if these URL values are valid. This functions as the only URL loading function for the dashboard.
-export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded) => {
+export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded, dataset) => {
   //console.log(result);
 
   //Prepare total scenarios
@@ -46,9 +47,9 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   const guages = params.map((guage) => {
     let units = getUnits(result, guage);
     units = units.slice(0, units.indexOf("(")).trim();
-    return { title: guage, units: units, group: "water" }
+    return { title: guage, units: units, group: datasets.find(obj => obj.dataset === dataset).params[guage] ? datasets.find(obj => obj.dataset === dataset).params[guage] : "other" }
   });
-  //console.log("STORE ALL GUAGES:", guages);
+  console.log("STORE ALL GUAGES:", guages);
   setGuagesTotal(guages);
   // Prepare opened guages
   const currentGuages = guages.slice(0, 5);

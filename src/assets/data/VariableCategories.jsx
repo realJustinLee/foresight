@@ -1,9 +1,9 @@
-import { MdError, MdElectricBolt, MdGroups, MdFilterHdr, MdOutlineWindPower, MdOutlineDesignServices, MdOutlineFactory  } from "react-icons/md";
+import { MdError, MdElectricBolt, MdGroups, MdFilterHdr, MdOutlineWindPower, MdDeviceThermostat, MdOutlineDesignServices, MdOutlineFactory  } from "react-icons/md";
 import { GiCorn, GiFactory, GiWaterDrop, GiCow, GiMolecule  } from "react-icons/gi";
 import { TbCoins, TbBuildingCommunity } from "react-icons/tb";
 import { FaTruckMoving } from "react-icons/fa";
 
-export const iconTypes = ["energy", "transport", "buildings", "industry", "water", "electricity", "socioeconomic - gdp", "socioeconomic - population", "agriculture", "livestock", "land", "emissions", "hydrogen", "other"];
+export const iconTypes = ["energy", "transport", "buildings", "industry", "water", "electricity", "socioeconomic - gdp", "socioeconomic - population", "agriculture", "livestock", "land", "emissions", "climate", "hydrogen", "other"];
 
 export const getIconParam = (param, guages) => {
   const found = guages.find(gauge => gauge.title === param);
@@ -35,7 +35,9 @@ export const getIcon = (category, custom) => {
     case "land":
       return <MdFilterHdr />
     case "emissions":
-      return <GiFactory />;  
+      return <GiFactory />;
+    case "climate":
+      return <MdDeviceThermostat />;
     case "hydrogen":
       return <GiMolecule />;
     default:

@@ -64,7 +64,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
 
   // Labels
   const lineChartLabel = (<div className="text-centered">{regionDisplay} {subcatDisplay} Trends</div>)
-  console.log(Scenerios.at(0), Scenerios.at(1));
+  //console.log(Scenerios.at(0), Scenerios.at(1));
   const choroplethLabel = (<div className="text-centered">
     <div>Spatial Composition {"(" + dashYear + subcatDisplay + ")"}</div>
     <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
