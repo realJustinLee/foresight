@@ -177,10 +177,8 @@
   position: static
 }
 
-dashboard-scenerio-button .dropdown-toggle::after {
+.dashboard-scenerio-button .dropdown-toggle::after {
   color: rgb(187, 155, 49);
-  margin-left: 10%;
-  margin-right: 15%;
 }
 
 .dashboard-scenerio-button {

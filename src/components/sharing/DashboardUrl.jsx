@@ -34,6 +34,8 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
 
   //Prepare total scenarios
   const scenarios = [...new Set(result.map(item => item.scenario))];
+  console.log(scenarios);
+  scenarios.sort();
   //console.log("STORE SCENARIOS:", scenarios);
   setAllScenarios(scenarios.map(obj => ({ title: obj })));
 
@@ -52,7 +54,7 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   console.log("STORE ALL GUAGES:", guages);
   setGuagesTotal(guages);
   // Prepare opened guages
-  const currentGuages = guages.slice(0, 5);
+  const currentGuages = guages.filter(guage => datasets.find(obj => obj.dataset === dataset).defaults.includes(guage.title));
   //console.log("STORE CURRENT GUAGES:", currentGuages);
   setGuagesCurrent(currentGuages);
   // Prepared selected guage

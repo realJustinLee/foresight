@@ -9,7 +9,7 @@ import ScenerioGuageNegative from "../guages/ScenerioGuageNegative"
 import Dropdown from 'react-bootstrap/Dropdown';
 import { findClosestDate, getGuage } from '../../assets/data/DataManager';
 import { updateHash, updateListHash } from '../sharing/DashboardUrl';
-import { getIconParam } from '../../assets/data/VariableCategories';
+import { getIconParam, iconTypes } from '../../assets/data/VariableCategories';
 import { GrAddCircle } from "react-icons/gr";
 import Form from 'react-bootstrap/Form';
 import { DropdownButton } from 'react-bootstrap';
@@ -36,19 +36,33 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
     </div>
   ))
 
-  const paramDropdownList = () => Parameters.map((param) => (
-    <div key={param.title}>
-      <Form.Check
-        disabled={(!(OpenedParameters.map(obj => obj.title).includes(param.title)) && OpenedParameters.map(obj => obj.title).length >= 5) || ((OpenedParameters.map(obj => obj.title).includes(param.title)) && OpenedParameters.map(obj => obj.title).length === 1)}
-        checked={OpenedParameters.map(obj => obj.title).includes(param.title)}
-        type="switch"
-        key={param.title}
-        id={param.title}
-        label={param.title}
-        onChange={e => { handleParamChange(e.target.checked, param) }}
-      />
-    </div>
-  ))
+  const paramDropdownList = () => {
+    let list = [];
+    iconTypes.forEach(group => {
+      let params = paramDropdownListGroup(group)
+      if(params.length > 0) {
+        list.push(<Dropdown.Header>{group.charAt(0).toUpperCase() + group.slice(1).trim()}</Dropdown.Header>);
+        list.push(params);
+      }
+    });
+    return list;
+  }
+
+  const paramDropdownListGroup = (group) => {
+    return (Parameters.filter(param => param.group === group).map((param) => (
+      <div key={param.title}>
+        <Form.Check
+          disabled={(!(OpenedParameters.map(obj => obj.title).includes(param.title)) && OpenedParameters.map(obj => obj.title).length >= 5) || ((OpenedParameters.map(obj => obj.title).includes(param.title)) && OpenedParameters.map(obj => obj.title).length === 1)}
+          checked={OpenedParameters.map(obj => obj.title).includes(param.title)}
+          type="switch"
+          key={param.title}
+          id={param.title}
+          label={param.title}
+          onChange={e => { handleParamChange(e.target.checked, param) }}
+        />
+      </div>
+    )))
+  }
 
 
   // Handles when a dropdown selection changes the scenario. The function
@@ -153,7 +167,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
 
 
   const guageSelectionCol = () => {
-    console.log(Parameters);
+    //console.log(Parameters);
     return (
       OpenedScenarios.map((scenario, index) => (
         <Dropdown as={ButtonGroup} key={index} className={"dashboard-scenerio-selector"}>
@@ -164,7 +178,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
             id="dropdown-split-basic"
           />
           <Dropdown.Menu>
-            {paramDropdownList(index)}
+            {paramDropdownList()}
           </Dropdown.Menu>
         </Dropdown>
       ))

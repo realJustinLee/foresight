@@ -13,7 +13,7 @@ const DashboardLeaflet = ({ data, region, displayLegend, id, setRegion, mapInsta
   const getJson = (data) => {
     if(data === 'i') return;
     const firstCountry = data[0].id.toLowerCase();
-    console.log(firstCountry.includes("|"));
+    //console.log(firstCountry.includes("|"));
     if(firstCountry === 'global')
       return global;
     else if(firstCountry.includes("|"))
@@ -23,11 +23,11 @@ const DashboardLeaflet = ({ data, region, displayLegend, id, setRegion, mapInsta
   mapData.forEach(country => {
     country.color = getColor(country.value, data, country.id);
   });
-  console.log(mapData);
+  //console.log(mapData);
   const mapJson = getJson(mapData);
 
   function style(feature) {
-    console.log(feature.id, getColor(getChoroplethValue(mapData, feature.id), mapData, feature.id))
+    //console.log(feature.id, getColor(getChoroplethValue(mapData, feature.id), mapData, feature.id))
     return {
       fillColor: getColor(getChoroplethValue(mapData, feature.id), mapData, feature.id),
       weight: feature.id === region ? 5 : 2,

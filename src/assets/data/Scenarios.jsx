@@ -21,10 +21,17 @@ export const datasets = [
       watWithdrawByCrop: "water",
       watWithdrawBySec: "water",
       waterWithdrawROGW: "water",
-      waterWithdrawByRunoffBasin: "water",
+      watWithdrawByBasinRunoff: "water",
       elecByTechTWh: "electricity",
       elecCapByFuel: "electricity",
       energyFinalSubsecByFuelBuildEJ: "electricity"
-    }
+    },
+    defaults: [
+      "agProdByCrop",
+      "energyPrimaryByFuelEJ",
+      "pop",
+      "watWithdrawBySec",
+      "emissCO2BySector"
+    ]
   }
 ]
