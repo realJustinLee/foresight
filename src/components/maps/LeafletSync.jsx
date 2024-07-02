@@ -1,25 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import "leaflet.sync";
-import landcells from "./data/landcells.json"
 import {
   ReactCompareSlider
 } from "react-compare-slider";
-import { getChoroplethValue, getSmallestChoropleth, getLargestChoropleth } from '../../assets/data/DataManager';
+import { getSmallestChoropleth, getLargestChoropleth } from '../../assets/data/DataManager';
 
 import ChoroplethControl from '../dropdowns/ChoroplethControl';
 import { getColorsFromPalette } from '../../assets/data/GcamColors';
 import ChoroplethLegend from '../dropdowns/ChoroplethLegend';
 import DashboardLeaflet from './DashboardLeaflet';
 
-const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
+const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, region, data, data2, uniqueValue, setRegion }) => {
   //Map Instances
   const [mapInstance, setMapInstance] = useState(null);
   const [mapInstance2, setMapInstance2] = useState(null);
 
   //Choropleth Visualization Settings
-  const [choroplethColorPalette, setChoroplethColorPalette] = useState("pal_green");
-  const [choroplethInterpolation, setInterpolation] = useState("VALUE - LOG");
   const divisions = 7;
 
   const [country, setCountryDisplay] = useState("");
@@ -93,8 +90,8 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
       <div className="slider-container">
         <div className="image-container">
           <div className="choropleth-data-info">
-            {country}
-            {country === "" ? "" : " - " + parseInt(countryValue).toFixed(2)}
+            {country === "" ? "" : country + ": "}
+            <strong>{country === "" ? "" : countryValue.toFixed(2)}</strong>
           </div>
           <ChoroplethControl
             palette={choroplethColorPalette}
@@ -113,6 +110,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
             itemOne={
               <DashboardLeaflet
                 data={data}
+                region={region}
                 displayLegend={true}
                 id={mapkey + '_1'}
                 setRegion={setRegion}
@@ -130,6 +128,7 @@ const LeafletSync = ({ data, data2, uniqueValue, setRegion }) => {
             itemTwo={
               <DashboardLeaflet
                 data={data2}
+                region={region}
                 displayLegend={false}
                 id={mapkey + '_2'}
                 setRegion={setRegion}

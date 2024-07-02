@@ -12,6 +12,7 @@ import { updateHash, updateListHash } from '../sharing/DashboardUrl';
 import { getIconParam } from '../../assets/data/VariableCategories';
 import { GrAddCircle } from "react-icons/gr";
 import Form from 'react-bootstrap/Form';
+import { DropdownButton } from 'react-bootstrap';
 
 function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameters, SelectedParameter, startDate, endDate, data, dateData, updateSelection, updateScenerios, updateGuages, dashDate, dashReg, dashSubs, reset }) {
   const [OpenedScenarios, setValueScenario] = useState(OpenScenarios);
@@ -67,12 +68,12 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   const handleParamChange = (checked, param) => {
     console.log(OpenedParameters, Parameters, param);
     let newParameters = structuredClone(OpenedParameters);
-    if(checked) //Add Guage
+    if (checked) //Add Guage
       newParameters.push(param)
     else { //Remove Guage
       newParameters = newParameters.filter(obj => obj.title !== param.title)
-      if(SelectedParameter === param.title)
-        updateSelection(newParameters[newParameters.length-1].title)
+      if (SelectedParameter === param.title)
+        updateSelection(newParameters[newParameters.length - 1].title)
     }
     updateGuages(newParameters);
   }
@@ -123,7 +124,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   // This function resets and updates each selected parameter apon a new parameter being
   // chosen.
   function resetAndUpdate(title) {
-    if (!dateData || dateData == "i") return;
+    if (!dateData || dateData === "i") return;
     let date = findClosestDate(dateData, 2020);
 
     dashDate(date);
@@ -143,17 +144,9 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   const scenarioSelectionCol = () => {
     return (
       OpenedScenarios.map((scenario, index) => (
-        <Dropdown as={ButtonGroup} key={index} className={"dashboard-scenerio-selector"}>
-          <Button variant="outline-light">{scenario.title}</Button>
-          <Dropdown.Toggle
-            split
-            variant="outline-warning"
-            id="dropdown-split-basic"
-          />
-          <Dropdown.Menu>
-            {scenarioDropdownList(index)}
-          </Dropdown.Menu>
-        </Dropdown>
+        <DropdownButton variant="outline-light" className="dashboard-scenerio-button" title={scenario.title}>
+          {scenarioDropdownList(index)}
+        </DropdownButton>
       ))
     )
   };

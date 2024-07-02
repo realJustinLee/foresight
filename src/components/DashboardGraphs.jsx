@@ -9,7 +9,7 @@ import { getBarColors } from '../assets/data/GcamColors';
 import { setDashDate, setDashReg, setDashSubs } from './Store';
 import LeafletSync from "./maps/LeafletSync";
 
-function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs }) {
+function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation }) {
   const [width, setWidth] = useState(window.innerWidth);
 
   const [dashYear, setYear] = useState(curYear);
@@ -18,19 +18,15 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
 
   useEffect(() => {
     setDashboardDate(dashYear)
-  }, [dashYear]);
+  }, [dashYear, setDashboardDate]);
 
   useEffect(() => {
     setDashboardReg(dashRegion)
-  }, [dashRegion]);
+  }, [dashRegion, setDashboardReg]);
 
   useEffect(() => {
     setDashboardSubs(dashSubcategory)
-  }, [dashSubcategory]);
-
-  useEffect(() => {
-    //console.log("SCENERIO CHANGE");
-  }, [openedScenerios]);
+  }, [dashSubcategory, setDashboardSubs]);
 
   useEffect(() => {
     const handleResize = () => {
@@ -49,10 +45,10 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
   // Display label text. Setting default display text for aggregates.
   let subcatDisplay = "";
   let regionDisplay = "";
-  if (dashSubcategory !== "Aggregate of Subsectors")
-    subcatDisplay = " " + dashSubcategory;
-  if (dashRegion !== "class1")
-    regionDisplay = dashRegion;
+  if (subcat !== "Aggregate of Subsectors")
+    subcatDisplay = " " + subcat;
+  if (region !== "class1")
+    regionDisplay = region;
 
 
   // Load Units for Display
@@ -65,50 +61,55 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
   // Labels
   const lineChartLabel = (<div className="text-centered">{regionDisplay} {subcatDisplay} Trends</div>)
   //console.log(Scenerios.at(0), Scenerios.at(1));
-  const choroplethLabel = (<div className="text-centered">
-    <div>Spatial Composition {"(" + dashYear + subcatDisplay + ")"}</div>
+  let choroplethLabel = (<div className="text-centered">
+    <div>Spatial Composition {"(" + curYear + subcatDisplay + ")"}</div>
     <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
   </div>)
-  const barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + dashYear + ")"} -- By Subsector</div>)
+  let barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + curYear + ")"} -- By Subsector</div>)
 
 
   // Line Chart Visualization
   const lineChart = (lineData === 'i') ? (
-    <div className = "grid-border-hidden text-centered">
+    <div className="grid-border-hidden text-centered">
       Loading Dataset...
     </div>
   ) : (
-    <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date = {dashYear} setDate = {setYear} />
+    <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date={dashYear} setDate={setYear} />
   )
 
 
   // Choropleth Visualization
   const choropleth = (choroplethData === 'i') ? (
-    <div className = "grid-border-hidden text-centered">
+    <div className="grid-border-hidden text-centered">
       Loading Dataset...
     </div>
   ) : (
     <LeafletSync
-      setRegion = {setRegion}
-      choroplethData = {choroplethData}
-      Scenerios = {Scenerios}
-      data = {choroplethReduce(choroplethData, Scenerios.at(0).title)}
-      data2 = {choroplethReduce(choroplethData, Scenerios.at(1).title)}
-      uniqueValue = {"Dashboard_Big"}
+      setRegion={setRegion}
+      region={region}
+      choroplethData={choroplethData}
+      Scenerios={Scenerios}
+      data={choroplethReduce(choroplethData, Scenerios.at(0).title)}
+      data2={choroplethReduce(choroplethData, Scenerios.at(1).title)}
+      uniqueValue={"Dashboard_Big"}
+      choroplethColorPalette={choroplethColorPalette}
+      setChoroplethColorPalette={setChoroplethColorPalette}
+      choroplethInterpolation={choroplethInterpolation}
+      setInterpolation={setInterpolation}
     />
   )
 
 
   // Bar Chart Visualization
   const barChart = (barData === "i" || aggSub === 'i') ? (
-    <div className = "grid-border-hidden text-centered">
+    <div className="grid-border-hidden text-centered">
       Loading Dataset...
     </div>
   ) : (
     <div className='bar-grid grid-border'>
       <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={dashYear} className="choropleth-control" />
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub = {setSubcategory}/>
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub = {setSubcategory}/>
+      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub={setSubcategory} left={true} />
+      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub={setSubcategory} left={false} />
     </div>
   )
 

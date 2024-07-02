@@ -8,7 +8,7 @@ import { getChoroplethValue } from '../../assets/data/DataManager';
 import { updateHash } from '../sharing/DashboardUrl';
 
 
-const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
+const DashboardLeaflet = ({ data, region, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
   const mapData = data;
   const getJson = (data) => {
     if(data === 'i') return;
@@ -30,11 +30,11 @@ const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, set
     console.log(feature.id, getColor(getChoroplethValue(mapData, feature.id), mapData, feature.id))
     return {
       fillColor: getColor(getChoroplethValue(mapData, feature.id), mapData, feature.id),
-      weight: 2,
+      weight: feature.id === region ? 5 : 2,
       opacity: 1,
       color: 'white',
       dashArray: '3',
-      fillOpacity: 0.7
+      fillOpacity: feature.id === region ? 0.8 : 0.6
     };
   }
 
@@ -114,11 +114,11 @@ const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, set
     setCountryDisplay("");
     setCountryDisplayValue("");
     layer.setStyle({
-      weight: 2,
+      weight: e.sourceTarget.feature.id === region ? 5 : 2,
       opacity: 1,
       color: 'white',
       dashArray: '3',
-      fillOpacity: 0.7
+      fillOpacity: e.sourceTarget.feature.id === region ? 0.8 : 0.6
     });
   }
 

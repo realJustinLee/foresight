@@ -38,6 +38,21 @@
   font-weight: 500;
 }
 
+.dashboard .dropdown-menu {
+  --bs-dropdown-bg: #2a2828;
+  --bs-dropdown-link-color: rgb(248, 248, 248);
+  --bs-dropdown-link-active-bg: rgb(158, 130, 36);
+  --bs-dropdown-link-hover-bg: rgb(145, 119, 36, 0.7);
+  --bs-dropdown-link-hover-color: rgb(248, 248, 248);
+  --bs-dropdown-header-color: #999999;
+  --bs-dropdown-color: rgb(248, 248, 248);
+}
+
+.dashboard .form-check-input:checked {
+  background-color: rgb(205, 165, 32);
+  border-color: rgb(219, 173, 22);
+}
+
 @media screen and (max-width: 700px) {
   .dashboard {
     padding-right: 20px !important;
@@ -162,6 +177,31 @@
   position: static
 }
 
+dashboard-scenerio-button .dropdown-toggle::after {
+  color: rgb(187, 155, 49);
+  margin-left: 10%;
+  margin-right: 15%;
+}
+
+.dashboard-scenerio-button {
+  margin: 0;
+  position: relative;
+  top: 35%;
+}
+
+.dashboard-floater-button .btn {
+  font-weight: 700;
+  --bs-btn-color: white;
+}
+
+.dashboard-floater-button {
+  margin: 0;
+  padding-left: 20px;
+  padding-right: 20px;
+  position: relative;
+  font-weight: 900;
+}
+
 .dashboard-guage-grid {
   display: grid;
   color: rgb(218, 218, 218);
@@ -240,9 +280,9 @@
     padding-left: 25%;
   }
 
-  @media screen and (max-width: 575px) {
-    .dashboard-scenerio-selector {
-      padding-left: 10%;
+  @media screen and (max-width: 700px) {
+    .dashboard-scenerio-button {
+      justify-self: center;
     }
   }
 
@@ -319,14 +359,12 @@
 @media screen and (max-width: 740px) and (min-width: 660px) {
   .selection-divider {
     margin-bottom: 10px;
-    height: 105px;
   }
 }
 
 @media screen and (max-width: 660px) {
   .selection-divider {
     margin-bottom: 10px;
-    height: 180px;
   }
 }
 
@@ -340,11 +378,11 @@
   position: relative;
   display: grid;
   width: 100%;
-  font-size: 1vw;
+  font-size: max(18px, 1vh);
   font-weight: 600;
   color: rgb(187, 155, 49);
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 5vw min(50vw, 40vh);
+  grid-template-rows: 5vw max(400px, min(50vw, 40vh));
   column-gap: 4px;
   margin: 0;
   margin-top: 1%;
@@ -358,7 +396,7 @@
   min-width: 0;
   position: relative;
   width: 100%;
-  height: min(150vw, 60vh);
+  height: max(400px, min(150vw, 60vh));
   font-size: max(var(--bs-body-font-size), 2vw);
   font-weight: 600;
   color: rgb(187, 155, 49);
@@ -410,7 +448,7 @@
 .bar-wrapper {
   min-width: 0;
   width: 100%;
-  height: min(48vw, 38vh);
+  height: max(390px, min(48vw, 38vh));
 }
 
 .grid-border {
@@ -431,16 +469,16 @@
 
 .map-wrapper {
   position: relative;
-  height: min(50vw, 40vh);
+  height: max(400px, min(50vw, 40vh));
 }
 
 @media screen and (max-width: 1000px) {
   .map-wrapper {
-    height: min(150vw, 60vh);
+    height: max(400px, min(150vw, 60vh));
   }
 
   .bar-wrapper {
-    height: min(148vw, 48vh);
+    height:max(390px,  min(148vw, 48vh));
   }
 }
 
@@ -515,7 +553,6 @@
 
 .choropleth-legend-container {
   position: absolute;
-  padding-bottom: 5px;
   padding-right: 8px;
   left: 0px;
   bottom: 0px;
@@ -531,26 +568,34 @@
 }
 
 .choropleth-legend-color {
-  width: 100%;
-  height: 100%;
+  width: 50%;
+  aspect-ratio: 1 / 1;
+  justify-self: center;
+  align-self: center;
   border-radius: 7%;
 }
 
 .choropleth-legend-arrow {
   cursor: pointer;
-  width: 100%;
+  justify-self: center;
+  align-self: center;
+  width: 90%;
+  height: 80%;
+  margin-bottom: 5%;
 }
 
 .choropleth-legend-arrow-closed {
   cursor: pointer;
-  width: 100%;
-  height: 100%;
+  justify-self: center;
+  align-self: center;
+  width: 65%;
+  height: 80%;
 }
 
 .choropleth-legend-text {
-  font-size: 60%;
+  font-size: 57%;
   text-align: left;
-  padding-left: 5%;
+  padding-left: 2%;
   width: 100%;
 }
 
@@ -571,11 +616,30 @@
   background: #dce4e8;
   right: 0px;
   z-index: 100;
+  font-size: 65%;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
 .dropdown-menu {
   height: 200px;
   overflow-y: scroll;
+}
+
+.line-graph-no-data {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.dashboard-guage-hr {
+  height: 2px;
+  width: 85%;
+  margin: 0 auto;
+  border-top: 2px solid rgb(255, 255, 255) !important;
+  z-index: 2 !important;
 }
 
 .guage-selection-menu {

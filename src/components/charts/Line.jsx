@@ -1,6 +1,8 @@
 import React from "react";
 import { ResponsiveLine } from '@nivo/line'
 import { updateHash } from "../sharing/DashboardUrl";
+import { MdOutlineWarning } from "react-icons/md";
+
 const Line = ({ data, setDate, unit }) => (
     <div className="line_container">
         <div className="nivo-wrapper grid-border">
@@ -26,6 +28,56 @@ const Line = ({ data, setDate, unit }) => (
                         parseInt(`${data["data"]["x"]}`)
                     );
                     updateHash("year", parseInt(`${data["data"]["x"]}`));
+                }}
+                tooltip={e => {
+                    return (
+                        <div
+                            style={(e.point.index % data[0].data.length < data[0].data.length / 2) ? {
+                                pointerEvents: "none",
+                                position: "absolute",
+                                zIndex: "9999",
+                                top: "0px",
+                                left: "0px"
+                            } : {
+                                pointerEvents: "none",
+                                position: "absolute",
+                                zIndex: "9999",
+                                top: "0px",
+                                right: "0px"
+                            }}
+                        >
+                            <div
+                                style={{
+                                    background: "rgb(218, 218, 218)",
+                                    color: "inherit",
+                                    fontSize: "12px",
+                                    borderRadius: "2px",
+                                    boxShadow: "rgba(0, 0, 0, 0.25) 0px 1px 2px",
+                                    padding: "5px 9px"
+                                }}
+                            >
+                                <div
+                                    style={{
+                                        whiteSpace: "pre",
+                                        display: "flex",
+                                        alignItems: "center"
+                                    }}
+                                >
+                                    <span style={{
+                                        display: "block",
+                                        width: "12px",
+                                        height: "12px",
+                                        background: e.point.serieColor,
+                                        marginRight: "7px"
+                                    }} />
+                                    <span>
+                                        {e.point.data.xFormatted}:{" "}
+                                        <strong>{e.point.data.yFormatted}</strong>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    );
                 }}
                 theme={{
                     "text": {
@@ -196,7 +248,17 @@ const Line = ({ data, setDate, unit }) => (
                 ]}
             />
         </div >
-    </div>
+        {
+            (data[0].data.length === 0) ? (
+                <div className="line-graph-no-data">
+                    <div><MdOutlineWarning /> No Data <MdOutlineWarning /></div>
+                    <div>Please pick another region.</div>
+                </div>
+            ) : (
+                <div />
+            )
+        }
+    </div >
 )
 
 

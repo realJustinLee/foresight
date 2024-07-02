@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import SidebarDashboard from "./SidebarDashboard.jsx";
 import DataQuerries from "../assets/data/DataQuerries.jsx";
@@ -9,7 +9,6 @@ import { setdashboardSelection, setStartDate, setEndDate } from "./Store";
 import './css/Dashboard.css';
 import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
 import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
-import DashboardUrl from "./sharing/DashboardUrl.jsx";
 import UserDataQuerries from "../assets/data/UserDataQuerries.jsx";
 import { datasets } from "../assets/data/Scenarios.jsx";
 
@@ -22,6 +21,9 @@ function Dashboard({ open, dataset, scenarios }) {
   const [aggSub, setAggSub] = useState("i");
   const [regionList, setRegionList] = useState("i");
   const [subcategoriesList, setSubcategoriesList] = useState("i");
+
+  const [choroplethColorPalette, setChoroplethColorPalette] = useState("pal_green");
+  const [choroplethInterpolation, setInterpolation] = useState("VALUE - LOG");
 
   const resetData = () => {
     setGuageData("i");
@@ -96,8 +98,11 @@ function Dashboard({ open, dataset, scenarios }) {
             reset={resetData}
           />
           <Row className="selection-divider">
-            <DashboardFloater
-              data={datesData}
+            <DashboardFloater 
+              data={guageData}
+              dates={datesData}
+              regions={regionList}
+              subcats={subcategoriesList}
             />
           </Row>
           <Row>
@@ -107,6 +112,10 @@ function Dashboard({ open, dataset, scenarios }) {
               barData={barData}
               aggSub={aggSub}
               guageData={guageData}
+              choroplethColorPalette={choroplethColorPalette}
+              setChoroplethColorPalette={setChoroplethColorPalette}
+              choroplethInterpolation={choroplethInterpolation}
+              setInterpolation={setInterpolation}
             />
           </Row>
         </Container>
