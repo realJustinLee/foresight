@@ -38,7 +38,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
 
   const paramDropdownList = () => {
     let list = [];
-    iconTypes.forEach(group => {
+    iconTypes.sort().forEach(group => {
       let params = paramDropdownListGroup(group)
       if(params.length > 0) {
         list.push(<Dropdown.Header>{group.charAt(0).toUpperCase() + group.slice(1).trim()}</Dropdown.Header>);

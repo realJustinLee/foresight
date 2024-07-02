@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import Papa from 'papaparse';
+import { saveAs } from 'file-saver';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
@@ -8,9 +10,9 @@ import { findClosestDate, findUnitsByTitle } from "../../assets/data/DataManager
 import { updateHash } from "../sharing/DashboardUrl";
 import { getIconParam } from "../../assets/data/VariableCategories";
 import { DropdownButton } from "react-bootstrap";
+import { MdFileDownload } from "react-icons/md";
 
-
-function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions, data }) {
+function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions, data, downloadableData }) {
     const [width, setWidth] = useState(window.innerWidth);
     useEffect(() => {
         const handleResize = () => {
@@ -23,6 +25,15 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
             window.removeEventListener('resize', handleResize);
         };
     }, []);
+
+    const downloadCSV = () => {
+        if(downloadableData !== "i") {
+            const csv = Papa.unparse(downloadableData);
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            saveAs(blob, 'data.csv');
+        }
+    };
 
     function resetParams() {
         if (data.length > 0) {
@@ -102,6 +113,11 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                         {links}
                     </Dropdown.Menu>
                 </Dropdown>
+                <div
+                    onClick={() => downloadCSV()}
+                    className="guage-button">
+                    <MdFileDownload />
+                </div>
             </div>
             {(width >= 875) ? (
                 <div>

@@ -231,6 +231,9 @@
   cursor: pointer;
 }
 
+.guage-button {
+  cursor: pointer;
+}
 .chart-container {
   z-index: 10;
 }

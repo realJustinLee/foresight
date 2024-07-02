@@ -100,6 +100,7 @@ function Dashboard({ open, dataset, scenarios }) {
           <Row className="selection-divider">
             <DashboardFloater 
               data={guageData}
+              downloadableData={barData}
               dates={datesData}
               regions={regionList}
               subcats={subcategoriesList}
