@@ -217,6 +217,11 @@ a {
   font-size: 20px;
 }
 
+.side-info-text {
+  color: grey;
+  text-align: center;
+}
+
 .linkText {
   padding-left: 5px;
   display: inline-block;

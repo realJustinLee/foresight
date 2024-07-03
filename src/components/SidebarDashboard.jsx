@@ -28,8 +28,8 @@ function SidebarDashboard({ open, toggleOpen, setOpen }) {
       </button>
       {
         (open) ? (
-          <div className="sideitem">
-            (Subpages Coming Soon!)
+          <div className="side-info-text">
+            Subpages Coming Soon!
           </div>
         ) : (<div />)
       }

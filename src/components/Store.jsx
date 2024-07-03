@@ -29,13 +29,18 @@ const initialState = {
       group: "population"
     },
     {
+      title: "gdp",
+      units: "GDP (MER)",
+      group: "socioeconomics"
+    },
+    {
       title: "watWithdrawBySec",
       units: "Water Withdrawal by Sector",
       group: "water"
     },
     {
       title: "agProdByCrop",
-      units: "Ag Production",
+      units: "Agriculture Production",
       group: "agriculture"
     },
     {

@@ -80,7 +80,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     return (
         <>
             <div>
-                SELECTED:    {findUnitsByTitle(openGuages, selection).toUpperCase()}   {getIcon(selection, openGuages)}
+                SELECTED:    {findUnitsByTitle(openGuages, selection).toUpperCase()}   {<div className='floater-icon'>{getIcon(selection, openGuages)}</div>}
                 <Dropdown as={ButtonGroup}>
                     <Dropdown.Toggle
                         split
