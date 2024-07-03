@@ -369,6 +369,13 @@
   }
 }
 
+.floater-icon {
+  transform: translate(0, -1px);
+}
+
+.floater-filter {
+  transform: translate(0, -50%);
+}
 .reset-button {
   width: 60px;
   padding-right: 5px;

@@ -11,9 +11,38 @@ import { updateHash } from "../sharing/DashboardUrl";
 import { getIconParam } from "../../assets/data/VariableCategories";
 import { DropdownButton } from "react-bootstrap";
 import { MdFileDownload } from "react-icons/md";
+import { RiFilterFill } from "react-icons/ri";
 
 function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions, data, downloadableData }) {
     const [width, setWidth] = useState(window.innerWidth);
+    const [selectedAggregate, setSelectedAggregate] = useState(0);
+    const [aggregates, setAggregates] = useState([]);
+
+    const aggregateRegion = (region) => {
+        let newAggregate = structuredClone(aggregates);
+        console.log(region + "AGGREGATED TO GROUP " + selectedAggregate);
+        if (newAggregate.length < selectedAggregate + 1) //Creating New Aggregate Group
+            newAggregate.push([region]);
+        else if (newAggregate[selectedAggregate].includes(region)) { //Removing from Aggregate Group
+            if (newAggregate[selectedAggregate].length === 1) //Delete Group
+                newAggregate.splice(selectedAggregate, 1);
+            else
+                newAggregate[selectedAggregate] = newAggregate[selectedAggregate].filter(item => item !== region);
+        }
+
+        else //Adding to Aggregate Group
+            newAggregate[selectedAggregate].push(region);
+        setAggregates(newAggregate);
+        console.log(newAggregate);
+    }
+
+    const moveGroup = (flag) => {
+        if (flag)
+            setSelectedAggregate(selectedAggregate + 1);
+        else
+            setSelectedAggregate(selectedAggregate - 1);
+    }
+
     useEffect(() => {
         const handleResize = () => {
             setWidth(window.innerWidth);
@@ -27,7 +56,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     }, []);
 
     const downloadCSV = () => {
-        if(downloadableData !== "i") {
+        if (downloadableData !== "i") {
             const csv = Papa.unparse(downloadableData);
 
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -80,7 +109,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
         </div >
     )) : <div></div>
 
-    const region_links = uniqueDates !== "i" ? Array.from(uniqueRegions).map((listedRegion) => (
+    const region_links = uniqueRegions !== "i" ? Array.from(uniqueRegions).map((listedRegion) => (
         (listedRegion !== "global") ?
             <div key={listedRegion}>
                 <Dropdown.Item as="button" active={region === listedRegion ? true : false}
@@ -90,6 +119,33 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
             </div > : <div></div>
     )) : <div></div>
 
+    let region_aggregate_links = uniqueRegions !== "i" ? Array.from(uniqueRegions).map((listedRegion) => (
+        (listedRegion !== "Global") ?
+            <div key={listedRegion}>
+                {console.log()}
+                <Dropdown.Item as="button" active={aggregates.length > selectedAggregate && aggregates[selectedAggregate].includes(listedRegion)}
+                    onClick={() => aggregateRegion(listedRegion)}>
+                    {listedRegion}
+                </Dropdown.Item>
+            </div > : <div></div>
+    )) : <div></div>
+    // region_aggregate_links.push(
+    //     <Dropdown.Divider />
+    // );
+    // region_aggregate_links.push(
+    //     <Dropdown.Item as="button"
+    //         onClick={() => moveGroup(true)}>
+    //         {aggregates.length === selectedAggregate + 1 ? 'Add New Group' : 'Next Group'}
+    //     </Dropdown.Item>
+    // );
+    if (selectedAggregate !== 0) {
+        region_aggregate_links.push(
+            <Dropdown.Item as="button"
+                onClick={() => moveGroup(false)}>
+                {'Previous Group'}
+            </Dropdown.Item>
+        );
+    }
     const subcat_links = uniqueSubcats !== "i" ? Array.from(uniqueSubcats).map((listedSubcat) => (
         (listedSubcat !== "class1") ?
             <div key={listedSubcat}>
@@ -102,7 +158,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     return (
         <>
             <div>
-                SELECTED:    {findUnitsByTitle(openGuages, selection).toUpperCase()}   {getIconParam(selection, openGuages)}
+                SELECTED:    {findUnitsByTitle(openGuages, selection).toUpperCase()}   {<div className="floater-icon">{getIconParam(selection, openGuages)}</div>}
                 <Dropdown as={ButtonGroup}>
                     <Dropdown.Toggle
                         split
@@ -118,6 +174,9 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                     className="guage-button">
                     <MdFileDownload />
                 </div>
+                <DropdownButton variant="outline-light" autoClose="outside" className="dashboard-scenerio-button" title={<RiFilterFill className='floater-filter' />}>
+                    {region_aggregate_links}
+                </DropdownButton>
             </div>
             {(width >= 875) ? (
                 <div>

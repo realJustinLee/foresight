@@ -8,6 +8,7 @@ import BarCountryControl from './dropdowns/BarCountryControl';
 import { getBarColors } from '../assets/data/GcamColors';
 import { setDashDate, setDashReg, setDashSubs } from './Store';
 import LeafletSync from "./maps/LeafletSync";
+import LineControl from './dropdowns/LineControl';
 
 function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation }) {
   const [width, setWidth] = useState(window.innerWidth);
@@ -74,7 +75,9 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
       Loading Dataset...
     </div>
   ) : (
-    <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date={dashYear} setDate={setYear} />
+    <>
+      <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date={dashYear} setDate={setYear} />
+    </>
   )
 
 
