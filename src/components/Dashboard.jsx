@@ -11,10 +11,8 @@ import { TbCoins } from "react-icons/tb";
 import { FaTruckMoving } from "react-icons/fa";
 import { setdashboardSelection, setStartDate, setEndDate } from "./Store";
 import './css/Dashboard.css';
-import { scenarios } from "../assets/data/Scenarios.jsx";
 import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
 import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
-import DashboardUrl from "./sharing/DashboardUrl.jsx";
 
 //Gets the icon of each category by name. Shows up next to the guages and the selection.
 export const getIcon = (selection, openGuages) => {
@@ -47,7 +45,7 @@ export const getIcon = (selection, openGuages) => {
   }
 }
 
-function Dashboard({ open }) {
+function Dashboard({ open, scenarios }) {
   const [guageData, setGuageData] = useState("i");
   const [datesData, setDatesData] = useState("i");
   const [lineData, setLineData] = useState("i");
@@ -150,6 +148,7 @@ function mapStateToProps(state) {
     openGuages: state.guages,
     parse: state.parsedData,
     curYear: state.dashboardYear,
+    scenarios: state.allScenarios,
   };
 }
 

@@ -43,14 +43,14 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
 
   //Prepare total scenarios
   const scenarios = [...new Set(result.map(item => item.scenario))];
-  console.log(scenarios);
+  //console.log(scenarios);
   scenarios.sort();
-  console.log("STORE SCENARIOS:", scenarios);
+  //console.log("STORE SCENARIOS:", scenarios);
   setAllScenarios(scenarios.map(obj => ({ title: obj })));
 
   //Prepare opened scenarios
   const currentScenarios = checkScenarioURL(urlLoaded, scenarios);
-  console.log("STORE CURRENT SCENARIOS:", currentScenarios);
+  //console.log("STORE CURRENT SCENARIOS:", currentScenarios);
   setScenariosTotal(currentScenarios);
 
   const params = [...new Set(result.map(item => item.param))];
@@ -59,28 +59,28 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
     units = units.slice(0, units.indexOf("(")).trim();
     return { title: guage, units: units, group: datasets.find(obj => obj.dataset === dataset).params[guage] ? datasets.find(obj => obj.dataset === dataset).params[guage] : "other" }
   });
-  console.log("STORE ALL GUAGES:", guages);
+  //console.log("STORE ALL GUAGES:", guages);
   setGuagesTotal(guages);
   // Prepare opened guages
   const currentGuages = [];
-  console.log(datasets.find(obj => obj.dataset === dataset))
+  //console.log(datasets.find(obj => obj.dataset === dataset))
   datasets.find(obj => obj.dataset === dataset).defaults.forEach(defaultGuage => currentGuages.push(guages.filter(guage => guage.title === defaultGuage)[0]));
-  console.log("STORE CURRENT GUAGES:", currentGuages);
+  //console.log("STORE CURRENT GUAGES:", currentGuages);
   setGuagesCurrent(currentGuages);
   // Prepared selected guage
   //console.log(urlLoaded, currentGuages);
   const selectedGuage = checkGuageURL(urlLoaded, currentGuages, "selectedParam");
-  console.log("STORE SELECTED GUAGE:", selectedGuage);
+  //console.log("STORE SELECTED GUAGE:", selectedGuage);
   setGuageSelected(selectedGuage);
 
   const start = checkDateURL(urlLoaded, result, params, "start", 2015);
   const end = checkDateURL(urlLoaded, result, params, "end", 2100);
   const dashboardDate = checkDateURL(urlLoaded, result, params, "year", 2020);
-  console.log("START DATE:", start);
+  //console.log("START DATE:", start);
   setStart(start);
-  console.log("END DATE:", end);
+  //console.log("END DATE:", end);
   setEnd(end);
-  console.log("DASHBOARD DATE:", dashboardDate);
+  //console.log("DASHBOARD DATE:", dashboardDate);
   setCurrentDate(dashboardDate);
   if (!urlLoaded)
     toggleURLLoaded();

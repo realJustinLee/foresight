@@ -7,10 +7,10 @@ import { setDashDate, setDashReg, setDashSubs, setScenerios } from "../Store";
 import ScenerioGuage from "../guages/ScenerioGuage"
 import ScenerioGuageNegative from "../guages/ScenerioGuageNegative"
 import Dropdown from 'react-bootstrap/Dropdown';
-import { getIcon } from "../Dashboard";
 import { getGuage } from '../../assets/data/DataManager';
 import { updateListHash } from '../sharing/DashboardUrl';
 import { DropdownButton } from 'react-bootstrap';
+import { getIconParam } from '../../assets/data/VariableCategories';
 
 function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParameters, SelectedParameter, startDate, endDate, data, updateSelection, updateScenerios, dashDate, dashReg, dashSubs, reset }) {
   const [OpenedScenarios, setValueScenario] = useState(OpenScenarios);
@@ -66,7 +66,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
           guageText={'' + guageTitle + index}
           guageValue={number}
         />
-        <div className="guageText"> {getIcon(guageTitle, OpenParameters)}  {displayTitle}</div>
+        <div className="guageText"> {getIconParam(guageTitle, OpenParameters)}  {displayTitle}</div>
       </>
     ) : (
       <>
@@ -74,7 +74,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
           guageText={'' + guageTitle + index}
           guageValue={number}
         />
-        <div className="guageText"> {getIcon(guageTitle, OpenParameters)}  {displayTitle}</div>
+        <div className="guageText"> {getIconParam(guageTitle, OpenParameters)}  {displayTitle}</div>
       </>
     )
   }
