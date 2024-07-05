@@ -1,6 +1,8 @@
 import { isValidDate, findClosestDate, getFirstParam, isValidParam, isValidFromObject } from "../../assets/data/DataManager";
 import { setdashboardSelection, setStartDate, setEndDate, setSceneriosNoUpdate, setDashDate, setdashboardGuages } from "../Store";
+import { findClosestDateAllParamsAbove, getUnits } from "../../assets/data/DataManager";
 import { connect } from 'react-redux';
+import { datasets } from "../../assets/data/Scenarios";
 
 //Updates the URL hash for single parameter hashes. Takes in the name and value of the hash.
 //Does not guarentee order of placement.
@@ -26,174 +28,97 @@ export const updateListHash = (name, index, value) => {
 }
 
 const isequal = (A, B) => {
-  if(A.length !== B.length)
+  if (A.length !== B.length)
     return false;
   return A.every((element, index) => element === B[index]);
 }
 
-//Ran at the beginning of loading the dashboard right from an URL. Takes items in the hash and populates
-//the dashboard with them.
-//export const loadHash = () => {
-//Load Start Date
-//if (searchParams.has("start") && parseInt(searchParams.get("start")) &&
+// loadDataURL is called everytime the dashboard reloads, whether it is on the first load, or if it is switching datasets.
+// This recieves the data from the dashboardQuery from the DataManager and uses this data to generate the date, scenerio,
+// and guage settings for the dashboard. The functionality is different on the first load, as when the urlLoaded parameter
+// is false, which only happens on the first load, loadDataURL will search for URL values and replace the default parameters
+// if these URL values are valid. This functions as the only URL loading function for the dashboard.
+export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded, dataset) => {
+  //console.log(result);
 
-function DashboardURL({ start, end, openedScenarios, parameter, year, URLLoaded, toggleURLLoaded, updateStartDate, updateEndDate, updateYear, updateParam, updateScenerios, dataDate, guageData, Scenarios }) {
+  //Prepare total scenarios
+  const scenarios = [...new Set(result.map(item => item.scenario))];
+  console.log(scenarios);
+  scenarios.sort();
+  console.log("STORE SCENARIOS:", scenarios);
+  setAllScenarios(scenarios.map(obj => ({ title: obj })));
 
-  let searchParams = new URLSearchParams(window.location.hash.substring(1));
+  //Prepare opened scenarios
+  const currentScenarios = checkScenarioURL(urlLoaded, scenarios);
+  console.log("STORE CURRENT SCENARIOS:", currentScenarios);
+  setScenariosTotal(currentScenarios);
 
-  async function checkIfLoaded() {
-    if (searchParams.has("start") || searchParams.has("end") || searchParams.has("year"))
-      await waitForData(dataDate);
-    if (searchParams.has("selectedParam") || searchParams.has("scenarios"))
-      await waitForData(guageData);
+  const params = [...new Set(result.map(item => item.param))];
+  const guages = params.map((guage) => {
+    let units = getUnits(result, guage);
+    units = units.slice(0, units.indexOf("(")).trim();
+    return { title: guage, units: units, group: datasets.find(obj => obj.dataset === dataset).params[guage] ? datasets.find(obj => obj.dataset === dataset).params[guage] : "other" }
+  });
+  console.log("STORE ALL GUAGES:", guages);
+  setGuagesTotal(guages);
+  // Prepare opened guages
+  const currentGuages = [];
+  console.log(datasets.find(obj => obj.dataset === dataset))
+  datasets.find(obj => obj.dataset === dataset).defaults.forEach(defaultGuage => currentGuages.push(guages.filter(guage => guage.title === defaultGuage)[0]));
+  console.log("STORE CURRENT GUAGES:", currentGuages);
+  setGuagesCurrent(currentGuages);
+  // Prepared selected guage
+  //console.log(urlLoaded, currentGuages);
+  const selectedGuage = checkGuageURL(urlLoaded, currentGuages, "selectedParam");
+  console.log("STORE SELECTED GUAGE:", selectedGuage);
+  setGuageSelected(selectedGuage);
+
+  const start = checkDateURL(urlLoaded, result, params, "start", 2015);
+  const end = checkDateURL(urlLoaded, result, params, "end", 2100);
+  const dashboardDate = checkDateURL(urlLoaded, result, params, "year", 2020);
+  console.log("START DATE:", start);
+  setStart(start);
+  console.log("END DATE:", end);
+  setEnd(end);
+  console.log("DASHBOARD DATE:", dashboardDate);
+  setCurrentDate(dashboardDate);
+  if (!urlLoaded)
     toggleURLLoaded();
-  }
-
-  function waitForData(data) {
-    return new Promise((resolve) => {
-      const intervalId = setInterval(() => {
-        if (data !== "i") {
-          clearInterval(intervalId);
-          resolve();
-        }
-      }, 100);
-    });
-  }
-
-  async function loadDates() {
-    if (searchParams.has("start")) {
-      let date = parseInt(searchParams.get("start"));
-      await waitForData(dataDate);
-      if (!isNaN(date) && date < end && isValidDate(dataDate, date)) {
-        //console.log("CHANGING START:", searchParams.get("start"));
-        if (date !== start)
-          updateStartDate(date);
-      }
-      else
-        updateHash("start", findClosestDate(dataDate, start));
-    }
-    else {
-      await waitForData(dataDate);
-      updateHash("start", findClosestDate(dataDate, start));
-    }      
-    if (searchParams.has("end")) {
-      let date = parseInt(searchParams.get("end"));
-      await waitForData(dataDate);
-      if (!isNaN(date) && date > start && isValidDate(dataDate, date)) {
-        //console.log("CHANGING END:", searchParams.get("end"));
-        if (date !== end)
-          updateEndDate(date);
-      }
-      else
-        updateHash("end", findClosestDate(dataDate, end));
-    }
-    else {
-      await waitForData(dataDate);
-      updateHash("end", findClosestDate(dataDate, end));
-    }      
-    if (searchParams.has("year")) {
-      let date = parseInt(searchParams.get("year"));
-      await waitForData(dataDate);
-      if (!isNaN(date) && isValidDate(dataDate, date)) {
-        //console.log("CHANGING YEAR:", searchParams.get("year"));
-        if (date !== year)
-          updateYear(date);
-      }
-      else
-        updateHash("year", findClosestDate(dataDate, year));
-    }
-    else {
-      await waitForData(dataDate);
-      updateHash("year", findClosestDate(dataDate, year));
-    }
-  }
-
-  async function loadParams() {
-    if (searchParams.has("selectedParam")) {
-      let param = searchParams.get("selectedParam");
-      await waitForData(guageData);
-      if (isValidParam(guageData, param)) {
-        //console.log("CHANGING PARAM:", searchParams.get("selectedParam"));
-        if (param !== parameter)
-          updateParam(param);
-      }
-      else
-        updateHash("selectedParam", getFirstParam(guageData));
-    }
-    else {
-      await waitForData(guageData);
-      updateHash("selectedParam", getFirstParam(guageData));
-    }/*
-    if (searchParams.has("params")) {
-      let params = searchParams.get("params").toString().split(",");
-      await waitForData(guageData);
-      if (isValidParams(guageData, params)) {
-        //console.log("CHANGING PARAMS:", searchParams.get("selectedParam"));
-        if (params.sort() !== parameters.map((item) => item.title).sort())
-          updateParams(params.map(param => ({ title: param })));
-      }
-      else
-        updateHash("displayedParams", parameters.map(item => item.title).join(","));
-    }
-    else {
-      await waitForData(guageData);
-      updateHash("displayedParams", parameters.map(item => item.title).join(","));
-    }   
-    */
-  }
-
-  async function loadScenarios() {
-    if (searchParams.has("scenarios")) {
-      let scenarioList = searchParams.get("scenarios").toString().split(",");
-      if (isValidFromObject(scenarioList, Scenarios) && scenarioList.length === 2) {
-        if (!isequal(scenarioList.sort(), openedScenarios.map((item) => item.title).sort())) {
-          console.log("CHANGING SCENARIOS:", scenarioList.sort(), openedScenarios.map((item) => item.title).sort());
-          updateScenerios(scenarioList.map(scenarioItem => ({ title: scenarioItem })));
-        }
-      }
-      else
-        updateHash("scenarios", openedScenarios.map(item => item.title).join(","));
-    }
-    else {
-      await waitForData(guageData);
-      updateHash("scenarios", openedScenarios.map(item => item.title).join(","));
-    }   
-  }
-  if(!URLLoaded) {
-    loadDates();
-    loadParams();
-    loadScenarios();
-    checkIfLoaded();
-  }
-  
 }
 
-function mapStateToProps(state) {
-  return {
-    start: parseInt(state.startDate),
-    end: parseInt(state.endDate),
-    openedScenarios: state.scenerios,
-    parameter: state.dashboardSelection,
-    parameters: state.guages,
-    year: state.dashboardYear,
-    region: state.dashboardRegion,
-    subcat: state.dashboardSubsector,
-    URLLoaded: state.urlLoaded
-  };
+const checkScenarioURL = (urlLoaded, scenarios) => {
+  if (scenarios.length < 2) return "Error: Not Enough Scenarios in this Dataset to load in the Dashboard.";
+  let searchParams = new URLSearchParams(window.location.hash.substring(1));
+  let scenarioList = scenarios.filter(scenario => scenario === 'GCAM_SSP2' || scenario === 'GCAM_SSP3').length === 2 ? scenarios.filter(scenario => scenario === 'GCAM_SSP2' || scenario === 'GCAM_SSP3') : scenarios.slice(0, 2);
+  let scenarioOutput = [];
+  if (!urlLoaded && searchParams.has("scenarios") && searchParams.get("scenarios").toString().split(",").every((scenario) => scenarios.includes(scenario)))
+    scenarioList = searchParams.get("scenarios").toString().split(",");
+  else
+    updateHash("scenarios", scenarios.filter(scenario => scenario === 'GCAM_SSP2' || scenario === 'GCAM_SSP3').length === 2 ? scenarios.filter(scenario => scenario === 'GCAM_SSP2' || scenario === 'GCAM_SSP3').toString() : scenarios.slice(0, 2).toString());
+  if (scenarioList.length < 2) return "Error: Scenarios not loaded.";
+  scenarioList.forEach((scenario, index) => {
+    scenarioOutput.push({ title: scenario, pos: index + 1 });
+  });
+  console.log(scenarioOutput);
+  return scenarioOutput;
 }
 
-
-function mapDispatchToProps(dispatch) {
-  return {
-    updateStartDate: (start) => dispatch(setStartDate(start)),
-    updateEndDate: (end) => dispatch(setEndDate(end)),
-    updateYear: (year) => dispatch(setDashDate(year)),
-    updateParam: (guage) => dispatch(setdashboardSelection(guage)),
-    updateParams: (guages) => dispatch(setdashboardGuages(guages)),
-    updateScenerios: (scenarios) => dispatch(setSceneriosNoUpdate(scenarios)),
-    toggleURLLoaded: () => dispatch({ type: 'toggleURLLoaded' })
-  };
+const checkGuageURL = (urlLoaded, guageData, title) => {
+  let searchParams = new URLSearchParams(window.location.hash.substring(1));
+  let guageList = guageData.map(guage => guage.title);
+  if (!urlLoaded && searchParams.has(title) && guageList.includes(searchParams.get(title)))
+    return searchParams.get(title);
+  if (guageList.length > 0) {
+    updateHash(title, guageList[0]);
+    return guageList[0];
+  }
+  return "Error: Data Variables not loaded.";
 }
 
-
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardURL);
+const checkDateURL = (urlLoaded, dataDate, params, title, def) => {
+  let searchParams = new URLSearchParams(window.location.hash.substring(1));
+  if (!urlLoaded && searchParams.has(title) && parseInt(searchParams.get(title)))
+    return findClosestDateAllParamsAbove(dataDate, params, parseInt(searchParams.get(title)));
+  updateHash(title, findClosestDateAllParamsAbove(dataDate, params, def));
+  return findClosestDateAllParamsAbove(dataDate, params, def);
+}

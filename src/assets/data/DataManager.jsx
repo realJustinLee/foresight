@@ -71,6 +71,24 @@ export const findUnitsByTitle = (objectsArray, titleToFind) => {
     return foundObject ? foundObject.units : "ERROR";
 }
 
+export const dateInAllParams = (data, params, date) => {
+    params.forEach((param) => {
+        if(data.filter(item => item.param === param && item.x === date).length === 0)
+            return false;
+    })
+    return true;
+}
+
+export const findClosestDateAllParamsAbove = (data, params, targetDate) => {
+    if(data.length === 0) return -1; 
+    //console.log(data, params);
+    let firstParamData = data.filter(item => item.param === params[0]);
+    const closest = firstParamData.reduce((prev, curr) => {
+        return (Math.abs(parseInt(curr.x) - targetDate) < Math.abs(parseInt(prev.x) - targetDate) && dateInAllParams(data, params, curr.x)) ? curr : prev;
+    });
+    return closest ? closest.x : -1
+};
+
 //Finds the closest date to the selected date in the dataset if there is no index with the specified date.
 export const findClosestDate = (data, targetDate) => {
     const closest = data.reduce((prev, curr) => {

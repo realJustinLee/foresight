@@ -1,17 +1,17 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import SidebarDashboard from "./SidebarDashboard.jsx";
 import DataQuerries from "../assets/data/DataQuerries.jsx";
 import { connect } from "react-redux";
 import DateDropdown from "./dropdowns/DashboardDate";
 import DashboardGraphs from "./DashboardGraphs.jsx";
-import { MdError, MdElectricBolt, MdGroups, MdFilterHdr, MdOutlineWindPower  } from "react-icons/md";
+import { MdError, MdElectricBolt, MdGroups, MdFilterHdr, MdOutlineWindPower } from "react-icons/md";
 import { GiCorn, GiFactory, GiWaterDrop, GiCow } from "react-icons/gi";
 import { TbCoins } from "react-icons/tb";
 import { FaTruckMoving } from "react-icons/fa";
-import { setdashboardSelection, setStartDate, setEndDate} from "./Store";
+import { setdashboardSelection, setStartDate, setEndDate } from "./Store";
 import './css/Dashboard.css';
-import scenarios from "../assets/data/Scenarios.jsx";
+import { scenarios } from "../assets/data/Scenarios.jsx";
 import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
 import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
 import DashboardUrl from "./sharing/DashboardUrl.jsx";
@@ -47,7 +47,7 @@ export const getIcon = (selection, openGuages) => {
   }
 }
 
-function Dashboard({ open }) {  
+function Dashboard({ open }) {
   const [guageData, setGuageData] = useState("i");
   const [datesData, setDatesData] = useState("i");
   const [lineData, setLineData] = useState("i");
@@ -71,28 +71,21 @@ function Dashboard({ open }) {
     setSubcategoriesList("i");
   }
 
-//<DashboardScenerioRows
-//Scenarios={scenarios}
-///>
+  //<DashboardScenerioRows
+  //Scenarios={scenarios}
+  ///>
   return (
     <div className="body-page-dark">
       <SidebarDashboard></SidebarDashboard>
-      <DashboardUrl
-        dataDate = {datesData}
-        guageData = {guageData}
-        regionList = {regionList}
-        subcategoriesList = {subcategoriesList}
-        Scenarios={scenarios}
-      />
-      <DataQuerries 
-        setGuage = {setGuageData}
-        setDates = {setDatesData}
-        setLine = {setLineData}
-        setChoropleth = {setChoroplethData}
-        setBar = {setBarData}
-        setAggSub = {setAggSub}
-        setRegions = {setRegionList}
-        setSubcategories = {setSubcategoriesList}
+      <DataQuerries
+        setGuage={setGuageData}
+        setDates={setDatesData}
+        setLine={setLineData}
+        setChoropleth={setChoroplethData}
+        setBar={setBarData}
+        setAggSub={setAggSub}
+        setRegions={setRegionList}
+        setSubcategories={setSubcategoriesList}
       />
       <div className={open ? "dashboard" : "dashboardClosed"}>
         <Container fluid>
@@ -124,14 +117,14 @@ function Dashboard({ open }) {
             reset={resetData}
           />
           <Row className="selection-divider">
-            <DashboardFloater 
+            <DashboardFloater
               dates={datesData}
               regions={regionList}
               subcats={subcategoriesList}
             />
           </Row>
           <Row>
-            <DashboardGraphs 
+            <DashboardGraphs
               lineData={lineData}
               choroplethData={choroplethData}
               barData={barData}

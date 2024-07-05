@@ -35,8 +35,8 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
   const handleScenerioChange = (index, scenario) => {
     reset();
     updateListHash("scenarios", index, scenario);
-    OpenedScenarios.at(index).title = scenario;
-    let newScenarios = [...OpenedScenarios];
+    OpenScenarios.at(index).title = scenario;
+    let newScenarios = [...OpenScenarios];
     setValueScenario(newScenarios);
     updateScenerios(index, scenario, newScenarios);
   }
@@ -98,8 +98,9 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
   // Creates the first column of scenario selectors. Reads from the array of currently opened scenarios
   // from the store.
   const scenarioSelectionCol = () => {
+    console.log(OpenScenarios);
     return (
-      OpenedScenarios.map((scenario, index) => (
+      OpenScenarios.map((scenario, index) => (
         <DropdownButton variant="outline-light" className="dashboard-scenerio-button" title={scenario.title}>
           {scenarioDropdownList(index)}
         </DropdownButton>
@@ -112,7 +113,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
   // have been changed to only take up one cell. This cell will then contain each guage layered sequentially.
   const col = () => {
     return (
-      OpenedParameters.map((param, index) => (
+      OpenParameters.map((param, index) => (
         <div className={getGuageCSS(param.title)} key={index} onClick={() => resetAndUpdate(param.title)}>
           {row(param.title, param.units)}
         </div>
@@ -125,7 +126,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
   // each column now has its seperate grid for rows.
   const row = (param, units) => {
     return (
-      OpenedScenarios.map((scenario, index) => (
+      OpenScenarios.map((scenario, index) => (
         <div title={units} key={index}>
           {guageNumber(getDataValue(scenario.title, param), param, units, index)}
         </div>
@@ -135,7 +136,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
 
 
   // If the dataset hasn't loaded yet, we give the user the "Loading Dataset..." message.
-  return (
+  return (    
     <div className="dashboard-guage-grid">
       <div className="dashboard-guage-grid-columns">
         {scenarioSelectionCol()}

@@ -12,48 +12,10 @@ const initialState = {
   dashboardRegion: "Global",
   dashboardSubsector: "Aggregate of Subsectors",
   barCountries: [],
-  scenerios: [
-    {
-      title: "GCAM_SSP2",
-      pos: 1,
-    },
-    {
-      title: "GCAM_SSP3",
-      pos: 2,
-    }
-  ],
-  guages: [
-    {
-      title: "pop",
-      units: "Population",
-      group: "population"
-    },
-    {
-      title: "gdp",
-      units: "GDP (MER)",
-      group: "socioeconomics"
-    },
-    {
-      title: "watWithdrawBySec",
-      units: "Water Withdrawal by Sector",
-      group: "water"
-    },
-    {
-      title: "agProdByCrop",
-      units: "Agriculture Production",
-      group: "agriculture"
-    },
-    {
-      title: "energyPrimaryByFuelEJ",
-      units: "Energy Primary by Fuel",
-      group: "energy"
-    },
-    {
-      title: "emissCO2BySector",
-      units: "CO2 emissions",
-      group: "emissions"
-    }
-  ]
+  scenerios: [],
+  guages: [],
+  allScenarios: [],
+  guageList: []
 };
 
 // Define a reducer function to update the state
@@ -73,10 +35,14 @@ function reducer(state = initialState, action) {
       return { ...state, startDate: action.payload };
     case 'setEndDate':
       return { ...state, endDate: action.payload };
+    case 'setAllScenarios':
+      return { ...state, allScenarios: action.payload };
     case 'setScenerios':
       return { ...state, scenerios: action.payload };
     case 'setGuages':
       return { ...state, guages: action.payload };
+    case 'setGuageList':
+      return { ...state, guageList: action.payload };
     case 'setDataLine':
       return { ...state, parsedDataLine: action.payload };
     case 'setDashYear':
@@ -102,7 +68,7 @@ export function setdashboardGraphParams(date, region, subsector) {
 }
 
 export function setDashDate(date) {
-  updateHash("year", date);
+  //updateHash("year", date);
   return { type: 'setDashYear', payload: date };
 }
 
@@ -128,6 +94,11 @@ export function setdashboardGuages(guages) {
   return { type: 'setGuages', payload: guages };
 }
 
+export function setGuageList(guages) {
+  //updateHash("selected", num);
+  return { type: 'setGuageList', payload: guages };
+}
+
 // Action creator function to update the dataset
 export function setDataset(dataset) {
   return { type: 'setDataset', payload: dataset };
@@ -135,19 +106,23 @@ export function setDataset(dataset) {
 
 // Change dashboard start date
 export function setStartDate(date) {
-  updateHash("start", date);
+  //updateHash("start", date);
   return { type: 'setStartDate', payload: date };
 }
 
 // Change dashboard end date
 export function setEndDate(date) {
-  updateHash("end", date);
+  //updateHash("end", date);
   return { type: 'setEndDate', payload: date };
 }
 
 // Change dashboard scenerios array
 export function setScenerios(index, newTitle, scenerios) {
   return { type: 'setScenerios', payload: scenerios };
+}
+
+export function setAllScenarios(scenarios) {
+  return { type: 'setAllScenarios', payload: scenarios };
 }
 
 export function setSceneriosNoUpdate(scenerios) {

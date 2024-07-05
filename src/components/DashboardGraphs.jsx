@@ -44,7 +44,8 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
     };
   }, []);
 
-  const Scenerios = openedScenerios ? openedScenerios : ["ERR", "ERR"];
+  const Scenerios = (openedScenerios && openedScenerios.length > 1) ? openedScenerios : [{ title: "ERR" }, { title: "ERR" }];
+
 
   // Display label text. Setting default display text for aggregates.
   let subcatDisplay = "";

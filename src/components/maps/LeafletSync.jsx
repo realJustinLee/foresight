@@ -18,7 +18,7 @@ const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, chorop
   const [mapInstance2, setMapInstance2] = useState(null);
 
   //Choropleth Visualization Settings
-  
+
   const divisions = 7;
 
   const [country, setCountryDisplay] = useState("");
@@ -55,6 +55,7 @@ const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, chorop
   }
 
   function getRelativeDataValue(countryValue) {
+    if (data.length === 0) return -1;
     return (countryValue - getSmallestChoropleth(data)) / (getLargestChoropleth(data) - getSmallestChoropleth(data))
   }
 
@@ -90,7 +91,7 @@ const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, chorop
       <div className="slider-container">
         <div className="image-container">
           <div className="choropleth-data-info">
-            {country === "" ? "" : country+": "}
+            {country === "" ? "" : country + ": "}
             <strong>{country === "" ? "" : countryValue.toFixed(2)}</strong>
           </div>
           <ChoroplethControl

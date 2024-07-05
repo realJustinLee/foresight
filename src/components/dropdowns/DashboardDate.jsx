@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../css/DashboardDate.css';
 import { isValidDate, getFirstDate, getLastDate } from "../../assets/data/DataManager";
+import { updateHash } from "../sharing/DashboardUrl";
 
 function DashboardDate({ year, isOrNotStart, updateStart, updateEnd, start, end, data }) {
     const [startDate, setStartDate] = useState(new Date().setFullYear(year));
@@ -17,9 +18,11 @@ function DashboardDate({ year, isOrNotStart, updateStart, updateEnd, start, end,
             selectedYear = date.getFullYear();
         if (isStart === 0) {
             updateStart(selectedYear);
+            updateHash("start", selectedYear);
         }
         else {
             updateEnd(selectedYear);
+            updateHash("end", selectedYear);
         }
     }
 
