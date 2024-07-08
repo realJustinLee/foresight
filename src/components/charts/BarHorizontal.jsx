@@ -10,7 +10,7 @@ import { BarTooltip } from "./NivoTooltips.tsx";
 // website examples showcase many properties,
 // you'll often use just a few of them.
 
-const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left, countries, subcat }) => {
+const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left, countries, subcat, selectedGuage }) => {
     //console.log("!!!!", csv, listKeys); 
     const [scenerioName, setScenerio] = useState(scenerio);
     const [barData, setData] = useState(getBarHorizontal(countries, csv, scenerio));
@@ -22,6 +22,7 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
         setData(getBarHorizontal(countries, csv, scenerio));
         //console.log("BAR DATA:", barData);
     }, [countries, csv, scenerio])
+    console.log(selectedGuage, subcat);
     return (
         <div className="bar-wrapper">
             <div className="double-bar-text-wrapper">  {scenerioName} </div>
@@ -236,7 +237,7 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
                                         marginRight: "7px"
                                     }} />
                                     <span>
-                                        {e.label}:{" "}
+                                        {e.label.replace('class1', selectedGuage)}:{" "}
                                         <strong>{e.value.toFixed(2)}</strong>
                                     </span>
                                 </div>
@@ -255,7 +256,7 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
                                             marginRight: "7px"
                                         }} />
                                         <span>
-                                            {(e.data[subcat] !== undefined) ? subcat + ": " + e.data[subcat].toFixed(2) : "No data for " + subcat}
+                                            {(e.data[subcat] !== undefined) ? (subcat === 'class1' || subcat === 'Aggregate of Subsectors' ? selectedGuage + ": " + e.data[subcat].toFixed(2) : subcat + ": " + e.data[subcat].toFixed(2)) : "No data for " + subcat}
                                         </span>
                                     </div> : <></>
                                 }

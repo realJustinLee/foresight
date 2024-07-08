@@ -67,6 +67,7 @@ export const getColorsFromPalette = (palette) => {
 const getColorJson = (param, counter) => {
     param = param.toLowerCase().trim();
     let color = "";
+    if(param === 'class1') return "#666666";
     Object.keys(colorData.colors).forEach((key) => {
         if( key === param)
             color = colorData.colors[key];

@@ -4,9 +4,9 @@ import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { setdashboardSelection, setDashDate, setDashReg, setDashSubs } from "../Store";
 import { connect } from 'react-redux';
-import { getIcon } from "../Dashboard";
 import { findUnitsByTitle } from "../../assets/data/DataManager";
 import { DropdownButton } from "react-bootstrap";
+import { getIconParam } from "../../assets/data/VariableCategories";
 
 function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions }) {
     const [width, setWidth] = useState(window.innerWidth);
@@ -80,7 +80,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     return (
         <>
             <div>
-                SELECTED:    {findUnitsByTitle(openGuages, selection).toUpperCase()}   {<div className='floater-icon'>{getIcon(selection, openGuages)}</div>}
+                SELECTED:    {findUnitsByTitle(openGuages, selection).toUpperCase()}   {<div className='floater-icon'>{getIconParam(selection, openGuages)}</div>}
                 <Dropdown as={ButtonGroup}>
                     <Dropdown.Toggle
                         split
