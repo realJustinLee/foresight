@@ -3,12 +3,13 @@ import colorData from '../../components/GcamColors.json';
 
 export const pal_green = ["#FFFFE5","#F7FCB9","#D9F0A3","#ADDD8E","#78C679","#41AB5D","#238443","#006837","#004529","#003300"]
 
-export const getBarColors = (data, scenerio, year) => {
+export const getBarColors = (data, scenerio, guages) => {
+    let category = guages ? guages : 'default';
     let counter = 0;
     let subcatList = filterSubcat(getScenerio(data, scenerio));
     let colors = [];
-    //console.log("!!!!!", data, subcatList);
-    subcatList.forEach((param) => colors.push(getColorJson(param, counter++)));
+    console.log("!!!!!", guages);
+    subcatList.forEach((param) => colors.push(getColorJson(param, counter++, category)));
     return colors;
 }
 
@@ -64,13 +65,13 @@ export const getColorsFromPalette = (palette) => {
     return colors;
 }
 
-const getColorJson = (param, counter) => {
-    param = param.toLowerCase().trim();
+const getColorJson = (param, counter, category) => {
+    param = param.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
     let color = "";
-    if(param === 'class1') return "#666666";
-    Object.keys(colorData.colors).forEach((key) => {
+    if(param === 'class1') return colorData.class_colors[category] ? colorData.class_colors[category] : "#666666";
+    Object.keys(colorData.pal_all).forEach((key) => {
         if( key === param)
-            color = colorData.colors[key];
+            color = colorData.pal_all[key];
     });
     if (color === "") {
         color = colorData.pal_16[counter%16];

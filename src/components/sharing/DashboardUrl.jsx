@@ -57,7 +57,7 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   const guages = params.map((guage) => {
     let units = getUnits(result, guage);
     units = units.slice(0, units.indexOf("(")).trim();
-    return { title: guage, units: units, group: datasets.find(obj => obj.dataset === dataset).params[guage] ? datasets.find(obj => obj.dataset === dataset).params[guage].group : "other" }
+    return { title: guage, units: datasets.find(obj => obj.dataset === dataset).params[guage] ? datasets.find(obj => obj.dataset === dataset).params[guage].units : units , group: datasets.find(obj => obj.dataset === dataset).params[guage] ? datasets.find(obj => obj.dataset === dataset).params[guage].group : "other" }
   });
   //console.log("STORE ALL GUAGES:", guages);
   setGuagesTotal(guages);

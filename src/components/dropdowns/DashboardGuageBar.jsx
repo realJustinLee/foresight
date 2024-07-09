@@ -98,7 +98,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
   // Creates the first column of scenario selectors. Reads from the array of currently opened scenarios
   // from the store.
   const scenarioSelectionCol = () => {
-    console.log(OpenScenarios);
+    //console.log(OpenScenarios);
     return (
       OpenScenarios.map((scenario, index) => (
         <DropdownButton variant="outline-light" className="dashboard-scenerio-button" title={scenario.title}>

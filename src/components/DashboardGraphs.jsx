@@ -9,7 +9,7 @@ import { getBarColors } from '../assets/data/GcamColors';
 import { setDashDate, setDashReg, setDashSubs } from './Store';
 import LeafletSync from "./maps/LeafletSync";
 
-function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation }) {
+function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation }) {
   const [width, setWidth] = useState(window.innerWidth);
 
   const [dashYear, setYear] = useState(curYear);
@@ -110,8 +110,8 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
   ) : (
     <div className='bar-grid grid-border'>
       <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={dashYear} className="choropleth-control" />
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub={setSubcategory} left={true} selectedGuage = {selectedGuage}/>
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub={setSubcategory} left={false} selectedGuage = {selectedGuage}/>
+      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, openedGuages.find(guage => guage.title === selectedGuage).group)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub={setSubcategory} left={true} selectedGuage = {selectedGuage}/>
+      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, openedGuages.find(guage => guage.title === selectedGuage).group)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub={setSubcategory} left={false} selectedGuage = {selectedGuage}/>
     </div>
   )
 
@@ -143,6 +143,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
 function mapStateToProps(state) {
   return {
     openedScenerios: state.scenerios,
+    openedGuages: state.guages,
     selectedGuage: state.dashboardSelection,
     curYear: state.dashboardYear,
     region: state.dashboardRegion,
