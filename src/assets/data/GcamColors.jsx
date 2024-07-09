@@ -36,22 +36,22 @@ export const getColorsFromPalette = (palette) => {
         case "pal_div_wet":
             colors = colorData.pal_div_wet;
             break;
-        case "pal_div_BlRd":
+        case "pal_div_blrd":
             colors = colorData.pal_div_BlRd;
             break;
-        case "pal_div_RdBl":
+        case "pal_div_rdbl":
             colors = colorData.pal_div_RdBl;
             break;
-        case "pal_div_BrGn":
+        case "pal_div_brgn":
             colors = colorData.pal_div_BrGn;
             break;
-        case "pal_div_GnBr":
+        case "pal_div_gnbr":
             colors = colorData.pal_div_GnBr;
             break;
-        case "pal_div_RdBlu":
+        case "pal_div_rdblu":
             colors = colorData.pal_div_RdBlu;
             break;
-        case "pal_div_BluRd":
+        case "pal_div_blurd":
             colors = colorData.pal_div_BluRd;
             break;
         case "pal_all":

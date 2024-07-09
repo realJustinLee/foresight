@@ -42,7 +42,7 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   //console.log(result);
 
   //Prepare total scenarios
-  const scenarios = [...new Set(result.map(item => item.scenario))];
+  const scenarios = [...new Set(datasets.find(obj => obj.dataset === dataset).scenarios)];
   //console.log(scenarios);
   scenarios.sort();
   //console.log("STORE SCENARIOS:", scenarios);
@@ -57,7 +57,7 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   const guages = params.map((guage) => {
     let units = getUnits(result, guage);
     units = units.slice(0, units.indexOf("(")).trim();
-    return { title: guage, units: units, group: datasets.find(obj => obj.dataset === dataset).params[guage] ? datasets.find(obj => obj.dataset === dataset).params[guage] : "other" }
+    return { title: guage, units: units, group: datasets.find(obj => obj.dataset === dataset).params[guage] ? datasets.find(obj => obj.dataset === dataset).params[guage].group : "other" }
   });
   //console.log("STORE ALL GUAGES:", guages);
   setGuagesTotal(guages);

@@ -4,7 +4,7 @@ import { MdSettings } from "react-icons/md";
 
 function ChoroplethControl({palette, interpolation, changePalette, changeInterpolation}) {
   //console.log(color, scale);
-  const colorList = ["pal_16", "pal_spectral", "pal_basic", "pal_hot", "pal_wet", "pal_green"];
+  const colorList = ["pal_16", "pal_spectral", "pal_basic", "pal_hot", "pal_wet", "pal_green", "pal_div_wet", "pal_div_BlRd", "pal_div_RdBl", "pal_div_BrGn", "pal_div_GnBr", "pal_div_BluRd", "pal_div_RdBlu"];
   const scaleList = ["VALUE - LINEAR", "VALUE - LOG", "VALUE - CUBIC", "DATA - EQUAL", "DATA - SIGMOID"];
   let colors = [];
   let scales = [];

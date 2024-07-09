@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { findUnitsByTitle } from "../../assets/data/DataManager";
 import { DropdownButton } from "react-bootstrap";
 import { getIconParam } from "../../assets/data/VariableCategories";
+import { updateHash } from "../sharing/DashboardUrl";
 
 function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions }) {
     const [width, setWidth] = useState(window.innerWidth);
@@ -26,6 +27,9 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
         dashDate(2020);
         dashReg("Global");
         dashSubs("Aggregate of Subsectors");
+        updateHash("year", 2020);
+        updateHash("reg", "Global");
+        updateHash("sub", "Aggregate of Subsectors");
     }
 
     function updateScenerio(scenerio) {
