@@ -57,7 +57,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
           type="switch"
           key={param.title}
           id={param.title}
-          label={param.title}
+          label={param.units}
           onChange={e => { handleParamChange(e.target.checked, param) }}
         />
       </div>
