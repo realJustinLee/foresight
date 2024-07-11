@@ -18,11 +18,14 @@ export default function ChoroplethLegend({ data, color, scale, divisions }) {
     return maxValue < 10 ? Math.round(maxValue*100)/100 : Math.round(maxValue);
   }
 
+  
   const rows = () => {
     let rowHTML = [];
     let min = 0;
     rowHTML.push(opened?(<MdArrowDownward className="choropleth-legend-arrow-closed" onClick={() => setOpened(false)}/>):(<MdArrowUpward key = {"choroplethlegend01"} className="choropleth-legend-arrow" onClick={() => setOpened(true)}/>))
     rowHTML.push(opened?(<div className= "choropleth-legend-text-closed" onClick={() => setOpened(false)}> Legend </div>):(<div className= "choropleth-legend-text-closed" onClick={() => setOpened(true)}> Legend </div>))
+    rowHTML.push(<div className= {opened?"choropleth-legend-color":"choropleth-legend-closed"} style={{ backgroundColor: "#666666" }}></div>);
+    rowHTML.push(<div className= {opened?"choropleth-legend-text":"choropleth-legend-closed"}> <strong>No Data</strong> </div>);
     for (let index = divisions; index >= 0; index--) {
       let max = getMaxValueByColor(getColorValues(color, index, divisions));
       if(max !== -Infinity) {

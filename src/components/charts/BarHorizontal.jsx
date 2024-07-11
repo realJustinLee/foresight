@@ -222,7 +222,7 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
                                     padding: "5px 9px"
                                 }}
                             >
-                                <div
+                                 <div
                                     style={{
                                         whiteSpace: "pre",
                                         display: "flex",
@@ -237,11 +237,29 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
                                         marginRight: "7px"
                                     }} />
                                     <span>
-                                        {e.label.replace('class1', selectedGuage)}:{" "}
-                                        <strong>{e.value.toFixed(2)}</strong>
+                                        <strong>{e.label.replace('class1', selectedGuage).split('-')[1].substring(1)}</strong>
                                     </span>
                                 </div>
-                                {(subcat !== "Aggregate of Subsectors") ?
+                                <div
+                                    style={{
+                                        whiteSpace: "pre",
+                                        display: "flex",
+                                        alignItems: "center"
+                                    }}
+                                >
+                                    <span style={{
+                                        display: "block",
+                                        width: "12px",
+                                        height: "12px",
+                                        marginRight: "7px"
+                                    }} />
+                                    <span>
+                                        {e.label.replace('class1', selectedGuage).split('-')[0]}:{" "}
+                                        <strong>{e.value.toFixed(2)}</strong>
+                                        {(subcat !== 'Aggregate of Subsectors') ? " (Current)" : ""}
+                                    </span>
+                                </div>
+                                {(subcat !== "Aggregate of Subsectors" && subcat !== e.label.split(" ")[0]) ?
                                     <div
                                         style={{
                                             whiteSpace: "pre",
@@ -256,7 +274,9 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
                                             marginRight: "7px"
                                         }} />
                                         <span>
-                                            {(e.data[subcat] !== undefined) ? (subcat === 'class1' || subcat === 'Aggregate of Subsectors' ? selectedGuage + ": " + e.data[subcat].toFixed(2) : subcat + ": " + e.data[subcat].toFixed(2)) : "No data for " + subcat}
+                                            {(e.data[subcat] !== undefined) ? (subcat === 'class1' || subcat === 'Aggregate of Subsectors' ? selectedGuage + ": " : subcat + ": ") : "No data for selection: " + subcat}
+                                            <strong>{(e.data[subcat] !== undefined) ? e.data[subcat].toFixed(2) : <div></div>}</strong>
+                                            {(e.data[subcat] !== undefined && subcat !== 'Aggregate of Subsectors') ? " (Selected)" : ""}
                                         </span>
                                     </div> : <></>
                                 }

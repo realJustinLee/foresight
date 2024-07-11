@@ -84,7 +84,6 @@ const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, chorop
     mapInstance.sync(mapInstance2);
     mapInstance2.sync(mapInstance);
   }, [mapInstance, mapInstance2, choroplethColorPalette, choroplethInterpolation]);
-
   // Toggle marker on button click:
   return (
     <div className="slider grid-border">
@@ -92,7 +91,7 @@ const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, chorop
         <div className="image-container">
           <div className="choropleth-data-info">
             {country === "" ? "" : country + ": "}
-            <strong>{country === "" ? "" : countryValue.toFixed(2)}</strong>
+            <strong>{country === "" ? "" : (getRank(data, country) === -1 ? "No Data" : countryValue.toFixed(2))}</strong>
           </div>
           <ChoroplethControl
             palette={choroplethColorPalette}
