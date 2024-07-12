@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import BarHorizontal from "./charts/BarHorizontal";
 import { connect } from 'react-redux';
-import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits } from '../assets/data/DataManager';
+import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits, getScenerio } from '../assets/data/DataManager';
 import Line from './charts/Line';
 import BarCountryControl from './dropdowns/BarCountryControl';
 import { getBarColors } from '../assets/data/GcamColors';
@@ -44,7 +44,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
     };
   }, []);
 
-  const Scenerios = (openedScenerios && openedScenerios.length > 1) ? openedScenerios : [{ title: "ERR" }, { title: "ERR" }];
+  const Scenerios = (openedScenerios && openedScenerios.length > 1) ? openedScenerios : [{ title: "" }, { title: "" }];
 
 
   // Display label text. Setting default display text for aggregates.
@@ -91,8 +91,8 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
       setRegion={setRegion}
       choroplethData={choroplethData}
       Scenerios={Scenerios}
-      data={choroplethReduce(choroplethData, Scenerios.at(0).title)}
-      data2={choroplethReduce(choroplethData, Scenerios.at(1).title)}
+      data={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, getScenerio(choroplethData, Scenerios.at(0).title))}
+      data2={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, getScenerio(choroplethData, Scenerios.at(1).title))}
       uniqueValue={"Dashboard_Big"}
       choroplethColorPalette={choroplethColorPalette}
       setChoroplethColorPalette={setChoroplethColorPalette}

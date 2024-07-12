@@ -1,6 +1,9 @@
 // getParam is a filtering fucntion that removes all entries
 // in a dataset without the specified param. Two inputs are given,
 // the dataset to modify and the param to filter by. The modified
+
+import { getColorsFromPalette } from "./GcamColors";
+
 // dataset is returned.
 export const getParam = (data, param) => data.filter(item => item.param === param);
 
@@ -73,14 +76,14 @@ export const findUnitsByTitle = (objectsArray, titleToFind) => {
 
 export const dateInAllParams = (data, params, date) => {
     params.forEach((param) => {
-        if(data.filter(item => item.param === param && item.x === date).length === 0)
+        if (data.filter(item => item.param === param && item.x === date).length === 0)
             return false;
     })
     return true;
 }
 
 export const findClosestDateAllParamsAbove = (data, params, targetDate) => {
-    if(data.length === 0) return -1; 
+    if (data.length === 0) return -1;
     //console.log(data, params);
     let firstParamData = data.filter(item => item.param === params[0]);
     const closest = firstParamData.reduce((prev, curr) => {
@@ -184,17 +187,63 @@ export const listRegions = (data) => {
     return Array.from(new Set(data.map(item => item.region)));
 }
 
-export const getNoSubcatChoropleth = (data) => {
-    //console.log("!!! LOAD CHOROPLETH");
-    let reducedData = [];
-    for (let i = 0; i < data.length; i++) {
-        reducedData.push({
-            id: data.at(i).region,
-            value: data.at(i).value
-        });
-    }
-    return reducedData;
+//Choropleth Color
+function getColorValues(color, number, n) {
+    const colors = getColorsFromPalette(color);
+    return colors[Math.floor(((Object.keys(colors).length - 1) / n) * (n - number))];
 }
+
+function getScaleValuesTest(choroplethColorPalette, choroplethInterpolation, divisions, value, placement, dataLength) {
+    let bracket = 0;
+    switch (choroplethInterpolation) {
+        case "VALUE - LINEAR":
+            bracket = Math.round((1 - value) * (divisions - 1));
+            break;
+        case "VALUE - LOG":
+            bracket = divisions - Math.round(divisions * (-1 * Math.exp(-5 * (value)) + 1));
+            break;
+        case "VALUE - CUBIC":
+            bracket = Math.round(((1 - value) ** 3) * (divisions - 1));
+            break;
+        case "DATA - EQUAL":
+            bracket = Math.round((placement / dataLength) * divisions);
+            break;
+        case "DATA - SIGMOID":
+            bracket = Math.round(divisions / (1 + Math.exp(-10 * (placement / dataLength) + 5)));
+            break;
+        default:
+            bracket = divisions - Math.round(divisions * (-1 * Math.exp(-5 * (value)) + 1));
+            break;
+    }
+    return getColorValues(choroplethColorPalette, Math.min(Math.abs(bracket), divisions), divisions);
+}
+
+function getRelativeDataValue(countryValue, data) {
+    if (data.length === 0) return -1;
+    if (data.length === 1) return 1;
+    return (countryValue - getSmallestChoropleth(data)) / (getLargestChoropleth(data) - getSmallestChoropleth(data))
+}
+
+function getRank(data, country) {
+    let dataCopy = structuredClone(data)
+    dataCopy.sort((a, b) => b.value - a.value);
+    const index = dataCopy.findIndex(item => item.region === country);
+    console.log(index);
+    return index !== -1 ? index + 1 : -1;
+}
+
+function getDataColor(choroplethColorPalette, choroplethInterpolation, divisions, value, data, country) {
+    return value ? getScaleValuesTest(choroplethColorPalette, choroplethInterpolation, divisions, getRelativeDataValue(value, data), getRank(data, country), Object.keys(data).length) : "#333333";
+}
+
+export const choroplethReduce = (choroplethColorPalette, choroplethInterpolation, divisions, data) => {
+    const reducedData = data.map(item => ({
+        id: item.region,
+        value: item.value,
+        color: getDataColor(choroplethColorPalette, choroplethInterpolation, divisions, item.value, data, item.region)
+    }));
+    return reducedData;
+};
 
 export const getBarTotal = (data, param, scenarios) => {
     let ans = [];
@@ -247,5 +296,3 @@ export const getLineGraphReduce = (data, param, subcat) => {
         y: item.value
     }));
 }
-
-export const choroplethReduce = (data, scenario) => getNoSubcatChoropleth(getScenerio(data, scenario));

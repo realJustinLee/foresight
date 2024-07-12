@@ -99,7 +99,7 @@ const checkScenarioURL = (urlLoaded, scenarios) => {
   scenarioList.forEach((scenario, index) => {
     scenarioOutput.push({ title: scenario, pos: index + 1 });
   });
-  console.log(scenarioOutput);
+  //console.log(scenarioOutput);
   return scenarioOutput;
 }
 

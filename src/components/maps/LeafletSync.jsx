@@ -16,9 +16,7 @@ const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, chorop
   //Map Instances
   const [mapInstance, setMapInstance] = useState(null);
   const [mapInstance2, setMapInstance2] = useState(null);
-
   //Choropleth Visualization Settings
-
   const divisions = 7;
 
   const [country, setCountryDisplay] = useState("");

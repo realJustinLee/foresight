@@ -13,9 +13,6 @@ import ChoroplethLegend from '../dropdowns/ChoroplethLegend';
 
 const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
   const mapData = data;
-  mapData.forEach(country => {
-    country.color = getColor(country.value, data, country.id);
-  });
 
   function style(feature) {
     //console.log(feature.id, mapData.filter(item => item.index === feature.id).at(0))

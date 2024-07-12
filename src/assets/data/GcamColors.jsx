@@ -8,7 +8,7 @@ export const getBarColors = (data, scenerio, guages) => {
     let counter = 0;
     let subcatList = filterSubcat(getScenerio(data, scenerio));
     let colors = [];
-    console.log("!!!!!", guages);
+    //console.log("!!!!!", guages);
     subcatList.forEach((param) => colors.push(getColorJson(param, counter++, category)));
     return colors;
 }

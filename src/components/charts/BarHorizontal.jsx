@@ -22,7 +22,7 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
         setData(getBarHorizontal(countries, csv, scenerio));
         //console.log("BAR DATA:", barData);
     }, [countries, csv, scenerio])
-    console.log(selectedGuage, subcat);
+    //console.log(selectedGuage, subcat);
     return (
         <div className="bar-wrapper">
             <div className="double-bar-text-wrapper">  {scenerioName} </div>
@@ -57,9 +57,11 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
                     legendOffset: 32
                 }}
                 onClick={(data) => {
-                    setdashboardSub(
-                        `${data["id"]}`
-                    );
+                    if (data.id !== 'class1') {
+                        setdashboardSub(
+                            `${data["id"]}`
+                        );
+                    }
                 }}
                 axisLeft={{
                     format: (v) => {
@@ -222,7 +224,7 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
                                     padding: "5px 9px"
                                 }}
                             >
-                                 <div
+                                <div
                                     style={{
                                         whiteSpace: "pre",
                                         display: "flex",
@@ -292,7 +294,7 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
 
     );
 }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+
 function mapStateToProps(state) {
     return {
         subcat: state.dashboardSubsector,

@@ -65,21 +65,21 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     )) : <div></div>
 
     const region_links = uniqueDates !== "i" ? Array.from(uniqueRegions).map((listedRegion) => (
-        <div key={listedRegion}>
+        (listedRegion !== "global") ? (<div key={listedRegion}>
             <Dropdown.Item as="button" active={region === listedRegion ? true : false}
                 onClick={() => dashReg(listedRegion)}>
                 {listedRegion}
             </Dropdown.Item>
-        </div >
+        </div >) : <div></div>
     )) : <div></div>
 
     const subcat_links = uniqueSubcats !== "i" ? Array.from(uniqueSubcats).map((listedSubcat) => (
-        <div key={listedSubcat}>
+        (listedSubcat !== "class1") ? (<div key={listedSubcat}>
             <Dropdown.Item as="button" active={subsector === listedSubcat ? true : false}
                 onClick={() => dashSubs(listedSubcat)}>
                 {listedSubcat.charAt(0).toUpperCase() + listedSubcat.slice(1).trim()}
             </Dropdown.Item>
-        </div >
+        </div >) : <div></div>
     )) : <div></div>
     return (
         <>

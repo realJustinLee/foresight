@@ -295,7 +295,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
 
   const fetchDashboard = useCallback(async () => {
     const result = await fetchParallel([[queryDataset, { dataset: dataset }]]);
-    console.log(result);
+    //console.log(result);
     loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, dataset);
   }, [fetchParallel]);
 
@@ -345,7 +345,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       queries.push([barQuery, { id: dataset + "|" + scenarios[1] + "|" + parameter, date: year.toString() }]);
       const result = await fetchParallel(queries);
       setBar(result);
-      console.log(parameter);
+      //console.log(parameter);
     }
   }, [scenarios, parameter, year, setBar, fetchParallel]);
 
