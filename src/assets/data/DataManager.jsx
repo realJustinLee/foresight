@@ -197,6 +197,41 @@ export const listRegions = (data) => {
     return Array.from(new Set(data.map(item => item.region)));
 };
 
+export const getBasinAggregate = (data, basinAggregate) => {
+    if(basinAggregate === 'BasinRegion' || !data || !data.at(0) || !data.at(0).region || !data.at(0).region.split('|')) return data;
+    if(basinAggregate === 'Region') return(data.reduce((acc, item) => {
+        const region = item.region.split('|')[0];
+        let regionObj = item.class ? acc.find(obj => obj.region === region && obj.class === item.class && obj.scenario === item.scenario) : acc.find(obj => obj.region === region && obj.scenario === item.scenario);
+        if (!regionObj) {
+            regionObj = { ...item, region: region, value: 0 };
+            acc.push(regionObj);
+        }
+        regionObj.value += item.value;
+        return acc;
+    }, []));
+    if(basinAggregate === 'Basin') return(data.reduce((acc, item) => {
+        const basin = item.region.split('|')[1];
+        let basinObj = item.class ? acc.find(obj => obj.region === basin && obj.class === item.class && obj.scenario === item.scenario) : acc.find(obj => obj.region === basin && obj.scenario === item.scenario);
+        if (!basinObj) {
+            basinObj = { ...item, region: basin, value: 0 };
+            acc.push(basinObj);
+        }
+        basinObj.value += item.value;
+        return acc;
+    }, []));
+    if(basinAggregate === 'Global') return(data.reduce((acc, item) => {
+        let foundClass = acc.find(obj => obj.class === item.class && obj.scenario === item.scenario);
+        if (!foundClass || !acc || acc.length < 1) {
+            let dataObj = { ...item, region: 'global', value: 0 };
+            acc.push(dataObj);
+        }
+        else
+            acc.at(0).value += item.value;
+        return acc;
+    }, []));
+    return data;
+}
+
 export const getNoSubcatChoropleth = (data) => {
     //console.log("!!! LOAD CHOROPLETH");
     let reducedData = [];
@@ -265,4 +300,4 @@ export const getLineGraphReduce = (data, param, subcat) => {
     }));
 };
 
-export const choroplethReduce = (data, scenario) => getNoSubcatChoropleth(getScenerio(data, scenario));
+export const choroplethReduce = (data, scenario, basinAggregation) => getNoSubcatChoropleth(getBasinAggregate(getScenerio(data, scenario), basinAggregation));

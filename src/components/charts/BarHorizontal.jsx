@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { ResponsiveBar } from '@nivo/bar'
 import { connect } from 'react-redux';
-import { getBarHorizontal } from "../../assets/data/DataManager";
+import { getBarHorizontal, getBasinAggregate } from "../../assets/data/DataManager";
 import { updateHash } from "../sharing/DashboardUrl.jsx";
+import { setBasinAggregation } from "../Store.jsx";
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
@@ -10,7 +11,7 @@ import { updateHash } from "../sharing/DashboardUrl.jsx";
 // website examples showcase many properties,
 // you'll often use just a few of them.
 
-const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left, countries, subcat }) => {
+const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left, countries, subcat, basinAggregation }) => {
     //console.log("!!!!", listKeys); 
     const [scenerioName, setScenerio] = useState(scenerio);
     const [barData, setData] = useState(getBarHorizontal(countries, csv, scenerio));
@@ -22,6 +23,7 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
         setData(getBarHorizontal(countries, csv, scenerio));
         //console.log("BAR DATA:", barData);
     }, [countries, csv, scenerio])
+    //console.log(csv, getBasinAggregate(csv, basinAggregation));
     return (
         <div className="bar-wrapper">
             <div className="double-bar-text-wrapper">  {scenerioName} </div>
@@ -280,6 +282,7 @@ function mapStateToProps(state) {
     return {
         subcat: state.dashboardSubsector,
         countries: state.barCountries,
+        basinAggregation: state.basinAggregation,
     };
 }
 

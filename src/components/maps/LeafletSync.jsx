@@ -11,7 +11,7 @@ import { getColorsFromPalette } from '../../assets/data/GcamColors';
 import ChoroplethLegend from '../dropdowns/ChoroplethLegend';
 import DashboardLeaflet from './DashboardLeaflet';
 
-const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, region, data, data2, uniqueValue, setRegion }) => {
+const LeafletSync = ({ basinAggregation, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, region, data, data2, uniqueValue, setRegion }) => {
   //Map Instances
   const [mapInstance, setMapInstance] = useState(null);
   const [mapInstance2, setMapInstance2] = useState(null);
@@ -111,6 +111,7 @@ const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, chorop
               <DashboardLeaflet
                 data={data}
                 region={region}
+                basinAggregation={basinAggregation}
                 displayLegend={true}
                 id={mapkey + '_1'}
                 setRegion={setRegion}
@@ -129,6 +130,7 @@ const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, chorop
               <DashboardLeaflet
                 data={data2}
                 region={region}
+                basinAggregation={basinAggregation}
                 displayLegend={false}
                 id={mapkey + '_2'}
                 setRegion={setRegion}

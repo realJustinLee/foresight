@@ -4,7 +4,7 @@ import { saveAs } from 'file-saver';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
-import { setdashboardSelection, setDashDate, setDashReg, setDashSubs } from "../Store";
+import { setBasinAggregation, setdashboardSelection, setDashDate, setDashReg, setDashSubs } from "../Store";
 import { connect } from 'react-redux';
 import { findClosestDate, findUnitsByTitle } from "../../assets/data/DataManager";
 import { updateHash } from "../sharing/DashboardUrl";
@@ -13,7 +13,7 @@ import { DropdownButton } from "react-bootstrap";
 import { MdFileDownload } from "react-icons/md";
 import { RiFilterFill } from "react-icons/ri";
 
-function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions, data, downloadableData }) {
+function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions, data, downloadableData, basinAggregation, setBasinAggregation }) {
     const [width, setWidth] = useState(window.innerWidth);
     const [selectedAggregate, setSelectedAggregate] = useState(0);
     const [aggregates, setAggregates] = useState([]);
@@ -155,6 +155,16 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                 </Dropdown.Item>
             </div > : <div></div>
     )) : <div></div>
+
+    let basinOptions = ["Region", "Basin", "Global", "RegionBasin"]
+    const basin_links = basinAggregation !== "i" ? Array.from(basinOptions).map((type) => (
+        <div key={type}>
+            <Dropdown.Item as="button" active={basinAggregation === type ? true : false}
+                onClick={() => setBasinAggregation(type)}>
+                {type}
+            </Dropdown.Item>
+        </div >
+    )) : <div></div>
     return (
         <>
             <div>
@@ -189,6 +199,9 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                     <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Subsector: " + subsector.trim()}>
                         {subcat_links}
                     </DropdownButton>
+                    <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Region Type: " + basinAggregation.trim()}>
+                        {basin_links}
+                    </DropdownButton>
                     <Button
                         className="floater-button"
                         variant="danger"
@@ -216,6 +229,12 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                             {subcat_links}
                         </DropdownButton>
                     </div>
+                    <div>
+                        Region Type: {basinAggregation}
+                        <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Region Type: " + basinAggregation.trim()}>
+                            {basin_links}
+                        </DropdownButton>
+                    </div>
                     <Button
                         className="floater-button reset-button"
                         variant="danger"
@@ -232,7 +251,8 @@ function mapDispatchToProps(dispatch) {
         updateGuage: (newSelectedGuage) => dispatch(setdashboardSelection(newSelectedGuage)),
         dashDate: (date) => dispatch(setDashDate(date)),
         dashReg: (date) => dispatch(setDashReg(date)),
-        dashSubs: (date) => dispatch(setDashSubs(date))
+        dashSubs: (date) => dispatch(setDashSubs(date)),
+        setBasinAggregation: (type) => dispatch(setBasinAggregation(type)),
     };
 }
 
@@ -243,6 +263,7 @@ function mapStateToProps(state) {
         year: state.dashboardYear,
         region: state.dashboardRegion,
         subsector: state.dashboardSubsector,
+        basinAggregation: state.basinAggregation,
     };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardFloater);

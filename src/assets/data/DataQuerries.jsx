@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { API, graphqlOperation } from "aws-amplify";
 import { connect } from 'react-redux';
 import { setAllScenarios, setSceneriosNoUpdate, setGuageList, setdashboardGuages, setdashboardSelection, setStartDate, setEndDate, setDashDate, setBarCountries } from '../../components/Store';
-import { getUnits, findClosestDateAllParamsAbove, getScenerio, filterRegion, listRegions, filterSubcat } from './DataManager';
+import { getUnits, findClosestDateAllParamsAbove, getScenerio, filterRegion, listRegions, filterSubcat, getBasinAggregate } from './DataManager';
 import { loadDataURL } from '../../components/sharing/DashboardUrl';
 import { datasets } from './Scenarios';
 
@@ -251,7 +251,7 @@ query BarQuery($date: Int!, $nextToken: String, $id: String!) {
 `;
 
 
-function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded }) {
+function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, basinAggregation }) {
 
   //console.log(scenerios);
   const [scenarios, setScenarios] = useState((scenerios.length > 1) ? scenerios.map(obj => obj.title) : "i");
@@ -378,7 +378,8 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       queries.push([aggSubQuery, { date: year.toString(), id: dataset + "|" + scenarios[1] + "|" + parameter }]);
       const result = await fetchParallel(queries);
       setAggSub(result);
-      setCountries(filterRegion(getScenerio(result, scenarios[0])));
+      console.log(filterRegion(getBasinAggregate(getScenerio(result, scenarios[0]), basinAggregation)));
+      setCountries(filterRegion(getBasinAggregate(getScenerio(result, scenarios[0]), basinAggregation)));
     }
   }, [scenarios, parameter, year, setAggSub, setCountries, fetchParallel]);
 
@@ -463,7 +464,8 @@ function mapStateToProps(state) {
     region: state.dashboardRegion,
     subcat: state.dashboardSubsector,
     dataLine: state.parsedDataLine,
-    URLLoaded: state.urlLoaded
+    URLLoaded: state.urlLoaded,
+    basinAggregation: state.basinAggregation,
   };
 }
 

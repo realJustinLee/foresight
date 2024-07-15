@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 
 import BarHorizontal from "./charts/BarHorizontal";
 import { connect } from 'react-redux';
-import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits } from '../assets/data/DataManager';
+import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits, getBasinAggregate } from '../assets/data/DataManager';
 import Line from './charts/Line';
 import BarCountryControl from './dropdowns/BarCountryControl';
 import { getBarColors } from '../assets/data/GcamColors';
-import { setDashDate, setDashReg, setDashSubs } from './Store';
+import { setBasinAggregation, setDashDate, setDashReg, setDashSubs } from './Store';
 import LeafletSync from "./maps/LeafletSync";
 import LineControl from './dropdowns/LineControl';
 
-function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation }) {
+function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, basinAggregation }) {
   const [width, setWidth] = useState(window.innerWidth);
 
   const [dashYear, setYear] = useState(curYear);
@@ -88,12 +88,13 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
     </div>
   ) : (
     <LeafletSync
+      basinAggregation={basinAggregation}
       setRegion={setRegion}
       region={region}
       choroplethData={choroplethData}
       Scenerios={Scenerios}
-      data={choroplethReduce(choroplethData, Scenerios.at(0).title)}
-      data2={choroplethReduce(choroplethData, Scenerios.at(1).title)}
+      data={choroplethReduce(choroplethData, Scenerios.at(0).title, basinAggregation)}
+      data2={choroplethReduce(choroplethData, Scenerios.at(1).title, basinAggregation)}
       uniqueValue={"Dashboard_Big"}
       choroplethColorPalette={choroplethColorPalette}
       setChoroplethColorPalette={setChoroplethColorPalette}
@@ -110,9 +111,9 @@ function DashboardGraphs({ openedScenerios, selectedGuage, curYear, region, subc
     </div>
   ) : (
     <div className='bar-grid grid-border'>
-      <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={dashYear} className="choropleth-control" />
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub={setSubcategory} left={true} />
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub={setSubcategory} left={false} />
+      <BarCountryControl csv={getBasinAggregate(aggSub, basinAggregation)} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={dashYear} className="choropleth-control" />
+      <BarHorizontal csv={getBasinAggregate(barData, basinAggregation)} color={getBarColors(getBasinAggregate(barData, basinAggregation), Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(getBasinAggregate(barData, basinAggregation))} scenerio={Scenerios.at(0).title} setdashboardSub={setSubcategory} left={true} />
+      <BarHorizontal csv={getBasinAggregate(barData, basinAggregation)} color={getBarColors(getBasinAggregate(barData, basinAggregation), Scenerios.at(0).title, dashYear)} listKeys={filterSubcat(getBasinAggregate(barData, basinAggregation))} scenerio={Scenerios.at(1).title} setdashboardSub={setSubcategory} left={false} />
     </div>
   )
 
@@ -149,6 +150,7 @@ function mapStateToProps(state) {
     region: state.dashboardRegion,
     subcat: state.dashboardSubsector,
     countries: state.barCountries,
+    basinAggregation: state.basinAggregation,
   };
 }
 

@@ -4,19 +4,22 @@ import "leaflet.sync";
 import landcells from "./data/landcells.json"
 import global from "./data/global.json"
 import regions_glu from "./data/regions_glu.json"
+import glu from "./data/glu.json"
 import { getChoroplethValue } from '../../assets/data/DataManager';
 import { updateHash } from '../sharing/DashboardUrl';
 
 
-const DashboardLeaflet = ({ data, region, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
+const DashboardLeaflet = ({ data, region, basinAggregation, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
   const mapData = data;
   const getJson = (data) => {
-    if(data === 'i') return;
+    if(!data || !data[0] || !data[0].id || data === 'i') return;
     const firstCountry = data[0].id.toLowerCase();
     //console.log(firstCountry.includes("|"));
     if(firstCountry === 'global')
       return global;
-    else if(firstCountry.includes("|"))
+    else if(basinAggregation === 'Basin')
+      return glu;
+    else if(basinAggregation === 'BasinRegion')
       return regions_glu;
     return landcells;
   }

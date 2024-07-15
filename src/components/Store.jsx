@@ -18,7 +18,8 @@ const initialState = {
   scenerios: [],
   parameters: [],
   guages: [],
-  guageList: []
+  guageList: [],
+  basinAggregation: "Region"
 };
 
 // Define a reducer function to update the state
@@ -60,6 +61,8 @@ function reducer(state = initialState, action) {
       return { ...state, datasets: action.payload };
     case 'setUserUploadedData':
       return { ...state, userUploadedData: action.payload };
+    case 'basinAggregation':
+      return {...state, basinAggregation: action.payload };
     default:
       return state;
   }
@@ -143,6 +146,10 @@ export function setSceneriosNoUpdate(scenerios) {
 
 export function setBarCountries(country) {
   return { type: 'setBarCountries', payload: country };
+}
+
+export function setBasinAggregation(agg) {
+  return { type: 'basinAggregation', payload: agg };
 }
 
 // Create the Redux store
