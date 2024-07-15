@@ -1,21 +1,62 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { setdashboardSelection } from "../Store";
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
-import { setDashDate, setDashReg, setDashSubs, setScenerios } from "../Store";
+import { setDashDate, setDashReg, setDashSubs, setScenerios, setdashboardSelection, setdashboardGuages } from "../Store";
 import ScenerioGuage from "../guages/ScenerioGuage"
 import ScenerioGuageNegative from "../guages/ScenerioGuageNegative"
 import Dropdown from 'react-bootstrap/Dropdown';
 import { getGuage } from '../../assets/data/DataManager';
 import { updateListHash } from '../sharing/DashboardUrl';
 import { DropdownButton } from 'react-bootstrap';
-import { getIconParam } from '../../assets/data/VariableCategories';
+import { MdOutlineLibraryAdd } from "react-icons/md";
+import { getIconParam, iconTypes } from '../../assets/data/VariableCategories';
+import Form from 'react-bootstrap/Form';
 
-function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParameters, SelectedParameter, startDate, endDate, data, updateSelection, updateScenerios, dashDate, dashReg, dashSubs, reset }) {
+function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameters, SelectedParameter, startDate, endDate, data, updateSelection, updateScenerios, updateGuages, dashDate, dashReg, dashSubs, reset }) {
   const [OpenedScenarios, setValueScenario] = useState(OpenScenarios);
   const [OpenedParameters, setValueParameter] = useState(OpenParameters);
 
+  const paramDropdownList = () => {
+    let list = [];
+    iconTypes.sort().forEach(group => {
+      let params = paramDropdownListGroup(group)
+      if(params.length > 0) {
+        list.push(<Dropdown.Header>{group.charAt(0).toUpperCase() + group.slice(1).trim()}</Dropdown.Header>);
+        list.push(params);
+      }
+    });
+    return list;
+  }
+
+  const paramDropdownListGroup = (group) => {
+    return (Parameters.filter(param => param.group === group).map((param) => (
+      <div key={param.title}>
+        <Form.Check
+          disabled={(!(OpenParameters.map(obj => obj.title).includes(param.title)) && OpenParameters.map(obj => obj.title).length >= 6) || ((OpenParameters.map(obj => obj.title).includes(param.title)) && OpenParameters.map(obj => obj.title).length === 1)}
+          checked={OpenParameters.map(obj => obj.title).includes(param.title)}
+          type="switch"
+          key={param.title}
+          id={param.title}
+          label={param.units}
+          onChange={e => { handleParamChange(e.target.checked, param) }}
+        />
+      </div>
+    )))
+  }
+
+  const handleParamChange = (checked, param) => {
+    console.log(OpenParameters, Parameters, param);
+    let newParameters = structuredClone(OpenParameters);
+    if (checked) //Add Guage
+      newParameters.push(param)
+    else { //Remove Guage
+      newParameters = newParameters.filter(obj => obj.title !== param.title)
+      if (SelectedParameter === param.title)
+        updateSelection(newParameters[newParameters.length - 1].title)
+    }
+    updateGuages(newParameters);
+  }
 
   // Maps the dropdown menu. Takes in the vector of all scenerios and creates 
   // a Dropdown.Item for each.
@@ -108,6 +149,16 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
     )
   };
 
+  const guageSelectionCol = () => {
+    console.log(Parameters);
+    return (
+      OpenScenarios.map((scenario, index) => (
+        <DropdownButton className = "dashboard-scenerio-button" variant="outline-light" title={<MdOutlineLibraryAdd/>}> 
+          {paramDropdownList(index)}
+        </DropdownButton>
+      ))
+    )
+  };
 
   // Returns the HTML for each column of the guage dashboard. As the user can add more scenarios, the columns
   // have been changed to only take up one cell. This cell will then contain each guage layered sequentially.
@@ -136,7 +187,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
 
 
   // If the dataset hasn't loaded yet, we give the user the "Loading Dataset..." message.
-  return (    
+  return (
     <div className="dashboard-guage-grid">
       <div className="dashboard-guage-grid-columns">
         {scenarioSelectionCol()}
@@ -144,6 +195,9 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, /*Parameters,*/ OpenParam
       {(data === 'i' || data.length === 0) ? (
         "Loading Dataset..."
       ) : (col())}
+      <div className="dashboard-guage-grid-columns">
+        {guageSelectionCol()}
+      </div>
     </div>
   );
 }
@@ -156,6 +210,7 @@ function mapStateToProps(state) {
     SelectedParameter: state.dashboardSelection,
     startDate: state.startDate,
     endDate: state.endDate,
+    Parameters: state.guageList,
   };
 }
 
@@ -164,6 +219,7 @@ function mapDispatchToProps(dispatch) {
   return {
     updateSelection: (openGuage) => dispatch(setdashboardSelection(openGuage)),
     updateScenerios: (newIndex, newTitle, openScenerio) => dispatch(setScenerios(newIndex, newTitle, openScenerio)),
+    updateGuages: (guages) => dispatch(setdashboardGuages(guages)),
     dashDate: (date) => dispatch(setDashDate(date)),
     dashReg: (reg) => dispatch(setDashReg(reg)),
     dashSubs: (sub) => dispatch(setDashSubs(sub))

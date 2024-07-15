@@ -13,8 +13,8 @@ const initialState = {
   dashboardSubsector: "Aggregate of Subsectors",
   barCountries: [],
   scenerios: [],
-  guages: [],
   allScenarios: [],
+  guages: [],
   guageList: []
 };
 

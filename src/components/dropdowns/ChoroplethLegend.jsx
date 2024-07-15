@@ -29,7 +29,7 @@ export default function ChoroplethLegend({ data, color, scale, divisions }) {
     }
     for (let index = divisions; index >= 0; index--) {
       let max = getMaxValueByColor(getColorValues(color, index, divisions));
-      console.log(data, color, max);
+      //console.log(data, color, max);
       if (max !== -Infinity) {
         rowHTML.push(<div key={index + "2choroplethlegend"} className={opened ? "choropleth-legend-color" : "choropleth-legend-closed"} style={{ backgroundColor: getColorValues(color, index, divisions) }}></div>);
         rowHTML.push(<div key={index + "3choroplethlegend"} className={opened ? "choropleth-legend-text" : "choropleth-legend-closed"}> <strong>{min}</strong> to <strong>{max}</strong> </div>);

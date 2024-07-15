@@ -228,7 +228,7 @@ function getRank(data, country) {
     let dataCopy = structuredClone(data)
     dataCopy.sort((a, b) => b.value - a.value);
     const index = dataCopy.findIndex(item => item.region === country);
-    console.log(index);
+    //console.log(index);
     return index !== -1 ? index + 1 : -1;
 }
 
