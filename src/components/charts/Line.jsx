@@ -199,7 +199,7 @@ const Line = ({ data, setDate, unit }) => (
                 axisLeft={{
                     format: (v) => {
                         return v.toString().length > 6 ? (
-                            v.toString().substring(0, 1) + "." + v.toString().substring(1, 2) + "x10^" + (Math.round(v).toString().length - 1)
+                            v.toString().substring(0, 1) + "." + v.toString().substring(1, 4) + "e" + (Math.round(v).toString().length - 1)
                         ) : (
                             v
                         );

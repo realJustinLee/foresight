@@ -53,7 +53,7 @@ export const datasets = [
         watWithdrawByBasinRunoff: {units: "Water Withdrawals by Basin [Runoff] (km3)", group:"water", region:"glu"},
         watWithdrawByCrop: {units: "Water Withdrawals by Crop (km3)", group:"water", region:"region"},
         watWithdrawBySec: {units: "Water Withdrawals by Sector (km3)", group:"water", region:"region"},
-        waterWithdrawROGW: {units: "Water Withdrawals [ROGW] (km3)", group:"water", region:"region"}
+        waterWithdrawROGW: {units: "Water Withdrawals [Runoff - Groundwater] (km3)", group:"water", region:"region"}
       },
       defaults: [
         "pop",
