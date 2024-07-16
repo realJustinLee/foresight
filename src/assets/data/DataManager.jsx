@@ -236,8 +236,9 @@ function getDataColor(choroplethColorPalette, choroplethInterpolation, divisions
     return value ? getScaleValuesTest(choroplethColorPalette, choroplethInterpolation, divisions, getRelativeDataValue(value, data), getRank(data, country), Object.keys(data).length) : "#333333";
 }
 
-export const choroplethReduce = (choroplethColorPalette, choroplethInterpolation, divisions, data) => {
-    const reducedData = data.map(item => ({
+export const choroplethReduce = (choroplethColorPalette, choroplethInterpolation, divisions, data, scenario) => {
+    console.log(data)
+    const reducedData = getScenerio(data, scenario).map(item => ({
         id: item.region,
         value: item.value,
         color: getDataColor(choroplethColorPalette, choroplethInterpolation, divisions, item.value, data, item.region)

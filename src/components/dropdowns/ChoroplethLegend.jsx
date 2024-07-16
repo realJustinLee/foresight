@@ -2,7 +2,7 @@ import { MdArrowDownward, MdArrowUpward } from 'react-icons/md';
 import { getColorsFromPalette } from '../../assets/data/GcamColors';
 import { useState } from 'react';
 
-export default function ChoroplethLegend({ data, color, scale, divisions }) {
+export default function ChoroplethLegend({ data, data2, color, divisions }) {
   const [opened, setOpened] = useState(true);
   function getColorValues(color, number, n) {
     const colors = getColorsFromPalette(color);
@@ -10,7 +10,7 @@ export default function ChoroplethLegend({ data, color, scale, divisions }) {
   }
 
 
-  function getMaxValueByColor(targetColor) {
+  function getMaxValueByColor(targetColor, data) {
     const filteredCountries = data.filter(country => country.color === targetColor);
     const values = filteredCountries.map(country => country.value);
     const maxValue = Math.max(...values);
@@ -28,7 +28,7 @@ export default function ChoroplethLegend({ data, color, scale, divisions }) {
       rowHTML.push(<div className={opened ? "choropleth-legend-text" : "choropleth-legend-closed"}> <strong>No Data</strong> </div>);
     }
     for (let index = divisions; index >= 0; index--) {
-      let max = getMaxValueByColor(getColorValues(color, index, divisions));
+      let max = Math.max(getMaxValueByColor(getColorValues(color, index, divisions), data), getMaxValueByColor(getColorValues(color, index, divisions), data2));
       //console.log(data, color, max);
       if (max !== -Infinity) {
         rowHTML.push(<div key={index + "2choroplethlegend"} className={opened ? "choropleth-legend-color" : "choropleth-legend-closed"} style={{ backgroundColor: getColorValues(color, index, divisions) }}></div>);

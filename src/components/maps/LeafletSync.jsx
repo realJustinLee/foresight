@@ -97,8 +97,8 @@ const LeafletSync = ({ mapRegion, choroplethColorPalette, setChoroplethColorPale
           />
           <ChoroplethLegend
             data={data}
+            data2={data2}
             color={choroplethColorPalette}
-            scale={choroplethInterpolation}
             divisions={divisions}
           />
           <div id="map" />

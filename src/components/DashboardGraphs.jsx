@@ -93,8 +93,8 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
       choroplethData={choroplethData}
       Scenerios={Scenerios}
       mapRegion={(datasets.find(obj => obj.dataset === dataset).params)[selectedGuage].region} //.find(param => param.title === selectedGuage).region
-      data={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, getScenerio(choroplethData, Scenerios.at(0).title))}
-      data2={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, getScenerio(choroplethData, Scenerios.at(1).title))}
+      data={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, choroplethData, Scenerios.at(0).title)}
+      data2={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, choroplethData, Scenerios.at(1).title)}
       uniqueValue={"Dashboard_Big"}
       choroplethColorPalette={choroplethColorPalette}
       setChoroplethColorPalette={setChoroplethColorPalette}
