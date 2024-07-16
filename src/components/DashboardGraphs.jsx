@@ -8,8 +8,9 @@ import BarCountryControl from './dropdowns/BarCountryControl';
 import { getBarColors } from '../assets/data/GcamColors';
 import { setDashDate, setDashReg, setDashSubs } from './Store';
 import LeafletSync from "./maps/LeafletSync";
+import { datasets } from '../assets/data/Scenarios';
 
-function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation }) {
+function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, dataset }) {
   const [width, setWidth] = useState(window.innerWidth);
 
   const [dashYear, setYear] = useState(curYear);
@@ -91,6 +92,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
       setRegion={setRegion}
       choroplethData={choroplethData}
       Scenerios={Scenerios}
+      mapRegion={(datasets.find(obj => obj.dataset === dataset).params)[selectedGuage].region} //.find(param => param.title === selectedGuage).region
       data={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, getScenerio(choroplethData, Scenerios.at(0).title))}
       data2={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, getScenerio(choroplethData, Scenerios.at(1).title))}
       uniqueValue={"Dashboard_Big"}
@@ -110,8 +112,8 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
   ) : (
     <div className='bar-grid grid-border'>
       <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={dashYear} className="choropleth-control" />
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, openedGuages.find(guage => guage.title === selectedGuage).group)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub={setSubcategory} left={true} selectedGuage = {selectedGuage}/>
-      <BarHorizontal csv={barData} color={getBarColors(barData, Scenerios.at(0).title, openedGuages.find(guage => guage.title === selectedGuage).group)} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub={setSubcategory} left={false} selectedGuage = {selectedGuage}/>
+      <BarHorizontal csv={barData} color={openedGuages ? getBarColors(barData, Scenerios.at(0).title, openedGuages.find(guage => guage.title === selectedGuage).group) : ["#666666"]} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub={setSubcategory} left={true} selectedGuage = {selectedGuage}/>
+      <BarHorizontal csv={barData} color={openedGuages ? getBarColors(barData, Scenerios.at(0).title, openedGuages.find(guage => guage.title === selectedGuage).group) : ["#666666"]} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub={setSubcategory} left={false} selectedGuage = {selectedGuage}/>
     </div>
   )
 
@@ -149,6 +151,7 @@ function mapStateToProps(state) {
     region: state.dashboardRegion,
     subcat: state.dashboardSubsector,
     countries: state.barCountries,
+    dataset: state.dataset,
   };
 }
 

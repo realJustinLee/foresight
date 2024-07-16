@@ -66,7 +66,7 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   //console.log(datasets.find(obj => obj.dataset === dataset))
   datasets.find(obj => obj.dataset === dataset).defaults.forEach(defaultGuage => currentGuages.push(guages.filter(guage => guage.title === defaultGuage)[0]));
   //console.log("STORE CURRENT GUAGES:", currentGuages);
-  setGuagesCurrent(currentGuages);
+  setGuagesCurrent(checkParamURL(urlLoaded, guages, currentGuages));
   // Prepared selected guage
   //console.log(urlLoaded, currentGuages);
   const selectedGuage = checkGuageURL(urlLoaded, currentGuages, "selectedParam");
@@ -103,9 +103,26 @@ const checkScenarioURL = (urlLoaded, scenarios) => {
   return scenarioOutput;
 }
 
+const checkParamURL = (urlLoaded, params, guages) => {
+  if (!params || params.length < 1 || !guages || guages.length < 1 || !guages.at(0).title) return "Error: Not Enough Params in this Dataset to load in the Dashboard.";
+  let searchParams = new URLSearchParams(window.location.hash.substring(1));
+  let paramList = guages;
+  let scenarioOutput = [];
+  //console.log(searchParams.get("params").toString().split(","), params);
+  // if (!urlLoaded && searchParams.has("params") && searchParams.get("params").toString().split(",").every((guage) => params ? params.map(param => param ? param.title : "error").includes(guage) : false))
+  //   paramList = [... new Set(searchParams.get("params").toString().split(","))].map(title => params ? params.find(param => param.title === title) : "error");
+  // else
+  //  updateHash("params", guages.map(guage => guage.title).toString());
+  if (paramList.length < 1 || paramList.length > 6) return "Error: Params not loaded correctly.";
+  paramList.forEach((guage) => {
+    scenarioOutput.push(guage);
+  });
+  return scenarioOutput;
+}
+
 const checkGuageURL = (urlLoaded, guageData, title) => {
   let searchParams = new URLSearchParams(window.location.hash.substring(1));
-  let guageList = guageData.map(guage => guage.title);
+  let guageList = guageData ? guageData.map(guage => guage.title) : [];
   if (!urlLoaded && searchParams.has(title) && guageList.includes(searchParams.get(title)))
     return searchParams.get(title);
   if (guageList.length > 0) {

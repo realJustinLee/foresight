@@ -7,7 +7,7 @@ import ScenerioGuage from "../guages/ScenerioGuage"
 import ScenerioGuageNegative from "../guages/ScenerioGuageNegative"
 import Dropdown from 'react-bootstrap/Dropdown';
 import { getGuage } from '../../assets/data/DataManager';
-import { updateListHash } from '../sharing/DashboardUrl';
+import { updateHash, updateListHash } from '../sharing/DashboardUrl';
 import { DropdownButton } from 'react-bootstrap';
 import { MdOutlineLibraryAdd } from "react-icons/md";
 import { getIconParam, iconTypes } from '../../assets/data/VariableCategories';
@@ -21,7 +21,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
     let list = [];
     iconTypes.sort().forEach(group => {
       let params = paramDropdownListGroup(group)
-      if(params.length > 0) {
+      if (params.length > 0) {
         list.push(<Dropdown.Header>{group.charAt(0).toUpperCase() + group.slice(1).trim()}</Dropdown.Header>);
         list.push(params);
       }
@@ -30,11 +30,12 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   }
 
   const paramDropdownListGroup = (group) => {
+    if (!OpenParameters) return;
     return (Parameters.filter(param => param.group === group).map((param) => (
       <div key={param.title}>
         <Form.Check
-          disabled={(!(OpenParameters.map(obj => obj.title).includes(param.title)) && OpenParameters.map(obj => obj.title).length >= 6) || ((OpenParameters.map(obj => obj.title).includes(param.title)) && OpenParameters.map(obj => obj.title).length === 1)}
-          checked={OpenParameters.map(obj => obj.title).includes(param.title)}
+          disabled={(!(OpenParameters.map(obj => obj ? obj.title : "").includes(param ? param.title : "!!Error!!")) && OpenParameters.map(obj => obj ? obj.title : "").length >= 6) || ((OpenParameters.map(obj => obj ? obj.title : "").includes(param.title)) && OpenParameters.map(obj => obj ? obj.title : "").length === 1)}
+          checked={OpenParameters ? OpenParameters.map(obj => obj ? obj.title : "").includes(param ? param.title : "!!Error!!") : false}
           type="switch"
           key={param.title}
           id={param.title}
@@ -45,16 +46,28 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
     )))
   }
 
+  const resetParams = () => {
+    dashDate(2020);
+    dashReg("Global");
+    dashSubs("Aggregate of Subsectors");
+    updateHash("year", 2020);
+    updateHash("reg", "Global");
+    updateHash("sub", "Aggregate of Subsectors");
+  }
+
   const handleParamChange = (checked, param) => {
     console.log(OpenParameters, Parameters, param);
     let newParameters = structuredClone(OpenParameters);
     if (checked) //Add Guage
-      newParameters.push(param)
+      newParameters.push(param);
     else { //Remove Guage
       newParameters = newParameters.filter(obj => obj.title !== param.title)
-      if (SelectedParameter === param.title)
-        updateSelection(newParameters[newParameters.length - 1].title)
+      if (SelectedParameter === param.title) {
+        updateSelection(newParameters[newParameters.length - 1].title);
+        resetParams();
+      }
     }
+    updateHash("params", newParameters.map(param => param.title).toString());
     updateGuages(newParameters);
   }
 
@@ -150,10 +163,9 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   };
 
   const guageSelectionCol = () => {
-    console.log(Parameters);
     return (
       OpenScenarios.map((scenario, index) => (
-        <DropdownButton className = "dashboard-scenerio-button" variant="outline-light" title={<MdOutlineLibraryAdd/>}> 
+        <DropdownButton className="dashboard-scenerio-button" variant="outline-light" title={<MdOutlineLibraryAdd />}>
           {paramDropdownList(index)}
         </DropdownButton>
       ))
@@ -165,9 +177,10 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   const col = () => {
     return (
       OpenParameters.map((param, index) => (
-        <div className={getGuageCSS(param.title)} key={index} onClick={() => resetAndUpdate(param.title)}>
-          {row(param.title, param.units)}
-        </div>
+        (param) ?
+          <div className={getGuageCSS(param ? param.title : "")} key={index} onClick={() => resetAndUpdate(param ? param.title : "")}>
+            {row(param.title, param.units)}
+          </div> : <div></div>
       ))
     )
   };

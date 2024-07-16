@@ -2,6 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import "leaflet.sync";
 import landcells from "./data/landcells.json"
+import global from "./data/global.json"
+import glu from "./data/glu.json"
+import regions_glu from "./data/regions_glu.json"
 import {
   ReactCompareSlider
 } from "react-compare-slider";
@@ -11,8 +14,22 @@ import ChoroplethControl from '../dropdowns/ChoroplethControl';
 import { getColorsFromPalette } from '../../assets/data/GcamColors';
 import ChoroplethLegend from '../dropdowns/ChoroplethLegend';
 
-const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
+const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
   const mapData = data;
+
+  const getJson = (data) => {
+    if (!data || !data[0] || !data[0].id || data === 'i') return landcells;
+    const firstCountry = data[0].id.toLowerCase();
+    if (mapRegion === 'global')
+      return global;
+    else if (mapRegion === 'glu')
+       return glu;
+    else if (mapRegion === 'regionglu')
+       return regions_glu;
+    return landcells;
+  }
+
+  const mapJson = getJson(mapData);
 
   function style(feature) {
     //console.log(feature.id, mapData.filter(item => item.index === feature.id).at(0))
@@ -79,7 +96,7 @@ const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, set
     });
     var map_base = L.layerGroup([tileRef.current]);
     map_base.addTo(mapInstance);
-    L.geoJSON(landcells, { style: style, onEachFeature: onEachFeature }).addTo(mapInstance);
+    L.geoJSON(mapJson, { style: style, onEachFeature: onEachFeature }).addTo(mapInstance);
     //setMapInstance(mapInstance);
   }, [mapInstance, mapData, choroplethColorPalette, choroplethInterpolation]);
 
@@ -125,10 +142,10 @@ const DashboardLeaflet = ({ data, displayLegend, id, setRegion, mapInstance, set
   // Toggle marker on button click:
   return (
     (displayLegend) ? (
-    <>
-      
-      <div id={id} style={mapStyles} />
-    </>
+      <>
+
+        <div id={id} style={mapStyles} />
+      </>
     ) : (
       <div id={id} style={mapStyles} />
     )

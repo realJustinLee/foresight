@@ -38,10 +38,10 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     }
 
     const links = openGuages.map((guage) => (
-        <div key={guage.title}>
-            <Dropdown.Item as="button" active={selection === guage.title ? true : false}
-                onClick={() => updateScenerio(guage.title)}>
-                {guage.units}
+        <div key={guage ? guage.title : "Error"}>
+            <Dropdown.Item as="button" active={guage ? (selection === guage.title ? true : false) : false}
+                onClick={() => guage ? updateScenerio(guage ? guage.title : "Error") : ""}>
+                {guage ? guage.units : "Error"}
             </Dropdown.Item>
         </div >
     ))

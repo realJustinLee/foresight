@@ -12,16 +12,14 @@ import { getColorsFromPalette } from '../../assets/data/GcamColors';
 import ChoroplethLegend from '../dropdowns/ChoroplethLegend';
 import DashboardLeaflet from './DashboardLeaflet';
 
-const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, data, data2, uniqueValue, setRegion }) => {
+const LeafletSync = ({ mapRegion, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, data, data2, uniqueValue, setRegion }) => {
   //Map Instances
   const [mapInstance, setMapInstance] = useState(null);
   const [mapInstance2, setMapInstance2] = useState(null);
   //Choropleth Visualization Settings
   const divisions = 7;
-
   const [country, setCountryDisplay] = useState("");
   const [countryValue, setCountryDisplayValue] = useState("");
-
   function getColorValues(color, number, n) {
     const colors = getColorsFromPalette(color);
     return colors[Math.floor(((Object.keys(colors).length - 1) / n) * (n - number))];
@@ -113,6 +111,7 @@ const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, chorop
                 setRegion={setRegion}
                 mapInstance={mapInstance}
                 setMapInstance={setMapInstance}
+                mapRegion={mapRegion}
                 mapStyles={mapStyles}
                 getColor={getColor}
                 setCountryDisplay={setCountryDisplay}
@@ -130,6 +129,7 @@ const LeafletSync = ({ choroplethColorPalette, setChoroplethColorPalette, chorop
                 setRegion={setRegion}
                 mapInstance={mapInstance2}
                 setMapInstance={setMapInstance2}
+                mapRegion={mapRegion}
                 mapStyles={mapStyles}
                 getColor={getColor}
                 setCountryDisplay={setCountryDisplay}
