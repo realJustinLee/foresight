@@ -237,7 +237,7 @@ function getDataColor(choroplethColorPalette, choroplethInterpolation, divisions
 }
 
 export const choroplethReduce = (choroplethColorPalette, choroplethInterpolation, divisions, data, scenario) => {
-    console.log(data)
+    //console.log(data)
     const reducedData = getScenerio(data, scenario).map(item => ({
         id: item.region,
         value: item.value,

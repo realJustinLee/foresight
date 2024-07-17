@@ -304,15 +304,15 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       const queries = [];
       if (subcat === "Aggregate of Subsectors" || subcat === "class1") {
         if (region === "Global") {
-          queries.push([lineQueryAggRegSub, { param: parameter, id: dataset + "|" + scenarios[0] }]);
-          queries.push([lineQueryAggRegSub, { param: parameter, id: dataset + "|" + scenarios[1] }]);
+          queries.push([lineQueryAggRegSub, { param: parameter + "|" , id: dataset + "|" + scenarios[0] }]);
+          queries.push([lineQueryAggRegSub, { param: parameter + "|" , id: dataset + "|" + scenarios[1] }]);
         } else {
           queries.push([lineQueryAggSub, { id: dataset + "|" + scenarios[0] + "|" + parameter, reg: region }]);
           queries.push([lineQueryAggSub, { id: dataset + "|" + scenarios[1] + "|" + parameter, reg: region }]);
         }
       } else if (region === "Global") {
-        queries.push([lineQueryAggReg, { id: dataset + "|" + scenarios[0] + "|" + parameter, sub: subcat }]);
-        queries.push([lineQueryAggReg, { id: dataset + "|" + scenarios[1] + "|" + parameter, sub: subcat }]);
+        queries.push([lineQueryAggReg, { id: dataset + "|" + scenarios[0] + "|" + parameter, sub: subcat + "|" }]);
+        queries.push([lineQueryAggReg, { id: dataset + "|" + scenarios[1] + "|" + parameter, sub: subcat + "|" }]);
       } else {
         queries.push([lineQuery, { id: dataset + "|" + scenarios[0] + "|" + parameter, reg: region, sub: subcat }]);
         queries.push([lineQuery, { id: dataset + "|" + scenarios[1] + "|" + parameter, reg: region, sub: subcat }]);
@@ -326,11 +326,11 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
     if (scenarios !== "i" && scenarios.length > 1) {
       const queries = [];
       if (subcat === "Aggregate of Subsectors") {
-        queries.push([choroplethQueryAggSub, { sort: year.toString(), id: dataset + "|" + scenarios[0] + "|" + parameter }]);
-        queries.push([choroplethQueryAggSub, { sort: year.toString(), id: dataset + "|" + scenarios[1] + "|" + parameter }]);
+        queries.push([choroplethQueryAggSub, { sort: year.toString()  + "|" , id: dataset + "|" + scenarios[0] + "|" + parameter }]);
+        queries.push([choroplethQueryAggSub, { sort: year.toString()  + "|" , id: dataset + "|" + scenarios[1] + "|" + parameter }]);
       } else {
-        queries.push([choroplethQuery, { id: dataset + "|" + scenarios[0] + "|" + parameter, date: year.toString(), sub: subcat }]);
-        queries.push([choroplethQuery, { id: dataset + "|" + scenarios[1] + "|" + parameter, date: year.toString(), sub: subcat }]);
+        queries.push([choroplethQuery, { id: dataset + "|" + scenarios[0] + "|" + parameter, date: year.toString()  + "|" , sub: subcat }]);
+        queries.push([choroplethQuery, { id: dataset + "|" + scenarios[1] + "|" + parameter, date: year.toString()  + "|" , sub: subcat }]);
       }
       const result = await fetchParallel(queries);
       setChoropleth(result);
@@ -341,8 +341,8 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   const fetchBar = useCallback(async () => {
     if (scenarios !== "i" && scenarios.length > 1) {
       const queries = [];
-      queries.push([barQuery, { id: dataset + "|" + scenarios[0] + "|" + parameter, date: year.toString() }]);
-      queries.push([barQuery, { id: dataset + "|" + scenarios[1] + "|" + parameter, date: year.toString() }]);
+      queries.push([barQuery, { id: dataset + "|" + scenarios[0] + "|" + parameter, date: year.toString()  + "|"  }]);
+      queries.push([barQuery, { id: dataset + "|" + scenarios[1] + "|" + parameter, date: year.toString()  + "|"  }]);
       const result = await fetchParallel(queries);
       setBar(result);
       //console.log(parameter);
@@ -362,8 +362,8 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   const fetchDates = useCallback(async () => {
     if (scenarios !== "i" && scenarios.length > 1) {
       const queries = [];
-      queries.push([queryDates, { param: parameter, id: dataset + "|" + scenarios[0] }]);
-      queries.push([queryDates, { param: parameter, id: dataset + "|" + scenarios[1] }]);
+      queries.push([queryDates, { param: parameter  + "|" , id: dataset + "|" + scenarios[0] }]);
+      queries.push([queryDates, { param: parameter  + "|" , id: dataset + "|" + scenarios[1] }]);
       const result = await fetchParallel(queries);
       setDates(result);
     }
@@ -372,8 +372,8 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   const fetchAggSub = useCallback(async () => {
     if (scenarios !== "i" && scenarios.length > 1) {
       const queries = [];
-      queries.push([aggSubQuery, { date: year.toString(), id: dataset + "|" + scenarios[0] + "|" + parameter }]);
-      queries.push([aggSubQuery, { date: year.toString(), id: dataset + "|" + scenarios[1] + "|" + parameter }]);
+      queries.push([aggSubQuery, { date: year.toString()  + "|" , id: dataset + "|" + scenarios[0] + "|" + parameter }]);
+      queries.push([aggSubQuery, { date: year.toString()  + "|" , id: dataset + "|" + scenarios[1] + "|" + parameter }]);
       const result = await fetchParallel(queries);
       setAggSub(result);
       setCountries(filterRegion(getScenerio(result, scenarios[0])));

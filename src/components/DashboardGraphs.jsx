@@ -16,7 +16,6 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
   const [dashYear, setYear] = useState(curYear);
   const [dashRegion, setRegion] = useState(region);
   const [dashSubcategory, setSubcategory] = useState(subcat);
-
   useEffect(() => {
     setDashboardDate(dashYear)
   }, [dashYear]);
@@ -71,7 +70,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
     <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
   </div>)
   let barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + curYear + ")"} -- By Subsector</div>)
-
+  console.log(lineData);
   // Line Chart Visualization
   const lineChart = (lineData === 'i') ? (
     <div className="grid-border-hidden text-centered">
