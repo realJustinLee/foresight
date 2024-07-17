@@ -386,12 +386,12 @@
   min-width: 0;
   position: relative;
   display: grid;
-  width: 100%;
+  width: 100%;;
   font-size: max(18px, 1vh);
   font-weight: 600;
   color: rgb(187, 155, 49);
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 5vw max(400px, min(50vw, 40vh));
+  grid-template-rows: auto max(400px, min(50vw, 40vh));
   column-gap: 4px;
   margin: 0;
   margin-top: 1%;
