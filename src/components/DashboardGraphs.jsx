@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import BarHorizontal from "./charts/BarHorizontal";
 import { connect } from 'react-redux';
-import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits, getScenerio } from '../assets/data/DataManager';
+import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits } from '../assets/data/DataManager';
 import Line from './charts/Line';
 import BarCountryControl from './dropdowns/BarCountryControl';
 import { getBarColors } from '../assets/data/GcamColors';
@@ -10,12 +10,14 @@ import { setDashDate, setDashReg, setDashSubs } from './Store';
 import LeafletSync from "./maps/LeafletSync";
 import { datasets } from '../assets/data/Scenarios';
 
-function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, dataset }) {
+function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, dataset, datasetInfo }) {
   const [width, setWidth] = useState(window.innerWidth);
 
   const [dashYear, setYear] = useState(curYear);
   const [dashRegion, setRegion] = useState(region);
   const [dashSubcategory, setSubcategory] = useState(subcat);
+
+  console.log(openedScenerios, selectedGuage)
   useEffect(() => {
     setDashboardDate(dashYear)
   }, [dashYear]);
@@ -70,7 +72,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
     <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
   </div>)
   let barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + curYear + ")"} -- By Subsector</div>)
-  console.log(lineData);
+  //console.log(lineData);
   // Line Chart Visualization
   const lineChart = (lineData === 'i') ? (
     <div className="grid-border-hidden text-centered">
@@ -80,6 +82,17 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
     <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date={dashYear} setDate={setYear} />
   )
 
+  const getRegion = () => {
+    if(datasets.find(obj => obj.dataset === dataset)) {
+      console.log("!!", datasets.find(obj => obj.dataset === dataset))
+      return (datasets.find(obj => obj.dataset === dataset).params)[selectedGuage].region;
+    }
+    else if(datasetInfo.find(obj => obj.dataset === dataset)) {
+      console.log("!!", datasetInfo.find(obj => obj.dataset === dataset).params, selectedGuage)
+      return (datasetInfo.find(obj => obj.dataset === dataset).params)[selectedGuage].region;
+    }
+    return "region";
+  };
 
   // Choropleth Visualization
   const choropleth = (choroplethData === 'i') ? (
@@ -91,7 +104,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
       setRegion={setRegion}
       choroplethData={choroplethData}
       Scenerios={Scenerios}
-      mapRegion={(datasets.find(obj => obj.dataset === dataset).params)[selectedGuage].region} //.find(param => param.title === selectedGuage).region
+      mapRegion={getRegion()} //.find(param => param.title === selectedGuage).region
       data={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, choroplethData, Scenerios.at(0).title)}
       data2={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, choroplethData, Scenerios.at(1).title)}
       uniqueValue={"Dashboard_Big"}
@@ -151,6 +164,7 @@ function mapStateToProps(state) {
     subcat: state.dashboardSubsector,
     countries: state.barCountries,
     dataset: state.dataset,
+    datasetInfo: state.datasetInfo,
   };
 }
 

@@ -5,6 +5,9 @@ const initialState = {
   open: 2,
   urlLoaded: false,
   dataset: "gcamv7p0",
+  datasetList: ["gcamv7p0"],
+  datasetData: [],
+  datasetInfo: [],
   startDate: 2015,
   endDate: 2100,
   dashboardSelection: "watWithdrawBySec",
@@ -31,6 +34,12 @@ function reducer(state = initialState, action) {
       return { ...state, open: action.payload };
     case 'setDataset':
       return { ...state, dataset: action.payload };
+    case 'setDatasetList':
+      return { ...state, datasetList: action.payload };
+    case 'setDatasetData':
+      return { ...state, datasetData: action.payload };
+    case 'setDatasetInfo':
+      return { ...state, datasetInfo: action.payload };
     case 'setStartDate':
       return { ...state, startDate: action.payload };
     case 'setEndDate':
@@ -102,6 +111,18 @@ export function setGuageList(guages) {
 // Action creator function to update the dataset
 export function setDataset(dataset) {
   return { type: 'setDataset', payload: dataset };
+}
+
+export function setDatasetList(dataset) {
+  return { type: 'setDatasetList', payload: dataset };
+}
+
+export function setDatasetData(data) {
+  return { type: 'setDatasetData', payload: data };
+}
+
+export function setDatasetInfo(data) {
+  return { type: 'setDatasetInfo', payload: data };
 }
 
 // Change dashboard start date

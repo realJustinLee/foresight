@@ -34,4 +34,5 @@ export { default as MapChoropleth } from "./maps/MapChoropleth";
 export { default as World } from "./globes/World";
 /**Dashboard**/
 export { default as DashboardDate } from "./dropdowns/DashboardDate";
+export { default as UploadData } from "./UploadData";
 

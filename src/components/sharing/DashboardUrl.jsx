@@ -38,9 +38,9 @@ const isequal = (A, B) => {
 // and guage settings for the dashboard. The functionality is different on the first load, as when the urlLoaded parameter
 // is false, which only happens on the first load, loadDataURL will search for URL values and replace the default parameters
 // if these URL values are valid. This functions as the only URL loading function for the dashboard.
-export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded, dataset) => {
-  //console.log(result);
-
+export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded, updateDataset, datasetList, dataset) => {
+  //Check and handle selected dataset. URL reset if dataset not currently loaded.
+  checkDatasetURL(urlLoaded, updateDataset, datasetList, dataset);
   //Prepare total scenarios
   const scenarios = [...new Set(datasets.find(obj => obj.dataset === dataset).scenarios)];
   //console.log(scenarios);
@@ -84,6 +84,19 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   setCurrentDate(dashboardDate);
   if (!urlLoaded)
     toggleURLLoaded();
+}
+
+const checkDatasetURL = (urlLoaded, updateDataset, datasetList, dataset) => {
+  let searchParams = new URLSearchParams(window.location.hash.substring(1));
+  if (!urlLoaded && searchParams.has("dataset")) {
+    if(datasets.includes(searchParams.get("dataset").toString()) || datasetList.includes(searchParams.get("dataset").toString()))
+      updateDataset(searchParams.get("dataset").toString());
+    else {
+      window.location.hash = "";
+    }
+  }
+  else
+    updateHash("dataset", dataset);
 }
 
 const checkScenarioURL = (urlLoaded, scenarios) => {

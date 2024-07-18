@@ -11,17 +11,11 @@ import {
   Navigation,
   Home,
   Dashboard,
-  Charts,
-  Maps,
-  Globes,
-  Energy,
-  Water,
-  Land,
-  Test,
   About,
   Team,
   Help,
-  Footer
+  Footer,
+  UploadData
 } from "./components";
 import reportWebVitals from './reportWebVitals';
 
@@ -33,7 +27,8 @@ root.render(
       <Navigation />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/dashboard" element={<Dashboard />} />     
+        <Route path="/dashboard" element={<Dashboard />} />    
+        <Route path="/uploaddata" element={<UploadData />} />    
         <Route path="/about" element={<About />} />
         <Route path="/team" element={<Team />} />
         <Route path="/help" element={<Help />} />

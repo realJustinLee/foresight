@@ -21,7 +21,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
     let list = [];
     iconTypes.sort().forEach(group => {
       let params = paramDropdownListGroup(group)
-      if (params.length > 0) {
+      if (params && params.length > 0) {
         list.push(<Dropdown.Header>{group.charAt(0).toUpperCase() + group.slice(1).trim()}</Dropdown.Header>);
         list.push(params);
       }
@@ -30,7 +30,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   }
 
   const paramDropdownListGroup = (group) => {
-    if (!OpenParameters) return;
+    if (!OpenParameters || !Parameters) return;
     return (Parameters.filter(param => param.group === group).map((param) => (
       <div key={param.title}>
         <Form.Check
@@ -101,6 +101,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   // scenario. This dataset should be aggregated by region and subcategory. 
   // If the value is found it is returned. Otherwise the function returns -1.
   const getDataValue = (scenario, fieldTitle) => {
+    //console.log(data, scenario, fieldTitle, startDate, endDate);
     return getGuage(data, scenario, fieldTitle, startDate, endDate);
   };
 

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import SidebarDashboard from "./SidebarDashboard.jsx";
 import DataQuerries from "../assets/data/DataQuerries.jsx";
+import UserDataQuerries from "../assets/data/DataQuerries.jsx";
 import { connect } from "react-redux";
 import DateDropdown from "./dropdowns/DashboardDate";
 import DashboardGraphs from "./DashboardGraphs.jsx";
@@ -13,6 +14,8 @@ import { setdashboardSelection, setStartDate, setEndDate } from "./Store";
 import './css/Dashboard.css';
 import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
 import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
+import { datasets } from "../assets/data/Scenarios.jsx";
+import DataQueryUser from "../assets/data/DataQueryUser.jsx";
 
 //Gets the icon of each category by name. Shows up next to the guages and the selection.
 export const getIcon = (selection, openGuages) => {
@@ -45,7 +48,7 @@ export const getIcon = (selection, openGuages) => {
   }
 }
 
-function Dashboard({ open, scenarios }) {
+function Dashboard({ open, dataset, scenarios }) {
   const [guageData, setGuageData] = useState("i");
   const [datesData, setDatesData] = useState("i");
   const [lineData, setLineData] = useState("i");
@@ -68,23 +71,37 @@ function Dashboard({ open, scenarios }) {
     setRegionList("i");
     setSubcategoriesList("i");
   }
-
+  console.log(datasets.some(e => e.dataset === dataset));
   //<DashboardScenerioRows
   //Scenarios={scenarios}
   ///>
   return (
     <div className="body-page-dark">
       <SidebarDashboard></SidebarDashboard>
-      <DataQuerries
-        setGuage={setGuageData}
-        setDates={setDatesData}
-        setLine={setLineData}
-        setChoropleth={setChoroplethData}
-        setBar={setBarData}
-        setAggSub={setAggSub}
-        setRegions={setRegionList}
-        setSubcategories={setSubcategoriesList}
-      />
+      {(datasets.some(e => e.dataset === dataset)) ? (
+        <DataQuerries
+          setGuage={setGuageData}
+          setDates={setDatesData}
+          setLine={setLineData}
+          setChoropleth={setChoroplethData}
+          setBar={setBarData}
+          setAggSub={setAggSub}
+          setRegions={setRegionList}
+          setSubcategories={setSubcategoriesList}
+        />
+      ) : (
+        <DataQueryUser
+          dataset={dataset}
+          setGuage={setGuageData}
+          setDates={setDatesData}
+          setLine={setLineData}
+          setChoropleth={setChoroplethData}
+          setBar={setBarData}
+          setAggSub={setAggSub}
+          setRegions={setRegionList}
+          setSubcategories={setSubcategoriesList}
+        />
+      )}
       <div className={open ? "dashboard" : "dashboardClosed"}>
         <Container fluid>
           <Row className="date-select-row">
@@ -143,6 +160,7 @@ function Dashboard({ open, scenarios }) {
 function mapStateToProps(state) {
   return {
     open: state.open,
+    dataset: state.dataset,
     selection: state.dashboardSelection,
     openScenerios: state.scenerios,
     openGuages: state.guages,

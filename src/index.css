@@ -94,6 +94,10 @@ a {
   z-index: 2 !important;
 }
 
+.page-text-dark {
+  color: rgb(254, 254, 254) !important;
+}
+
 .page-image-container {
   text-align: center;
 }
@@ -132,6 +136,23 @@ a {
   z-index: 2 !important;
 }
 
+.form-gap {
+  margin-bottom: 25px !important;
+}
+
+.buffer-top{
+  margin-top: 5px;
+}
+
+.color-important {
+  display: inline;
+  color: red;
+}
+
+.color-optional {
+  display: inline;
+  color: yellow;
+}
 /* Solid line above a section break */
 .section-break-hr {
   height: 2px;

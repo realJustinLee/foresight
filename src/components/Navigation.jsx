@@ -9,17 +9,32 @@ import { RiDashboardFill } from "react-icons/ri";
 import { AiFillGithub, AiFillHome, AiFillExperiment } from "react-icons/ai";
 import { BsFillInfoCircleFill, BsFillDatabaseFill } from "react-icons/bs";
 import { RiTeamFill } from "react-icons/ri";
-import { MdHelp } from "react-icons/md";
+import { MdFileUpload, MdHelp } from "react-icons/md";
 import { connect } from "react-redux";
 import { setDataset } from "./Store";
 import './css/Navigation.css';
+import { updateHash } from "./sharing/DashboardUrl";
 
-function Navigation({ dataset, updateDataset }) {
+function Navigation({ dataset, datasets, updateDataset }) {
   const handleDatasetChange = (selectedDataset) => {
     console.log("Selected dataset:", selectedDataset);
     // Call updateDataset to dispatch the action
-    updateDataset(selectedDataset);
+    updateDataset(selectedDataset.data);
+    updateHash("dataset", selectedDataset.data);
   };
+
+  let datasetList = [];
+  console.log(datasets)
+  for (let i = 0; i < datasets.length; i++) {
+    let data = datasets.at(i);
+    datasetList.push(
+      <NavDropdown.Item
+        onClick={() => handleDatasetChange({ data })}
+      >
+        {data}
+      </NavDropdown.Item>
+    )
+  }
 
   const [expanded, setExpanded] = useState(false);
 
@@ -58,24 +73,29 @@ function Navigation({ dataset, updateDataset }) {
                   <div className="nav-icon nav-icon-drop">
                     <BsFillDatabaseFill />
                   </div>
-                  <span className="nav-dropdown-title">{`${
-                    dataset || "None"
-                  }`}</span>
+                  <span className="nav-dropdown-title">{`${dataset || "None"
+                    }`}</span>
                 </span>
               }
               id="dataset-dropdown"
             >
-              <NavDropdown.Item
-                onClick={() => handleDatasetChange("gcamv7p0")}
-              >
-                gcamv7p0
-              </NavDropdown.Item>
+              {datasetList}
             </NavDropdown>
             <NavLink className="nav-link" to="/dashboard" onClick={handleClose}>
               <div className="nav-icon">
                 <RiDashboardFill />
               </div>{" "}
               Dashboard
+            </NavLink>
+            <NavLink
+              className="nav-link"
+              to="/uploaddata"
+              onClick={handleClose}
+            >
+              <div className="nav-icon">
+                <MdFileUpload />
+              </div>
+              Upload Data
             </NavLink>
           </Nav>
           <Nav className="ms-auto nav-right">
@@ -118,6 +138,7 @@ function Navigation({ dataset, updateDataset }) {
 const mapStateToProps = (state) => {
   return {
     dataset: state.dataset,
+    datasets: state.datasetList,
   };
 };
 

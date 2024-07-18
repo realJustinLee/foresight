@@ -50,7 +50,7 @@ export const getFirstParam = (data) => (data[0]?.param || "ERROR: NO PARAMETERS"
 // isValidDate takes in a year and determines if it is a valid date for the parameter in the dataset.
 // This is used in DashboardDate to grey out dates not available in the dataset and to determine if
 // the URL is valid.
-export const isValidDate = (data, date) => data.some(item => item.x === date);
+export const isValidDate = (data, date) => data.some(item => Number(item.x) === date);
 
 
 // filterDateRange filters a dataset between two provided dates. Three inputs
@@ -58,25 +58,26 @@ export const isValidDate = (data, date) => data.some(item => item.x === date);
 export const filterDateRange = (data, start, end) => data.filter(item => item.x >= start && item.x <= end);
 
 //Returns the first date in the Dataset. Used for default dateranges in the dashboard.
-export const getFirstDate = (data) => new Date(data[0]?.x || 0);
+export const getFirstDate = (data) => new Date(Number(data[0]?.x || 0));
 
 //Returns the last date in the Dataset. Used for default dateranges in the dashboard.
-export const getLastDate = (data) => new Date(data[data.length - 1]?.x || 0);
+export const getLastDate = (data) => new Date(Number(data[data.length - 1]?.x || 0));
 
 export const getDataDate = (data, scenario, param, date) => {
-    const item = data.find(row => row.x === parseInt(date) && row.scenario === scenario && row.param === param);
+    const item = data.find(row => Number(row.x) === parseInt(date) && row.scenario === scenario && row.param === param);
     return item ? item.value : 0;
 }
 
 //Given an object array, return the units given the matchoign title. For store guages.
 export const findUnitsByTitle = (objectsArray, titleToFind) => {
     const foundObject = objectsArray.find(obj => obj.title === titleToFind);
+    console.log(foundObject)
     return foundObject ? foundObject.units : "ERROR";
 }
 
 export const dateInAllParams = (data, params, date) => {
     params.forEach((param) => {
-        if (data.filter(item => item.param === param && item.x === date).length === 0)
+        if (data.filter(item => item.param === param && Number(item.x) === date).length === 0)
             return false;
     })
     return true;
@@ -87,7 +88,7 @@ export const findClosestDateAllParamsAbove = (data, params, targetDate) => {
     //console.log(data, params);
     let firstParamData = data.filter(item => item.param === params[0]);
     const closest = firstParamData.reduce((prev, curr) => {
-        return (Math.abs(parseInt(curr.x) - targetDate) < Math.abs(parseInt(prev.x) - targetDate) && dateInAllParams(data, params, curr.x)) ? curr : prev;
+        return (Math.abs(Number(curr.x) - targetDate) < Math.abs(Number(prev.x) - targetDate) && dateInAllParams(data, params, Number(curr.x))) ? curr : prev;
     });
     return closest ? closest.x : -1
 };
@@ -95,7 +96,7 @@ export const findClosestDateAllParamsAbove = (data, params, targetDate) => {
 //Finds the closest date to the selected date in the dataset if there is no index with the specified date.
 export const findClosestDate = (data, targetDate) => {
     const closest = data.reduce((prev, curr) => {
-        return (Math.abs(curr.x - targetDate) < Math.abs(prev.x - targetDate)) ? curr : prev;
+        return (Math.abs(Number(curr.x) - targetDate) < Math.abs(Number(prev.x) - targetDate)) ? curr : prev;
     });
     return closest ? closest.x : -1
 }
@@ -106,8 +107,8 @@ export const getGuage = (data, scenario, param, start, end) => {
     if (data.length === 0) return -1; // Check for invalid data.
     const reducedData = data.filter(row => row.scenario === scenario && row.param === param);
     if (reducedData.length === 0) return -1; // Check to make sure the parameter exists.
-    const startData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, start));
-    const endData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, end));
+    const startData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, Number(start)));
+    const endData = getDataDate(reducedData, scenario, param, findClosestDate(reducedData, Number(end)));
     const change = startData !== 0 ? (((endData - startData) / startData) * 100) : -1;
     //console.log("START: " + start, "END: " + end, "REV START: " + findClosestDate(reducedData, start), "REV END: " + findClosestDate(reducedData, end));
     //console.log("START DATA: " + startData, "END DATA: " + endData);
@@ -123,7 +124,7 @@ export const getDataset = (data, dataaggr, dataaggs, dataaggrs, date, region, su
 // Gets the individual value from the dtat given the date, region, subcat, and scenerio.
 export const getDataPoint = (datad, dataaggr, dataaggs, dataaggrs, date, region, subcat, scenario) => {
     let data = getDataset(datad, dataaggr, dataaggs, dataaggrs, date, region, subcat);
-    let item = data.find(row => row.x === date && row.scenario === scenario && (region === "" || row.region === region) && (subcat === "" || row.subcat === subcat));
+    let item = data.find(row => Number(row.x) === Number(date) && row.scenario === scenario && (region === "" || row.region === region) && (subcat === "" || row.subcat === subcat));
     return item ? item.value : "0";
 }
 

@@ -22,7 +22,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
             window.removeEventListener('resize', handleResize);
         };
     }, []);
-
+    //console.log(regions);
     function resetParams() {
         dashDate(2020);
         dashReg("Global");
@@ -55,7 +55,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
         uniqueSubcats.add("Aggregate of Subsectors");
     //console.log(uniqueDates, uniqueRegions, uniqueSubcats);
 
-    const date_links = uniqueDates !== "i" ? Array.from(uniqueDates).map((date) => (
+    const date_links = (uniqueDates && uniqueDates !== "i") ? Array.from(uniqueDates).map((date) => (
         <div key={date}>
             <Dropdown.Item as="button" active={year === date ? true : false}
                 onClick={() => dashDate(date)}>
@@ -64,8 +64,8 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
         </div >
     )) : <div></div>
 
-    const region_links = uniqueDates !== "i" ? Array.from(uniqueRegions).map((listedRegion) => (
-        (listedRegion !== "global") ? (<div key={listedRegion}>
+    const region_links = uniqueRegions !== "i" ? Array.from(uniqueRegions).map((listedRegion) => (
+        (listedRegion && listedRegion !== "global") ? (<div key={listedRegion}>
             <Dropdown.Item as="button" active={region === listedRegion ? true : false}
                 onClick={() => dashReg(listedRegion)}>
                 {listedRegion}
@@ -73,8 +73,9 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
         </div >) : <div></div>
     )) : <div></div>
 
+    //console.log(uniqueSubcats)
     const subcat_links = uniqueSubcats !== "i" ? Array.from(uniqueSubcats).map((listedSubcat) => (
-        (listedSubcat !== "class1") ? (<div key={listedSubcat}>
+        (listedSubcat && listedSubcat !== "class1") ? (<div key={listedSubcat}>
             <Dropdown.Item as="button" active={subsector === listedSubcat ? true : false}
                 onClick={() => dashSubs(listedSubcat)}>
                 {listedSubcat.charAt(0).toUpperCase() + listedSubcat.slice(1).trim()}

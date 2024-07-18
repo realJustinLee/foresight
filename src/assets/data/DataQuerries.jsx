@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { API, graphqlOperation } from "aws-amplify";
 import { connect } from 'react-redux';
-import { setAllScenarios, setSceneriosNoUpdate, setGuageList, setdashboardGuages, setdashboardSelection, setStartDate, setEndDate, setDashDate, setBarCountries } from '../../components/Store';
+import { setAllScenarios, setSceneriosNoUpdate, setGuageList, setdashboardGuages, setdashboardSelection, setStartDate, setEndDate, setDashDate, setBarCountries, setDataset } from '../../components/Store';
 import { getScenerio, filterRegion, listRegions, filterSubcat } from './DataManager';
 import { loadDataURL } from '../../components/sharing/DashboardUrl';
 
@@ -248,9 +248,8 @@ query BarQuery($date: Int!, $nextToken: String, $id: String!) {
 }
 `;
 
-function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded }) {
+function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList }) {
   const [scenarios, setScenarios] = useState(scenerios.map(obj => obj.title));
-
 
   useEffect(() => {
     setScenarios(scenerios.map(obj => obj.title));
@@ -296,7 +295,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   const fetchDashboard = useCallback(async () => {
     const result = await fetchParallel([[queryDataset, { dataset: dataset }]]);
     //console.log(result);
-    loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, dataset);
+    loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList, dataset);
   }, [fetchParallel]);
 
   const fetchLine = useCallback(async () => {
@@ -448,6 +447,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
 function mapStateToProps(state) {
   return {
     dataset: state.dataset,
+    datasetList: state.datasetList,
     start: parseInt(state.startDate),
     end: parseInt(state.endDate),
     scenerios: state.scenerios,
@@ -455,7 +455,6 @@ function mapStateToProps(state) {
     year: state.dashboardYear,
     region: state.dashboardRegion,
     subcat: state.dashboardSubsector,
-    dataLine: state.parsedDataLine,
     URLLoaded: state.urlLoaded
   };
 }
@@ -471,7 +470,8 @@ function mapDispatchToProps(dispatch) {
     setEnd: (end) => dispatch(setEndDate(end)),
     setCurrentDate: (current) => dispatch(setDashDate(current)),
     setCountries: (countryList) => dispatch(setBarCountries(countryList)),
-    toggleURLLoaded: () => dispatch({ type: 'toggleURLLoaded' })
+    toggleURLLoaded: () => dispatch({ type: 'toggleURLLoaded' }),
+    updateDataset: (dataset) => dispatch(setDataset(dataset)),
   };
 }
 

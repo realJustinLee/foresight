@@ -19,12 +19,12 @@ const LeafletSync = ({ mapRegion, choroplethColorPalette, setChoroplethColorPale
   //Choropleth Visualization Settings
   const divisions = 7;
   const [country, setCountryDisplay] = useState("");
-  const [countryValue, setCountryDisplayValue] = useState("");
+  const [countryValue, setCountryDisplayValue] = useState(0.0);
   function getColorValues(color, number, n) {
     const colors = getColorsFromPalette(color);
     return colors[Math.floor(((Object.keys(colors).length - 1) / n) * (n - number))];
   }
-
+  //console.log(countryValue);
   function getScaleValuesTest(value, placement, dataLength) {
     let bracket = 0;
     switch (choroplethInterpolation) {
@@ -87,7 +87,7 @@ const LeafletSync = ({ mapRegion, choroplethColorPalette, setChoroplethColorPale
         <div className="image-container">
           <div className="choropleth-data-info">
             {country === "" ? "" : country + ": "}
-            <strong>{country === "" ? "" : (getRank(data, country) === -1 ? "No Data" : countryValue.toFixed(2))}</strong>
+            <strong>{country === "" ? "" : (getRank(data, country) === -1 ? "No Data" : Number(countryValue).toFixed(2))}</strong>
           </div>
           <ChoroplethControl
             palette={choroplethColorPalette}
