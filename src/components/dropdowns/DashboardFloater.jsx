@@ -84,7 +84,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     )) : <div></div>
     return (
         <>
-            <div>
+            <div title="Change selected data variable">
                 SELECTED:    {findUnitsByTitle(openGuages, selection).toUpperCase()}   {<div className='floater-icon'>{getIconParam(selection, openGuages)}</div>}
                 <Dropdown as={ButtonGroup}>
                     <Dropdown.Toggle
@@ -98,7 +98,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                 </Dropdown>
             </div>
             {(width >= 875) ? (
-                <div>
+                <div title="Change selected year, region, and subsector">
                     <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Year: " + year}>
                         {date_links}
                     </DropdownButton>
@@ -109,6 +109,7 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                         {subcat_links}
                     </DropdownButton>
                     <Button
+                        title="Reset all data selections"
                         className="floater-button"
                         variant="danger"
                         onClick={() => resetParams()}>
@@ -117,22 +118,23 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                 </div>
             ) : (
                 <>
-                    <div>
+                    <div title="Change selected year">
                         <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Year: " + year}>
                             {date_links}
                         </DropdownButton>
                     </div>
-                    <div>
+                    <div title="Change selected region">
                         <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Region: " + region}>
                             {region_links}
                         </DropdownButton>
                     </div>
-                    <div>
+                    <div title="Change selected subsector">
                         <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Subsector: " + subsector.trim()}>
                             {subcat_links}
                         </DropdownButton>
                     </div>
                     <Button
+                        title="Reset all data selections"
                         className="floater-button reset-button"
                         variant="danger"
                         onClick={() => resetParams()}>

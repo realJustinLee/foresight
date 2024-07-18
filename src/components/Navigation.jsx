@@ -56,13 +56,13 @@ function Navigation({ dataset, datasets, updateDataset }) {
     >
       <Container fluid>
         <Navbar.Brand href="/">
-          <img className="logo" src={logo} alt="Logo" />
+          <img title="Home" className="logo" src={logo} alt="Logo" />
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="navbar-nav" onClick={handleToggle} />
         <Navbar.Collapse id="navbar-nav">
           <Nav className="me-auto nav-left">
             <NavLink className="nav-link" to="/" onClick={handleClose}>
-              <div className="nav-icon">
+              <div img title="Home" className="nav-icon">
                 <AiFillHome />
               </div>
             </NavLink>
@@ -70,10 +70,10 @@ function Navigation({ dataset, datasets, updateDataset }) {
               className="nav-link"
               title={
                 <span>
-                  <div className="nav-icon nav-icon-drop">
+                  <div title="Change Dataset" className="nav-icon nav-icon-drop">
                     <BsFillDatabaseFill />
                   </div>
-                  <span className="nav-dropdown-title">{`${dataset || "None"
+                  <span title="Change Dataset" className="nav-dropdown-title">{`${dataset || "None"
                     }`}</span>
                 </span>
               }

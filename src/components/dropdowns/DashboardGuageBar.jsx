@@ -203,13 +203,13 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   // If the dataset hasn't loaded yet, we give the user the "Loading Dataset..." message.
   return (
     <div className="dashboard-guage-grid">
-      <div className="dashboard-guage-grid-columns">
+      <div className="dashboard-guage-grid-columns" title="Select scenario">
         {scenarioSelectionCol()}
       </div>
       {(data === 'i' || data.length === 0) ? (
         "Loading Dataset..."
       ) : (col())}
-      <div className="dashboard-guage-grid-columns">
+      <div className="dashboard-guage-grid-columns" title="Select parameters">
         {guageSelectionCol()}
       </div>
     </div>

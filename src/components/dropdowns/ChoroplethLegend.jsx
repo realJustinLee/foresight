@@ -44,7 +44,7 @@ export default function ChoroplethLegend({ data, data2, color, divisions }) {
   };
 
   return (
-    <div className="choropleth-legend-container">
+    <div title="Map legend" className="choropleth-legend-container">
       {rows()}
     </div>
   );

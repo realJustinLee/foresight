@@ -104,11 +104,11 @@ function Dashboard({ open, dataset, scenarios }) {
       )}
       <div className={open ? "dashboard" : "dashboardClosed"}>
         <Container fluid>
-          <Row className="date-select-row">
+          <Row title="Select date range for guages" className="date-select-row">
             <Col xs="auto" sm="auto" md="auto" lg="auto" xl="auto">
               % Change from :
             </Col>
-            <Col>
+            <Col title="Select guage starting date">
               <DateDropdown
                 data={datesData}
                 year={2015}
@@ -118,7 +118,7 @@ function Dashboard({ open, dataset, scenarios }) {
             <Col className="date-select-text" xs="auto" sm="auto" md="auto" lg="auto" xl="auto">
               to
             </Col>
-            <Col>
+            <Col title="Select guage ending date">
               <DateDropdown
                 data={datesData}
                 year={2100}
@@ -131,7 +131,7 @@ function Dashboard({ open, dataset, scenarios }) {
             Scenarios={scenarios}
             reset={resetData}
           />
-          <Row className="selection-divider">
+          <Row title="Selected data information." className="selection-divider">
             <DashboardFloater
               dates={datesData}
               regions={regionList}
