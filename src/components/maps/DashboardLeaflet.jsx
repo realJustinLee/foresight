@@ -22,9 +22,9 @@ const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapIn
     const firstCountry = data[0].id.toLowerCase();
     if (mapRegion === 'global')
       return global;
-    else if (mapRegion === 'glu')
+    else if (mapRegion === 'glu' || mapRegion === 'basin')
        return glu;
-    else if (mapRegion === 'regionglu')
+    else if (mapRegion === 'regionglu' || mapRegion === 'regionbasin')
        return regions_glu;
     return landcells;
   }

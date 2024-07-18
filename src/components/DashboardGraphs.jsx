@@ -88,7 +88,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
       return (datasets.find(obj => obj.dataset === dataset).params)[selectedGuage].region;
     }
     else if(datasetInfo.find(obj => obj.dataset === dataset)) {
-      console.log("!!", datasetInfo.find(obj => obj.dataset === dataset).params, selectedGuage)
+      console.log("!!", datasetInfo.find(obj => obj.dataset === dataset).params[selectedGuage].region, selectedGuage)
       return (datasetInfo.find(obj => obj.dataset === dataset).params)[selectedGuage].region;
     }
     return "region";

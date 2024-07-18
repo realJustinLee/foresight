@@ -144,7 +144,7 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
     if(energyList.includes(country))
       return "region";
     else if(waterList.includes(country))
-      return "basin";
+      return "glu";
     else if(countryList.includes(country))
       return "country";
     return "region";
@@ -302,6 +302,7 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
                 </ul>
               </li>
               <li>All values must be in the proper units with no NaN values.</li>
+              <li>Once the data is uplaoded, it can be accessed by the datasets dropdown in the navigation bar.</li>
             </ul>
           </div>
         </Row>
