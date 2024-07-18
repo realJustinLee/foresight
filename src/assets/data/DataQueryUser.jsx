@@ -16,15 +16,15 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
 
   useEffect(() => {
     //Prepare Scenarios
-    console.log(data, dataInfo, dataset);
-    console.log("STORE SCENARIOS:", dataInfo.scenarios);
+    //console.log(data, dataInfo, dataset);
+    //console.log("STORE SCENARIOS:", dataInfo.scenarios);
     const currentScenarios = [];
     const opened = dataInfo.scenarios.filter(scenario => scenario === 'GCAM_SSP2' || scenario === 'GCAM_SSP3').length === 2 ? dataInfo.scenarios.filter(scenario => scenario === 'GCAM_SSP2' || scenario === 'GCAM_SSP3') : dataInfo.scenarios.slice(0, 2);
-    console.log(opened);
+    //console.log(opened);
     opened.forEach((scenario, index) => {
       currentScenarios.push({ title: scenario, pos: index + 1 });
     });
-    console.log("STORE CURRENT SCENARIOS:", currentScenarios);
+    //console.log("STORE CURRENT SCENARIOS:", currentScenarios);
 
     setAllScenarios(dataInfo.scenarios.map(obj => ({title: obj})));
     setScenarios(dataInfo.scenarios.map(obj => obj.title));
@@ -37,15 +37,15 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
       return {title: guage.title, units: guage.units, group: guage.group}
     })
     const guageNames = Object.keys(dataInfo.params);
-    console.log("STORE ALL GUAGES:", guages);
+    //console.log("STORE ALL GUAGES:", guages);
     setGuagesTotal(guages);
 
     const currentGuages = guages.slice(0, 5);
-    console.log("STORE CURRENT GUAGES:", currentGuages);
+    //console.log("STORE CURRENT GUAGES:", currentGuages);
     setGuagesCurrent(currentGuages);
 
     const selectedGuage = guageNames[0];
-    console.log("STORE SELECTED GUAGE:", selectedGuage);
+    //console.log("STORE SELECTED GUAGE:", selectedGuage);
     setGuageSelected(selectedGuage);
 
 
@@ -53,15 +53,15 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     const start = findClosestDateAllParamsAbove(data.aggParam_global, guageNames, 2015);
     const end = findClosestDateAllParamsAbove(data.aggParam_global, guageNames, 2100);
     const dashboardDate = findClosestDateAllParamsAbove(data.aggParam_global, guageNames, 2020);
-    console.log("START DATE:", start);
+    //console.log("START DATE:", start);
     setStart(start);
-    console.log("END DATE:", end);
+    //console.log("END DATE:", end);
     setEnd(end);
-    console.log("DASHBOARD DATE:", dashboardDate);
+    //console.log("DASHBOARD DATE:", dashboardDate);
     setCurrentDate(dashboardDate);
   
     // Prepare Datasets
-    console.log(dashboardDate, subcat, region)
+    //console.log(dashboardDate, subcat, region)
     let lineData = [];
     if (subcat === "Aggregate of Subsectors" || subcat === "class1") {
       if (region === "Global") {
@@ -88,23 +88,23 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     let aggRegData = data.aggClass1_global.filter(item => item.param === selectedGuage && item.x === dashboardDate && item.scenario === opened[0]).map(dataValue => dataValue.class);
     
     lineData.sort((a, b) => a.x - b.x);
-    console.log("DATASET: LINE", lineData);
+    //console.log("DATASET: LINE", lineData);
     setLine(lineData);
-    console.log("DATASET: CHOROPLETH", choroplethData);
+    //console.log("DATASET: CHOROPLETH", choroplethData);
     setChoropleth(choroplethData);
-    console.log("DATASET: REGIONS", listRegions(choroplethData));
+    //console.log("DATASET: REGIONS", listRegions(choroplethData));
     setRegions(listRegions(choroplethData));
-    console.log("DATASET: BAR", barData);
+    //console.log("DATASET: BAR", barData);
     setBar(barData);
-    console.log("DATASET: GUAGE", guageData);
+    //console.log("DATASET: GUAGE", guageData);
     setGuage(guageData);
-    console.log("DATASET: DATES", dateData);
+    //console.log("DATASET: DATES", dateData);
     setDates(dateData);
-    console.log("DATASET: AGGSUB", aggSubData);
+    //console.log("DATASET: AGGSUB", aggSubData);
     setAggSub(aggSubData);
-    console.log("DATASET: COUNTRIES", filterRegion(getScenerio(aggSubData, scenarios[0])));
+    //console.log("DATASET: COUNTRIES", filterRegion(getScenerio(aggSubData, scenarios[0])));
     setCountries(filterRegion(getScenerio(aggSubData, currentScenarios[0].title)));
-    console.log("DATASET: AGGREG", aggRegData);
+    //console.log("DATASET: AGGREG", aggRegData);
     setSubcategories(aggRegData);
 
   }, [dataset]);
@@ -135,7 +135,7 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     } else {
       choroplethData = data.aggClass1_regions.filter(item => item.param === parameter && item.x.toString() === year.toString() && scenarios.includes(item.scenario) && item.class === subcat);
     }
-    console.log(data, scenarios, parameter, year, subcat);
+    //console.log(data, scenarios, parameter, year, subcat);
     setChoropleth(choroplethData);
     setRegions(listRegions(choroplethData));
   }, [scenarios, parameter, year, subcat, setChoropleth]);

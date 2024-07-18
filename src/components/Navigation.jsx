@@ -17,14 +17,14 @@ import { updateHash } from "./sharing/DashboardUrl";
 
 function Navigation({ dataset, datasets, updateDataset }) {
   const handleDatasetChange = (selectedDataset) => {
-    console.log("Selected dataset:", selectedDataset);
+    //console.log("Selected dataset:", selectedDataset);
     // Call updateDataset to dispatch the action
     updateDataset(selectedDataset.data);
     updateHash("dataset", selectedDataset.data);
   };
 
   let datasetList = [];
-  console.log(datasets)
+  //console.log(datasets)
   for (let i = 0; i < datasets.length; i++) {
     let data = datasets.at(i);
     datasetList.push(

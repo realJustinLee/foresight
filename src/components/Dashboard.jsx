@@ -71,7 +71,7 @@ function Dashboard({ open, dataset, scenarios }) {
     setRegionList("i");
     setSubcategoriesList("i");
   }
-  console.log(datasets.some(e => e.dataset === dataset));
+  //console.log(datasets.some(e => e.dataset === dataset));
   //<DashboardScenerioRows
   //Scenarios={scenarios}
   ///>

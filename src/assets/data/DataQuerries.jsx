@@ -249,9 +249,10 @@ query BarQuery($date: Int!, $nextToken: String, $id: String!) {
 `;
 
 function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList }) {
-  const [scenarios, setScenarios] = useState(scenerios.map(obj => obj.title));
+  const [scenarios, setScenarios] = useState("i");
 
   useEffect(() => {
+    console.log("Change Scenarios:", scenerios)
     setScenarios(scenerios.map(obj => obj.title));
   }, [scenerios]);
 

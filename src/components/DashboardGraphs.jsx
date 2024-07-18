@@ -17,7 +17,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
   const [dashRegion, setRegion] = useState(region);
   const [dashSubcategory, setSubcategory] = useState(subcat);
 
-  console.log(openedScenerios, selectedGuage)
+  //console.log(openedScenerios, selectedGuage)
   useEffect(() => {
     setDashboardDate(dashYear)
   }, [dashYear]);
@@ -84,11 +84,11 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
 
   const getRegion = () => {
     if(datasets.find(obj => obj.dataset === dataset)) {
-      console.log("!!", datasets.find(obj => obj.dataset === dataset))
+      //console.log("!!", datasets.find(obj => obj.dataset === dataset))
       return (datasets.find(obj => obj.dataset === dataset).params)[selectedGuage].region;
     }
     else if(datasetInfo.find(obj => obj.dataset === dataset)) {
-      console.log("!!", datasetInfo.find(obj => obj.dataset === dataset).params[selectedGuage].region, selectedGuage)
+      //console.log("!!", datasetInfo.find(obj => obj.dataset === dataset).params[selectedGuage].region, selectedGuage)
       return (datasetInfo.find(obj => obj.dataset === dataset).params)[selectedGuage].region;
     }
     return "region";

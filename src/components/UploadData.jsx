@@ -147,6 +147,8 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
       return "glu";
     else if(countryList.includes(country))
       return "country";
+    else if(country === 'global' || country === 'Global')
+      return "global";
     return "region";
   }
 
@@ -199,6 +201,8 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
     const uploadedFile = e.target.files[0];
     if (uploadedFile) {
       setLoading(true);
+      setDataStore(null);
+      setDataInfoStore(null);
       Papa.parse(uploadedFile, {
         header: true,
         complete: (result) => {
@@ -238,16 +242,22 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
     let test = string.toLowerCase().trim();
     if (test.includes("energy") || test.includes("fuel"))
       return "energy";
-    if (test.includes("wat") || test.includes("irr") || test.includes("basin") || test.includes("runoff"))
+    if (test.includes("wat"))
       return "water";
-    if (test.includes("elec") || test.includes("fuel"))
+    if (test.includes("elec"))
       return "electricity";
-    if (test.includes("emiss") || test.includes("ghg") || test.includes("co2") || test.includes("methane"))
+    if (test.includes("emiss"))
       return "emissions";
     if (test.includes("land"))
       return "land";
     if (test.includes("agprod"))
       return "agriculture";
+    if (test.includes("irr") || test.includes("basin") || test.includes("runoff"))
+      return "water";
+    if (test.includes("fuel"))
+      return "electricity";
+    if (test.includes("ghg") || test.includes("co2") || test.includes("methane"))
+      return "emissions";
     if (test.includes("livestock") || test.includes("meat") || test.includes("dairy"))
       return "livestock";
     if (test.includes("transport") || test.includes("pass") || test.includes("freight"))

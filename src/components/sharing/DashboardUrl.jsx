@@ -1,7 +1,4 @@
-import { isValidDate, findClosestDate, getFirstParam, isValidParam, isValidFromObject } from "../../assets/data/DataManager";
-import { setdashboardSelection, setStartDate, setEndDate, setSceneriosNoUpdate, setDashDate, setdashboardGuages } from "../Store";
 import { findClosestDateAllParamsAbove, getUnits } from "../../assets/data/DataManager";
-import { connect } from 'react-redux';
 import { datasets } from "../../assets/data/Scenarios";
 
 //Updates the URL hash for single parameter hashes. Takes in the name and value of the hash.

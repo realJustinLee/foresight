@@ -71,7 +71,7 @@ export const getDataDate = (data, scenario, param, date) => {
 //Given an object array, return the units given the matchoign title. For store guages.
 export const findUnitsByTitle = (objectsArray, titleToFind) => {
     const foundObject = objectsArray.find(obj => obj.title === titleToFind);
-    console.log(foundObject)
+    //console.log(foundObject)
     return foundObject ? foundObject.units : "ERROR";
 }
 
