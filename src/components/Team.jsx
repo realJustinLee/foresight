@@ -3,20 +3,21 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Image from "react-bootstrap/Image";
-import team_chris from "../assets/img/team_chris.png";
+import team_benjamin from "../assets/img/team_benjamin.jpg";
 import team_mengqi from "../assets/img/team_mengqi.jpg";
 import team_taryn from "../assets/img/team_taryn.png";
 import team_hassan from "../assets/img/team_hassan.jpg";
-import team_benjamin from "../assets/img/team_benjamin.jpg";
+import team_zarrar from "../assets/img/team_zarrar.png";
+import team_chris from "../assets/img/team_chris.png";
 import './css/Team.css';
 
 const teamMembers = [
   {
-    name: "Chris Vernon",
-    position: "Data Scientist",
-    photo: team_chris,
-    email: "chris.vernon@pnnl.gov"
-  },
+    name: "Benjamin Knight",
+    position: "Software Lead",
+    photo: team_benjamin,
+    email: "benjamin.knight@pnnl.gov"
+  },    
   {
     name: "Mengqi Zhao",
     position: "Earth Scientist",
@@ -31,16 +32,22 @@ const teamMembers = [
   },
   {
     name: "Hassan Niazi",
-    position: "Post Masters Research Associate",
+    position: "Earth Scientist",
     photo: team_hassan,
     email: "hassan.niazi@pnnl.gov"
   },
   {
-    name: "Benjamin Knight",
-    position: "Software Intern",
-    photo: team_benjamin,
-    email: "benjamin.knight@pnnl.gov"
-  },  
+    name: "Zarrar Khan",
+    position: "Climate Change Specialist",
+    photo: team_zarrar,
+    email: "zarrar_khan@abtassoc.com"
+  },
+  {
+    name: "Chris Vernon",
+    position: "Data Scientist",
+    photo: team_chris,
+    email: "chris.vernon@pnnl.gov"
+  },
 ];
 
 const Team = () => {
