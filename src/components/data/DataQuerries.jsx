@@ -358,7 +358,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
     const result = await fetchParallel([[queryDataset, { dataset: dataset }]]);
     //console.log(result);
     loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList, dataset);
-  }, [fetchParallel, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList, dataset]);
+  }, [dataset]);
 
   const fetchLine = useCallback(async () => {
     if (scenarios !== "i" && scenarios.length > 1) {

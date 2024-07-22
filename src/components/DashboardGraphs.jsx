@@ -189,13 +189,13 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages,
       className="choropleth-control" />
       <BarHorizontal csv={barData} color={openedGuages ? 
         getBarColors(barData, Scenerios.at(0).title, 
-        openedGuages.find(guage => guage.title === selectedGuage).group) : ["#666666"]} 
+        openedGuages.find(guage => guage.title === selectedGuage) ? openedGuages.find(guage => guage.title === selectedGuage).group : ["#error"]) : ["#666666"]} 
         listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} 
         setdashboardSub={setSubcategory} left={true} 
         selectedGuage = {selectedGuage}/>
       <BarHorizontal csv={barData} color={openedGuages ? 
         getBarColors(barData, Scenerios.at(0).title, 
-        openedGuages.find(guage => guage.title === selectedGuage).group) : ["#666666"]} 
+        openedGuages.find(guage => guage.title === selectedGuage) ? openedGuages.find(guage => guage.title === selectedGuage).group : ["error"]) : ["#666666"]} 
         listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} 
         setdashboardSub={setSubcategory} left={false} 
         selectedGuage = {selectedGuage}/>

@@ -95,6 +95,12 @@ function Charts({ open }) {
   );
 }
 
+/**
+ * Maps the state from the Redux store to the component props.
+ * 
+ * @param {Object} state - The current state.
+ * @returns {Object} The mapped props.
+ */
 function mapStateToProps(state) {
   return {
     open: state.open,
