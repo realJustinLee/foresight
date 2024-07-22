@@ -4,11 +4,9 @@ import Papa from "papaparse";
 import './css/UploadData.css';
 import { setDatasetList, setDatasetData, setDatasetInfo } from "./Store";
 import { connect } from "react-redux";
-import { MdOutlineWater } from "react-icons/md";
-import { TbBuildingFactory } from "react-icons/tb";
-import { RiMapPinAddFill, RiLandscapeFill } from "react-icons/ri";
-import { iconTypes, getIcon } from "../assets/data/VariableCategories";
-import { getUnits } from "../assets/data/DataManager";
+import { getUnits } from "./data/DataManager";
+import { iconTypes, getIcon } from "./data/VariableCategories";
+
 
 function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStore, setDatasetInfo, userUploadedDataInfo }) {
   const [dataset_name, setInput1] = useState('');

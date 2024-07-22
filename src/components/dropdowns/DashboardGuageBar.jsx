@@ -1,21 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { setDashDate, setDashReg, setDashSubs, setScenerios, setdashboardSelection, setdashboardGuages } from "../Store";
 import ScenerioGuage from "../guages/ScenerioGuage"
 import ScenerioGuageNegative from "../guages/ScenerioGuageNegative"
 import Dropdown from 'react-bootstrap/Dropdown';
-import { getGuage } from '../../assets/data/DataManager';
+import { getGuage } from '../data/DataManager';
 import { updateHash, updateListHash } from '../sharing/DashboardUrl';
 import { DropdownButton } from 'react-bootstrap';
 import { MdOutlineLibraryAdd } from "react-icons/md";
-import { getIconParam, iconTypes } from '../../assets/data/VariableCategories';
 import Form from 'react-bootstrap/Form';
+import { getIconParam, iconTypes } from '../data/VariableCategories';
 
 function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameters, SelectedParameter, startDate, endDate, data, updateSelection, updateScenerios, updateGuages, dashDate, dashReg, dashSubs, reset }) {
-  const [OpenedScenarios, setValueScenario] = useState(OpenScenarios);
-  const [OpenedParameters, setValueParameter] = useState(OpenParameters);
 
   const paramDropdownList = () => {
     let list = [];
@@ -91,7 +87,6 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
     updateListHash("scenarios", index, scenario);
     OpenScenarios.at(index).title = scenario;
     let newScenarios = [...OpenScenarios];
-    setValueScenario(newScenarios);
     updateScenerios(index, scenario, newScenarios);
   }
 

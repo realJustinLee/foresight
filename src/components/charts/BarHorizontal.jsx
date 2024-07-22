@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { ResponsiveBar } from '@nivo/bar'
 import { connect } from 'react-redux';
-import { getBarHorizontal } from "../../assets/data/DataManager";
 import { BarTooltip } from "./NivoTooltips.tsx";
+import { getBarHorizontal } from "../data/DataManager.jsx";
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and

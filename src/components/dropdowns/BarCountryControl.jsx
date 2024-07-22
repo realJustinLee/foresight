@@ -5,8 +5,8 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import { MdSettings } from "react-icons/md";
 import { setBarCountries } from '../Store';
 import { connect } from 'react-redux';
-import { getRegionsSorted, getScenerio, listRegions } from '../../assets/data/DataManager';
 import Form from 'react-bootstrap/Form';
+import { getRegionsSorted, getScenerio, listRegions } from '../data/DataManager';
 
 function BarChartControl({csv, scenario, year, setCountries, countries}) {
   const changeCountries = (checked, country) => {

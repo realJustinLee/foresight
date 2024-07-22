@@ -1,5 +1,5 @@
-import { findClosestDateAllParamsAbove, getUnits } from "../../assets/data/DataManager";
-import { datasets } from "../../assets/data/Scenarios";
+import { findClosestDateAllParamsAbove, getUnits } from "../data/DataManager";
+import { datasets } from "../data/Scenarios";
 
 //Updates the URL hash for single parameter hashes. Takes in the name and value of the hash.
 //Does not guarentee order of placement.
@@ -24,11 +24,11 @@ export const updateListHash = (name, index, value) => {
   }
 }
 
-const isequal = (A, B) => {
-  if (A.length !== B.length)
-    return false;
-  return A.every((element, index) => element === B[index]);
-}
+// const isequal = (A, B) => {
+//   if (A.length !== B.length)
+//     return false;
+//   return A.every((element, index) => element === B[index]);
+// }
 
 // loadDataURL is called everytime the dashboard reloads, whether it is on the first load, or if it is switching datasets.
 // This recieves the data from the dashboardQuery from the DataManager and uses this data to generate the date, scenerio,
@@ -61,7 +61,7 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   // Prepare opened guages
   const currentGuages = [];
   //console.log(datasets.find(obj => obj.dataset === dataset))
-  datasets.find(obj => obj.dataset === dataset).defaults.forEach(defaultGuage => currentGuages.push(guages.filter(guage => guage.title === defaultGuage)[0]));
+  datasets.find(obj => obj.dataset === dataset).defaults.forEach(defaultGuage => currentGuages.push(guages.filter(guage => guage ? guage.title === defaultGuage : false)[0]));
   //console.log("STORE CURRENT GUAGES:", currentGuages);
   setGuagesCurrent(checkParamURL(urlLoaded, guages, currentGuages));
   // Prepared selected guage
@@ -115,7 +115,7 @@ const checkScenarioURL = (urlLoaded, scenarios) => {
 
 const checkParamURL = (urlLoaded, params, guages) => {
   if (!params || params.length < 1 || !guages || guages.length < 1 || !guages.at(0).title) return "Error: Not Enough Params in this Dataset to load in the Dashboard.";
-  let searchParams = new URLSearchParams(window.location.hash.substring(1));
+  //let searchParams = new URLSearchParams(window.location.hash.substring(1));
   let paramList = guages;
   let scenarioOutput = [];
   //console.log(searchParams.get("params").toString().split(","), params);
@@ -132,7 +132,7 @@ const checkParamURL = (urlLoaded, params, guages) => {
 
 const checkGuageURL = (urlLoaded, guageData, title) => {
   let searchParams = new URLSearchParams(window.location.hash.substring(1));
-  let guageList = guageData ? guageData.map(guage => guage.title) : [];
+  let guageList = guageData ? guageData.map(guage => guage ? guage.title : "") : [];
   if (!urlLoaded && searchParams.has(title) && guageList.includes(searchParams.get(title)))
     return searchParams.get(title);
   if (guageList.length > 0) {

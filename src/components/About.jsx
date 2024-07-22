@@ -12,6 +12,7 @@ const scrollHandler = (event) => {
   }
 };
 
+
 function About() {
   return (
     <div className="body-page about-page " onScroll={scrollHandler}>

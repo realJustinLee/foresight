@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { connect } from 'react-redux';
-import { setAllScenarios, setdashboardGuages, setdashboardSelection, setGuageList, setSceneriosNoUpdate, setStartDate, setEndDate, setDashDate, setBarCountries } from '../../components/Store';
+import { setAllScenarios, setdashboardGuages, setdashboardSelection, setGuageList, setSceneriosNoUpdate, setStartDate, setEndDate, setDashDate, setBarCountries } from '../Store';
 import { filterRegion, findClosestDateAllParamsAbove, getScenerio, listRegions } from './DataManager';
-
-function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, setDates, setLine, setChoropleth, setBar, setGuage, setAggSub, setCountries, setRegions, setSubcategories, year, region, subcat, start, end, parameter}) {
+function DataQueryUser({ dataset, userUploadedData, userUploadedInfo, scenerios, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart,
+  setEnd, setCurrentDate, setDates, setLine, setChoropleth, setBar, setGuage, setAggSub, setCountries, setRegions, setSubcategories, year, region, subcat, start, end, parameter }) {
   const data = userUploadedData[dataset];
   const dataInfo = userUploadedInfo.filter(data => data.dataset === dataset)[0];
 
@@ -14,7 +14,8 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     setScenarios(scenerios.map(obj => obj.title));
   }, [scenerios]);
 
-  useEffect(() => {
+  const setData = () => {
+    console.log("i");
     //Prepare Scenarios
     //console.log(data, dataInfo, dataset);
     //console.log("STORE SCENARIOS:", dataInfo.scenarios);
@@ -26,7 +27,7 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     });
     //console.log("STORE CURRENT SCENARIOS:", currentScenarios);
 
-    setAllScenarios(dataInfo.scenarios.map(obj => ({title: obj})));
+    setAllScenarios(dataInfo.scenarios.map(obj => ({ title: obj })));
     setScenarios(dataInfo.scenarios.map(obj => obj.title));
     setScenariosTotal(currentScenarios);
 
@@ -34,7 +35,7 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     //Prepare Guages
     const guages = Object.keys(dataInfo.params).map(param => {
       let guage = dataInfo.params[param];
-      return {title: guage.title, units: guage.units, group: guage.group}
+      return { title: guage.title, units: guage.units, group: guage.group }
     })
     const guageNames = Object.keys(dataInfo.params);
     //console.log("STORE ALL GUAGES:", guages);
@@ -59,7 +60,7 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     setEnd(end);
     //console.log("DASHBOARD DATE:", dashboardDate);
     setCurrentDate(dashboardDate);
-  
+
     // Prepare Datasets
     //console.log(dashboardDate, subcat, region)
     let lineData = [];
@@ -76,7 +77,7 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     }
     let choroplethData = [];
     if (subcat === "Aggregate of Subsectors") {
-      choroplethData = data.aggParam_regions.filter(item => item.param === selectedGuage  && item.x === dashboardDate && opened.includes(item.scenario));
+      choroplethData = data.aggParam_regions.filter(item => item.param === selectedGuage && item.x === dashboardDate && opened.includes(item.scenario));
     } else {
       choroplethData = data.aggClass1_regions.filter(item => item.param === selectedGuage && item.x === dashboardDate && opened.includes(item.scenario) && item.class === subcat);
     }
@@ -86,7 +87,7 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     let dateData = data.aggParam_global.filter(item => item.param === selectedGuage && opened.includes(item.scenario));
     let aggSubData = data.aggParam_regions.filter(item => item.param === selectedGuage && item.x === dashboardDate && opened.includes(item.scenario));
     let aggRegData = data.aggClass1_global.filter(item => item.param === selectedGuage && item.x === dashboardDate && item.scenario === opened[0]).map(dataValue => dataValue.class);
-    
+
     lineData.sort((a, b) => a.x - b.x);
     //console.log("DATASET: LINE", lineData);
     setLine(lineData);
@@ -107,7 +108,11 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     //console.log("DATASET: AGGREG", aggRegData);
     setSubcategories(aggRegData);
 
-  }, [dataset]);
+  };
+
+  useEffect(() => {
+    setData();
+  }, [dataset]); //Do not include setData or you must render this for every frame.
 
   useEffect(() => {
     setLine("i");
@@ -125,7 +130,7 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     }
     lineData.sort((a, b) => a.x - b.x);
     setLine(lineData);
-  }, [scenarios, parameter, region, subcat, setLine]);
+  }, [scenarios, data, parameter, region, subcat, setLine]);
 
   useEffect(() => {
     setChoropleth("i");
@@ -138,38 +143,38 @@ function DataQueryUser({dataset, userUploadedData, userUploadedInfo, scenerios, 
     //console.log(data, scenarios, parameter, year, subcat);
     setChoropleth(choroplethData);
     setRegions(listRegions(choroplethData));
-  }, [scenarios, parameter, year, subcat, setChoropleth]);
+  }, [scenarios, data, parameter, year, subcat, setChoropleth, setRegions]);
 
   useEffect(() => {
     setBar("i");
     let barData = data.aggClass1_regions.filter(item => item.param === parameter && item.x.toString() === year.toString() && scenarios.includes(item.scenario));
     setBar(barData);
-  }, [scenarios, parameter, year, setBar]);
+  }, [scenarios, data, parameter, year, setBar]);
 
   useEffect(() => {
     setGuage("i");
     let guageData = data.aggParam_global.filter(item => (item.x.toString() === start.toString() || item.x.toString() === end.toString()) && scenarios.includes(item.scenario));
     setGuage(guageData);
-  }, [scenarios, start, end, setGuage]);
+  }, [scenarios, data, start, end, setGuage]);
 
   useEffect(() => {
     setDates("i");
     let dateData = data.aggParam_global.filter(item => item.param === parameter && scenarios.includes(item.scenario));
     setDates(dateData);
-  }, [scenarios, parameter, setDates]);
+  }, [scenarios, data, parameter, setDates]);
 
   useEffect(() => {
     setAggSub("i");
     let aggSubData = data.aggParam_regions.filter(item => item.param === parameter && item.x.toString() === year.toString() && scenarios.includes(item.scenario));
     setAggSub(aggSubData);
     setCountries(filterRegion(getScenerio(aggSubData, scenarios[0])));
-  }, [scenarios, parameter, year, setAggSub, setCountries]);
+  }, [scenarios, data, parameter, year, setAggSub, setCountries]);
 
   useEffect(() => {
     setSubcategories("i");
     let aggRegData = data.aggClass1_global.filter(item => item.param === parameter && item.x.toString() === year.toString() && item.scenario === scenarios[0]).map(dataValue => dataValue.class);
     setSubcategories(aggRegData);
-  }, [scenarios, parameter, year, setSubcategories]);
+  }, [scenarios, data, parameter, year, setSubcategories]);
 }
 
 function mapStateToProps(state) {

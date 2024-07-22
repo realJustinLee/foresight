@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
 import { API, graphqlOperation } from "aws-amplify";
 import { connect } from 'react-redux';
-import { setAllScenarios, setSceneriosNoUpdate, setGuageList, setdashboardGuages, setdashboardSelection, setStartDate, setEndDate, setDashDate, setBarCountries, setDataset } from '../../components/Store';
+import { setAllScenarios, setSceneriosNoUpdate, setGuageList, setdashboardGuages, setdashboardSelection, setStartDate, setEndDate, setDashDate, setBarCountries, setDataset } from '../Store';
+import { loadDataURL } from '../sharing/DashboardUrl';
 import { getScenerio, filterRegion, listRegions, filterSubcat } from './DataManager';
-import { loadDataURL } from '../../components/sharing/DashboardUrl';
 
 export const lineQuery = `
 query BarQuery($reg: String!, $sub: String!, $nextToken: String, $id: String!) {
@@ -256,17 +256,13 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
     setScenarios(scenerios.map(obj => obj.title));
   }, [scenerios]);
 
-  useEffect(() => {
-    setScenarios("i");
-    fetchDashboard();
-  }, [dataset])
-
   const fetchData = async (query, variables) => {
     let nextToken = null;
     let allItems = [];
     let retries = 5;
     let delay = 500; // initial delay of 1/2 second
 
+    let timeout = (resolve) => setTimeout(resolve, delay);
     do {
       try {
         const response = await API.graphql(graphqlOperation(query, { ...variables, nextToken }));
@@ -276,7 +272,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       } catch (error) {
         if (error.errors && error.errors.some(e => e.errorType === 'DynamoDB:ProvisionedThroughputExceededException')) {
           if (retries === 0) throw new Error('Retries exhausted');
-          await new Promise(resolve => setTimeout(resolve, delay));
+          await new Promise(resolve => timeout(resolve));
           delay *= 2; // exponential backoff
           retries -= 1;
         } else {
@@ -297,7 +293,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
     const result = await fetchParallel([[queryDataset, { dataset: dataset }]]);
     //console.log(result);
     loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList, dataset);
-  }, [fetchParallel]);
+  }, [fetchParallel, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList, dataset]);
 
   const fetchLine = useCallback(async () => {
     if (scenarios !== "i" && scenarios.length > 1) {
@@ -336,7 +332,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       setChoropleth(result);
       setRegions(listRegions(result));
     }
-  }, [subcat, scenarios, parameter, year, setChoropleth, fetchParallel]);
+  }, [dataset, subcat, scenarios, parameter, year, setChoropleth, setRegions, fetchParallel]);
 
   const fetchBar = useCallback(async () => {
     if (scenarios !== "i" && scenarios.length > 1) {
@@ -347,7 +343,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       setBar(result);
       //console.log(parameter);
     }
-  }, [scenarios, parameter, year, setBar, fetchParallel]);
+  }, [dataset, scenarios, parameter, year, setBar, fetchParallel]);
 
   const fetchGuage = useCallback(async () => {
     if (scenarios !== "i" && scenarios.length > 1 && scenarios.length > 1) {
@@ -357,7 +353,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       const result = await fetchParallel(queries);
       setGuage(result);
     }
-  }, [scenarios, start, end, setGuage, fetchParallel]);
+  }, [dataset, scenarios, start, end, setGuage, fetchParallel]);
 
   const fetchDates = useCallback(async () => {
     if (scenarios !== "i" && scenarios.length > 1) {
@@ -367,7 +363,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       const result = await fetchParallel(queries);
       setDates(result);
     }
-  }, [scenarios, parameter, setDates, fetchParallel]);
+  }, [dataset, scenarios, parameter, setDates, fetchParallel]);
 
   const fetchAggSub = useCallback(async () => {
     if (scenarios !== "i" && scenarios.length > 1) {
@@ -378,14 +374,19 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       setAggSub(result);
       setCountries(filterRegion(getScenerio(result, scenarios[0])));
     }
-  }, [scenarios, parameter, year, setAggSub, setCountries, fetchParallel]);
+  }, [dataset, scenarios, parameter, year, setAggSub, setCountries, fetchParallel]);
 
   const fetchAggReg = useCallback(async () => {
     if (scenarios !== "i" && scenarios.length > 1) {
       const result = await fetchParallel([[aggRegQuery, { date: year, id: dataset + "|" + scenarios[0] + "|" + parameter }]]);
       setSubcategories(filterSubcat(result));
     }
-  }, [scenarios, parameter, year, setSubcategories, fetchParallel]);
+  }, [dataset, scenarios, parameter, year, setSubcategories, fetchParallel]);
+
+  useEffect(() => {
+    setScenarios("i");
+    fetchDashboard();
+  }, [dataset, fetchDashboard])
 
   useEffect(() => {
     if (URLLoaded && dataset) {
@@ -394,7 +395,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       fetchLine(abortController.signal);
       return () => abortController.abort();
     }
-  }, [scenarios, parameter, region, subcat, setLine, fetchLine, URLLoaded]);
+  }, [dataset, scenarios, parameter, region, subcat, setLine, fetchLine, URLLoaded]);
 
   useEffect(() => {
     if (URLLoaded && dataset) {
@@ -403,7 +404,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       fetchChoropleth(abortController.signal);
       return () => abortController.abort();
     }
-  }, [scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth, URLLoaded]);
+  }, [dataset, scenarios, parameter, year, subcat, setChoropleth, fetchChoropleth, URLLoaded]);
 
   useEffect(() => {
     if (URLLoaded && dataset) {
@@ -412,7 +413,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       fetchBar(abortController.signal);
       return () => abortController.abort();
     }
-  }, [scenarios, parameter, year, setBar, fetchBar, URLLoaded]);
+  }, [dataset, scenarios, parameter, year, setBar, fetchBar, URLLoaded]);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -435,7 +436,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       fetchAggSub(abortController.signal);
       return () => abortController.abort();
     }
-  }, [scenarios, parameter, year, setAggSub, fetchAggSub, URLLoaded]);
+  }, [dataset, scenarios, parameter, year, setAggSub, fetchAggSub, URLLoaded]);
 
   useEffect(() => {
     const abortController = new AbortController();

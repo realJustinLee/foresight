@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import SidebarDashboard from "./SidebarDashboard.jsx";
-import DataQuerries from "../assets/data/DataQuerries.jsx";
-import UserDataQuerries from "../assets/data/DataQuerries.jsx";
 import { connect } from "react-redux";
 import DateDropdown from "./dropdowns/DashboardDate";
 import DashboardGraphs from "./DashboardGraphs.jsx";
@@ -14,8 +12,9 @@ import { setdashboardSelection, setStartDate, setEndDate } from "./Store";
 import './css/Dashboard.css';
 import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
 import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
-import { datasets } from "../assets/data/Scenarios.jsx";
-import DataQueryUser from "../assets/data/DataQueryUser.jsx";
+import DataQuerries from "./data/DataQuerries.jsx";
+import { datasets } from "./data/Scenarios.jsx";
+import DataQueryUser from "./data/DataQueryUser.jsx";
 
 //Gets the icon of each category by name. Shows up next to the guages and the selection.
 export const getIcon = (selection, openGuages) => {

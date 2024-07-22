@@ -1,6 +1,6 @@
 import { MdArrowDownward, MdArrowUpward } from 'react-icons/md';
-import { getColorsFromPalette } from '../../assets/data/GcamColors';
 import { useState } from 'react';
+import { getColorsFromPalette } from '../data/GcamColors';
 
 export default function ChoroplethLegend({ data, data2, color, divisions }) {
   const [opened, setOpened] = useState(true);

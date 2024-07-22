@@ -4,10 +4,10 @@ import Button from 'react-bootstrap/Button';
 import Dropdown from 'react-bootstrap/Dropdown';
 import { setdashboardSelection, setDashDate, setDashReg, setDashSubs } from "../Store";
 import { connect } from 'react-redux';
-import { findUnitsByTitle } from "../../assets/data/DataManager";
 import { DropdownButton } from "react-bootstrap";
-import { getIconParam } from "../../assets/data/VariableCategories";
+import { getIconParam } from "../data/VariableCategories";
 import { updateHash } from "../sharing/DashboardUrl";
+import { findUnitsByTitle } from "../data/DataManager";
 
 function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions }) {
     const [width, setWidth] = useState(window.innerWidth);
@@ -46,12 +46,12 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
         </div >
     ))
 
-    let uniqueDates = dates != "i" ? new Set(dates.map(obj => obj.x)) : "i";
-    let uniqueRegions = regions != "i" ? new Set(regions) : "i";
-    let uniqueSubcats = subcats != "i" ? new Set(subcats) : "i";
-    if (uniqueRegions != "i")
+    let uniqueDates = dates !== "i" ? new Set(dates.map(obj => obj.x)) : "i";
+    let uniqueRegions = regions !== "i" ? new Set(regions) : "i";
+    let uniqueSubcats = subcats !== "i" ? new Set(subcats) : "i";
+    if (uniqueRegions !== "i")
         uniqueRegions.add("Global");
-    if (uniqueSubcats != "i")
+    if (uniqueSubcats !== "i")
         uniqueSubcats.add("Aggregate of Subsectors");
     //console.log(uniqueDates, uniqueRegions, uniqueSubcats);
 

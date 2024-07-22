@@ -1,18 +1,16 @@
-import React, { useState } from "react";
+import React from "react";
 import DatePicker from 'react-datepicker';
 import { setStartDate, setEndDate } from "../Store";
 import { connect } from 'react-redux';
 import 'react-datepicker/dist/react-datepicker.css';
 import '../css/DashboardDate.css';
-import { isValidDate, getFirstDate, getLastDate } from "../../assets/data/DataManager";
 import { updateHash } from "../sharing/DashboardUrl";
+import { isValidDate, getFirstDate, getLastDate } from "../data/DataManager";
 
 function DashboardDate({ year, isOrNotStart, updateStart, updateEnd, start, end, data }) {
-    const [startDate, setStartDate] = useState(new Date().setFullYear(year));
     const isStart = isOrNotStart
     function dateHandler(date, isStart) {
         date = checkStartDate(date, isStart);
-        setStartDate(date);
         var selectedYear = 1;
         if (date != null)
             selectedYear = date.getFullYear();

@@ -37,6 +37,7 @@ export const datasets = [
         elecByTechTWh: {units: "Electricity Generation by Fuel (TWh)", group:"electricity", region:"region"},
         energyFinalSubsecByFuelBuildEJ: {units: "Building Final Energy by Fuel (EJ)", group:"electricity", region:"region"},
         emissCO2BySector: {units: "CO2 Emissions by Sector (MTCO2)", group:"emissions", region:"region"},
+        emissCO2ByAggSector: {units: "CO2 Emissions by Aggregated Sector (MTCO2)", group:"emissions", region:"region"},
         emissGHGByGasGWPAR5: {units: "Greenhouse Gas Emissions by Gas [GWP - AR5] (MTCO2eq)", group:"emissions", region:"region"},
         energyFinalByFuelEJ: {units: "Final Energy by Fuel (EJ)", group:"energy", region:"region"},
         energyFinalConsumBySecEJ: {units: "Final Energy Consumption by Sector (EJ)", group:"energy", region:"region"},
@@ -53,7 +54,7 @@ export const datasets = [
         watWithdrawByBasinRunoff: {units: "Water Withdrawals by Basin [Runoff] (km3)", group:"water", region:"glu"},
         watWithdrawByCrop: {units: "Water Withdrawals by Crop (km3)", group:"water", region:"region"},
         watWithdrawBySec: {units: "Water Withdrawals by Sector (km3)", group:"water", region:"region"},
-        waterWithdrawROGW: {units: "Water Withdrawals [Runoff - Groundwater] (km3)", group:"water", region:"region"}
+        waterWithdrawROGW: {units: "Water Withdrawals [Runoff - Groundwater] (km3)", group:"water", region:"glu"}
       },
       defaults: [
         "pop",
@@ -61,7 +62,7 @@ export const datasets = [
         "agProdByCrop",
         "energyPrimaryByFuelEJ",
         "watWithdrawBySec",
-        "emissCO2BySector"
+        "emissCO2ByAggSector"
       ]
     }
   ]

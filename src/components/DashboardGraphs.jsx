@@ -2,13 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 import BarHorizontal from "./charts/BarHorizontal";
 import { connect } from 'react-redux';
-import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits } from '../assets/data/DataManager';
+
 import Line from './charts/Line';
 import BarCountryControl from './dropdowns/BarCountryControl';
-import { getBarColors } from '../assets/data/GcamColors';
 import { setDashDate, setDashReg, setDashSubs } from './Store';
 import LeafletSync from "./maps/LeafletSync";
-import { datasets } from '../assets/data/Scenarios';
+import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits } from './data/DataManager';
+import { getBarColors } from './data/GcamColors';
+import { datasets } from './data/Scenarios';
 
 function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, dataset, datasetInfo }) {
   const [width, setWidth] = useState(window.innerWidth);
@@ -20,15 +21,15 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
   //console.log(openedScenerios, selectedGuage)
   useEffect(() => {
     setDashboardDate(dashYear)
-  }, [dashYear]);
+  }, [dashYear, setDashboardDate]);
 
   useEffect(() => {
     setDashboardReg(dashRegion)
-  }, [dashRegion]);
+  }, [dashRegion, setDashboardReg]);
 
   useEffect(() => {
     setDashboardSubs(dashSubcategory)
-  }, [dashSubcategory]);
+  }, [dashSubcategory, setDashboardSubs]);
 
   useEffect(() => {
     //console.log("SCENERIO CHANGE");

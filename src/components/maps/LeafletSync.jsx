@@ -1,16 +1,15 @@
-import React, { useEffect, useRef, useState } from 'react';
-import L from 'leaflet';
+import React, { useEffect, useState } from 'react';
+import L from 'leaflet'; //This must be here to allow the leaflet sync to work correctly. Do not remove!
 import "leaflet.sync";
-import landcells from "./data/landcells.json"
 import {
   ReactCompareSlider
 } from "react-compare-slider";
-import { getChoroplethValue, getSmallestChoropleth, getLargestChoropleth } from '../../assets/data/DataManager';
 
 import ChoroplethControl from '../dropdowns/ChoroplethControl';
-import { getColorsFromPalette } from '../../assets/data/GcamColors';
 import ChoroplethLegend from '../dropdowns/ChoroplethLegend';
 import DashboardLeaflet from './DashboardLeaflet';
+import { getSmallestChoropleth, getLargestChoropleth } from '../data/DataManager';
+import { getColorsFromPalette } from '../data/GcamColors';
 
 const LeafletSync = ({ mapRegion, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, data, data2, uniqueValue, setRegion }) => {
   //Map Instances

@@ -1,25 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
 import "leaflet.sync";
 import landcells from "./data/landcells.json"
 import global from "./data/global.json"
 import glu from "./data/glu.json"
 import regions_glu from "./data/regions_glu.json"
-import {
-  ReactCompareSlider
-} from "react-compare-slider";
-import { getChoroplethValue, getSmallestChoropleth, getLargestChoropleth } from '../../assets/data/DataManager';
-
-import ChoroplethControl from '../dropdowns/ChoroplethControl';
-import { getColorsFromPalette } from '../../assets/data/GcamColors';
-import ChoroplethLegend from '../dropdowns/ChoroplethLegend';
+import { getChoroplethValue } from '../data/DataManager';
 
 const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
   const mapData = data;
 
   const getJson = (data) => {
     if (!data || !data[0] || !data[0].id || data === 'i') return landcells;
-    const firstCountry = data[0].id.toLowerCase();
     if (mapRegion === 'global')
       return global;
     else if (mapRegion === 'glu' || mapRegion === 'basin')
@@ -32,7 +24,6 @@ const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapIn
   const mapJson = getJson(mapData);
 
   function style(feature) {
-    //console.log(feature.id, mapData.filter(item => item.index === feature.id).at(0))
     return {
       fillColor: getColor(getChoroplethValue(mapData, feature.id), mapData, feature.id),
       weight: 2,
@@ -75,7 +66,7 @@ const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapIn
       mapRef.current = L.map(id, mapParams);
       setMapInstance(mapRef.current);
     }
-  }, []);
+  }, [id, mapInstance, setMapInstance]);
 
   // If you want to use the mapInstance in a useEffect hook,
   // you first have to make sure the map exists. Then, you can add your logic.
