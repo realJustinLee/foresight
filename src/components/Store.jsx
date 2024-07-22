@@ -21,7 +21,13 @@ const initialState = {
   guageList: []
 };
 
-// Define a reducer function to update the state
+/**
+ * Reducer function to manage the state updates.
+ * 
+ * @param {Object} state - The current state.
+ * @param {Object} action - The action dispatched.
+ * @returns {Object} The updated state.
+ */
 function reducer(state = initialState, action) {
   switch (action.type) {
     case 'dashboardSelection':
@@ -66,7 +72,14 @@ function reducer(state = initialState, action) {
       return state;
   }
 }
-// Update Dashboard Parameters
+/**
+ * Updates all dashboard parameters at once.
+ * 
+ * @param {number} date - The dashboard year.
+ * @param {string} region - The dashboard region.
+ * @param {string} subsector - The dashboard subsector.
+ * @returns {Object} The action.
+ */
 export function setdashboardGraphParams(date, region, subsector) {
   //updateHash("dashdate", date);
   //updateHash("dashreg", region);
@@ -76,80 +89,180 @@ export function setdashboardGraphParams(date, region, subsector) {
   return { type: 'setDashYear', payload: date };
 }
 
+/**
+ * Updates the dashboard date.
+ * 
+ * @param {number} date - The dashboard year.
+ * @returns {Object} The action.
+ */
 export function setDashDate(date) {
   //updateHash("year", date);
   return { type: 'setDashYear', payload: date };
 }
 
+/**
+ * Updates the open state.
+ * 
+ * @param {number} open - The open state value.
+ * @returns {Object} The action.
+ */
 export function setOpen(open) {
   return { type: 'setOpen', payload: open };
 }
 
+/**
+ * Updates the dashboard region.
+ * 
+ * @param {string} region - The dashboard region.
+ * @returns {Object} The action.
+ */
 export function setDashReg(region) {
   return { type: 'setDashRegions', payload: region };
 }
 
+/**
+ * Updates the dashboard subsector.
+ * 
+ * @param {string} subsector - The dashboard subsector.
+ * @returns {Object} The action.
+ */
 export function setDashSubs(subsector) {
   return { type: 'setDashSubsectors', payload: subsector };
 }
-// Change currently selected guage
+
+/**
+ * Updates the currently selected gauge.
+ * 
+ * @param {string} param - The selected parameter.
+ * @returns {Object} The action.
+ */
 export function setdashboardSelection(param) {
   updateHash("selectedParam", param);
   return { type: 'dashboardSelection', payload: param };
 }
 
+/**
+ * Updates the list of gauges for the dashboard.
+ * 
+ * @param {Array} guages - The list of gauges.
+ * @returns {Object} The action.
+ */
 export function setdashboardGuages(guages) {
   //updateHash("selected", num);
   return { type: 'setGuages', payload: guages };
 }
 
+/**
+ * Updates the gauge list.
+ * 
+ * @param {Array} guages - The gauge list.
+ * @returns {Object} The action.
+ */
 export function setGuageList(guages) {
   //updateHash("selected", num);
   return { type: 'setGuageList', payload: guages };
 }
 
-// Action creator function to update the dataset
+/**
+ * Updates the selected dataset.
+ * 
+ * @param {string} dataset - The dataset name.
+ * @returns {Object} The action.
+ */
 export function setDataset(dataset) {
   return { type: 'setDataset', payload: dataset };
 }
 
+/**
+ * Updates the list of datasets.
+ * 
+ * @param {Array} dataset - The dataset list.
+ * @returns {Object} The action.
+ */
 export function setDatasetList(dataset) {
   return { type: 'setDatasetList', payload: dataset };
 }
 
+/**
+ * Updates the dataset data.
+ * 
+ * @param {Array} data - The dataset data.
+ * @returns {Object} The action.
+ */
 export function setDatasetData(data) {
   return { type: 'setDatasetData', payload: data };
 }
 
+/**
+ * Updates the dataset data headers.
+ * 
+ * @param {Array} data - The dataset information.
+ * @returns {Object} The action.
+ */
 export function setDatasetInfo(data) {
   return { type: 'setDatasetInfo', payload: data };
 }
 
-// Change dashboard start date
+/**
+ * Updates the start date of the dashboard.
+ * 
+ * @param {number} date - The start date.
+ * @returns {Object} The action.
+ */
 export function setStartDate(date) {
   //updateHash("start", date);
   return { type: 'setStartDate', payload: date };
 }
 
-// Change dashboard end date
+/**
+ * Updates the end date of the dashboard.
+ * 
+ * @param {number} date - The end date.
+ * @returns {Object} The action.
+ */
 export function setEndDate(date) {
   //updateHash("end", date);
   return { type: 'setEndDate', payload: date };
 }
 
-// Change dashboard scenerios array
-export function setScenerios(index, newTitle, scenerios) {
+/**
+ * Updates the scenarios array in the dashboard.
+ * 
+ * @param {number} index - The index of the scenario.
+ * @param {string} newTitle - The new title of the scenario.
+ * @param {Array} scenerios - The list of scenarios.
+ * @returns {Object} The action.
+ */
+export function setScenerios(scenerios) {
   return { type: 'setScenerios', payload: scenerios };
 }
 
+/**
+ * Updates all scenarios in the dashboard.
+ * 
+ * @param {Array} scenarios - The list of all scenarios.
+ * @returns {Object} The action.
+ */
 export function setAllScenarios(scenarios) {
   return { type: 'setAllScenarios', payload: scenarios };
 }
 
+/**
+ * Updates scenarios in the dashboard without additional updates.
+ * 
+ * @param {Array} scenerios - The list of scenarios.
+ * @returns {Object} The action.
+ */
 export function setSceneriosNoUpdate(scenerios) {
   return { type: 'setScenerios', payload: scenerios };
 }
 
+/**
+ * Updates the list of bar countries.
+ * 
+ * @param {Array} country - The list of countries.
+ * @returns {Object} The action.
+ */
 export function setBarCountries(country) {
   return { type: 'setBarCountries', payload: country };
 }

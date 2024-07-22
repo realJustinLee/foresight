@@ -34,9 +34,16 @@ const countryData = [
   },
 ];
 
-const gaugeValue = -10;
-
-function Test({ open, toggleOpen }) {
+/**
+ * Test component. A subdashboard that will be accessed through the 
+ * dashboard sidebar. Currently in development but will be renamed
+ * in alter versions.
+ * 
+ * @param {Object} props - The component props.
+ * @param {boolean} props.open - State indicating if the sidebar is open.
+ * @returns {ReactElement} The rendered component.
+ */
+function Test({ open }) {
   return (
     <div className="body-page">
       <SidebarDashboard />
@@ -64,16 +71,16 @@ function Test({ open, toggleOpen }) {
   );
 }
 
+/**
+ * Maps the state from the Redux store to the component props.
+ * 
+ * @param {Object} state - The current state.
+ * @returns {Object} The mapped props.
+ */
 function mapStateToProps(state) {
   return {
     open: state.open,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleOpen: () => dispatch({ type: "toggleOpen" }),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Test);
+export default connect(mapStateToProps)(Test);

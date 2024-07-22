@@ -16,7 +16,14 @@ import DataQuerries from "./data/DataQuerries.jsx";
 import { datasets } from "./data/Scenarios.jsx";
 import DataQueryUser from "./data/DataQueryUser.jsx";
 
-//Gets the icon of each category by name. Shows up next to the guages and the selection.
+/**
+ * Gets the icon for each category by name. 
+ * This icon is displayed next to the gauges and the selection.
+ * 
+ * @param {string} selection - The selected category name.
+ * @param {string[]} openGuages - List of open gauges.
+ * @returns {ReactElement} The icon component for the specified category.
+ */
 export const getIcon = (selection, openGuages) => {
   const found = openGuages.find(gauge => gauge.title === selection);
   const guageCategory = found ? found.group : "error"
@@ -47,6 +54,15 @@ export const getIcon = (selection, openGuages) => {
   }
 }
 
+/**
+ * Main Dashboard component.
+ * 
+ * @param {Object} props - The component props.
+ * @param {boolean} props.open - State indicating if the sidebar is open.
+ * @param {string} props.dataset - The selected dataset.
+ * @param {Array} props.scenarios - List of scenarios.
+ * @returns {ReactElement} The rendered component.
+ */
 function Dashboard({ open, dataset, scenarios }) {
   const [guageData, setGuageData] = useState("i");
   const [datesData, setDatesData] = useState("i");
@@ -156,6 +172,12 @@ function Dashboard({ open, dataset, scenarios }) {
   );
 }
 
+/**
+ * Maps the state from the Redux store to the component props.
+ * 
+ * @param {Object} state - The current state.
+ * @returns {Object} The mapped props.
+ */
 function mapStateToProps(state) {
   return {
     open: state.open,
@@ -169,6 +191,12 @@ function mapStateToProps(state) {
   };
 }
 
+/**
+ * Maps the dispatch functions to the component props.
+ * 
+ * @param {Function} dispatch - The dispatch function.
+ * @returns {Object} The mapped props.
+ */
 function mapDispatchToProps(dispatch) {
   return {
     toggleOpen: () => dispatch({ type: "toggleOpen" }),

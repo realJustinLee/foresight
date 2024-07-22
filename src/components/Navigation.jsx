@@ -6,7 +6,7 @@ import Navbar from "react-bootstrap/Navbar";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import logo from "../assets/img/PNNL_CENTER_White.png";
 import { RiDashboardFill } from "react-icons/ri";
-import { AiFillGithub, AiFillHome, AiFillExperiment } from "react-icons/ai";
+import { AiFillGithub, AiFillHome } from "react-icons/ai";
 import { BsFillInfoCircleFill, BsFillDatabaseFill } from "react-icons/bs";
 import { RiTeamFill } from "react-icons/ri";
 import { MdFileUpload, MdHelp } from "react-icons/md";
@@ -15,6 +15,16 @@ import { setDataset } from "./Store";
 import './css/Navigation.css';
 import { updateHash } from "./sharing/DashboardUrl";
 
+/**
+ * Navigation component. Used for testing different maps
+ * under the Experiments page. Currently unused.
+ * 
+ * @param {Object} props - The component props.
+ * @param {string} props.dataset - State indicating the current dataset.
+ * @param {string[]} props.datasets - State indicating all datasets.
+ * @param {(dataset: any) => any} props.updateDataset - Updates the current dataset.
+ * @returns {ReactElement} The rendered component.
+ */
 function Navigation({ dataset, datasets, updateDataset }) {
   const handleDatasetChange = (selectedDataset) => {
     //console.log("Selected dataset:", selectedDataset);
@@ -135,6 +145,12 @@ function Navigation({ dataset, datasets, updateDataset }) {
   );
 }
 
+/**
+ * Maps the state from the Redux store to the component props.
+ * 
+ * @param {Object} state - The current state.
+ * @returns {Object} The mapped props.
+ */
 const mapStateToProps = (state) => {
   return {
     dataset: state.dataset,
@@ -142,6 +158,12 @@ const mapStateToProps = (state) => {
   };
 };
 
+/**
+ * Maps the dispatch functions to the component props.
+ * 
+ * @param {Function} dispatch - The dispatch function.
+ * @returns {Object} The mapped props.
+ */
 function mapDispatchToProps(dispatch) {
   return {
     updateDataset: (dataset) => dispatch(setDataset(dataset)),

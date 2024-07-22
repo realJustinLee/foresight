@@ -3,6 +3,68 @@ import { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { setAllScenarios, setdashboardGuages, setdashboardSelection, setGuageList, setSceneriosNoUpdate, setStartDate, setEndDate, setDashDate, setBarCountries } from '../Store';
 import { filterRegion, findClosestDateAllParamsAbove, getScenerio, listRegions } from './DataManager';
+
+/**
+ * DataQueryUser modifies stored user data into the data needed for the various guages and visualizations.
+ * 
+ * @param {Object} props - The component props.
+ * @param {string} props.dataset - State of the current dataset
+ * @param {Object[]} props.userUploadedData - Dataset of 
+ * all user uploaded data
+ * @param {Object[]} props.userUploadedInfo - Dataset of 
+ * the headers of all user uploaded data
+ * @param {Object[]} props.scenerios - State of the currently open scenarios
+ * @param {(scenarios: Object[]) => any} props.setAllScenarios - Function to 
+ * set the list of all scenarios.
+ * @param {(scenarios: Object[]) => any} props.setScenariosTotal - Function to 
+ * set the currently open scenarios.
+ * @param {(guages: Object[]) => any} props.setGuagesTotal - Function to set 
+ * the list of all parameters
+ * @param {(guages: Object[]) => any} props.setGuagesCurrent - Function to 
+ * set the list of all currently displayed parameters.
+ * @param {(guage: string) => any} props.setGuageSelected - Function 
+ * to set the currently selected parameter
+ * @param {(start: number) => any} props.setStart - Function 
+ * to set the start year.
+ * @param {(end: number) => any} props.setEnd - Function 
+ * to set the end year.
+ * @param {(current: number) => any} props.setCurrentDate - Function 
+ * to set the current year.
+ * @param {React.Dispatch<React.SetStateAction<string>> | 
+ * React.Dispatch<React.SetStateAction<Object[]>>} props.setDates - Function
+ * to change the data needed for dates.
+ * @param {React.Dispatch<React.SetStateAction<string>> | 
+ * React.Dispatch<React.SetStateAction<Object[]>>} props.setLine - Function
+ * to change the data for the lien chart.
+ * @param {React.Dispatch<React.SetStateAction<string>> | 
+ * React.Dispatch<React.SetStateAction<Object[]>>} props.setChoropleth - Function
+ * to change the data for the choropleth.
+ * @param {React.Dispatch<React.SetStateAction<string>> | 
+ * React.Dispatch<React.SetStateAction<Object[]>>} props.setBar - Function
+ * to change the data for the bar chart.
+ * @param {React.Dispatch<React.SetStateAction<string>> | 
+ * React.Dispatch<React.SetStateAction<Object[]>>} props.setGuage - Function
+ * to change the data for guage displays.
+ * @param {React.Dispatch<React.SetStateAction<string>> | 
+ * React.Dispatch<React.SetStateAction<Object[]>>} props.setAggSub - Function
+ * to change the aggregated region data.
+ * @param {React.Dispatch<React.SetStateAction<string>> | 
+ * React.Dispatch<React.SetStateAction<Object[]>>} props.setCountries - Function
+ * to change the currently selected bar countries.
+ * @param {React.Dispatch<React.SetStateAction<string>> | 
+ * React.Dispatch<React.SetStateAction<Object[]>>} props.setRegions - Function
+ * to change the data for current regions.
+ * @param {React.Dispatch<React.SetStateAction<string>> | 
+ * React.Dispatch<React.SetStateAction<Object[]>>} props.setSubcategories - Function
+ * to change the data for current subcategories.
+ * @param {number} props.year - State of the current year
+ * @param {number} props.start - State of the current start date
+ * @param {number} props.end - State of the current end date
+ * @param {string} props.parameter - State of the currently selected parameter
+ * @param {string} props.region - State of the current region
+ * @param {string} props.subcat - State of the current subcategory
+ * @returns {ReactElement} The rendered component.
+ */
 function DataQueryUser({ dataset, userUploadedData, userUploadedInfo, scenerios, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart,
   setEnd, setCurrentDate, setDates, setLine, setChoropleth, setBar, setGuage, setAggSub, setCountries, setRegions, setSubcategories, year, region, subcat, start, end, parameter }) {
   const data = userUploadedData[dataset];
@@ -112,6 +174,7 @@ function DataQueryUser({ dataset, userUploadedData, userUploadedInfo, scenerios,
 
   useEffect(() => {
     setData();
+    // eslint-disable-next-line
   }, [dataset]); //Do not include setData or you must render this for every frame.
 
   useEffect(() => {
@@ -177,6 +240,12 @@ function DataQueryUser({ dataset, userUploadedData, userUploadedInfo, scenerios,
   }, [scenarios, data, parameter, year, setSubcategories]);
 }
 
+/**
+ * Maps the state from the Redux store to the component props.
+ * 
+ * @param {Object} state - The current state.
+ * @returns {Object} The mapped props.
+ */
 function mapStateToProps(state) {
   return {
     userUploadedData: state.datasetData,
@@ -191,6 +260,12 @@ function mapStateToProps(state) {
   };
 }
 
+/**
+ * Maps the dispatch functions to the component props.
+ * 
+ * @param {Function} dispatch - The dispatch function.
+ * @returns {Object} The mapped props.
+ */
 function mapDispatchToProps(dispatch) {
   return {
     setAllScenarios: (scenarios) => dispatch(setAllScenarios(scenarios)),

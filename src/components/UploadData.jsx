@@ -7,7 +7,23 @@ import { connect } from "react-redux";
 import { getUnits } from "./data/DataManager";
 import { iconTypes, getIcon } from "./data/VariableCategories";
 
-
+/**
+ * UploadData component. Is accessed through the main dashbar. 
+ * This icon is displayed next to the gauges and the selection.
+ * 
+ * @param {Object} props - The component props.
+ * @param {string[]} props.datasets - State indicating all current datasets.
+ * @param {(datasets: string[]) => any} props.updateDatasets - Function to update the 
+ * list of all datasets.
+ * @param {Object} props.userUploadedData - State containing all user uploaded datasets.
+ * @param {(data: Object) => any} props.loadDataToStore - Function to 
+ * update the stored user-uploaded data.
+ * @param {(data: Object) => any} props.setDatasetInfo - Function to 
+ * update the stored user-uploaded data headers.
+ * @param {Object} props.userUploadedDataInfo - State containing all user uploaded 
+ * dataset headers.
+ * @returns {ReactElement} The icon component for the specified category.
+ */
 function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStore, setDatasetInfo, userUploadedDataInfo }) {
   const [dataset_name, setInput1] = useState('');
   const [fileError, setFileError] = useState('');
@@ -160,6 +176,7 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
 
   const handleParamChange = (e, param) => {
     const value = e.target.value;
+    // eslint-disable-next-line
     const regex = /^[\[\]a-z A-Z0-9-]*$/;
     if (regex.test(value) && value.length > 0) {
       let temp = structuredClone(tempDataInfoStore);
@@ -293,7 +310,7 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
               <li>NOTE: This feature is in heavy development.
                 There will be features that have many bugs and can potentially crash the site.
                 Please use this feature at your own risk. If you encounter bugs please report them to the
-                <a href="https://github.com/JGCRI/foresight/issues" target="_blank"> Foresight Github</a>.
+                <a href="https://github.com/JGCRI/foresight/issues" target="_blank" rel="noreferrer"> Foresight Github</a>.
               </li>
               <li>All data must be in CSV format.</li>
               <li>
@@ -393,6 +410,12 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
   );
 }
 
+/**
+ * Maps the state from the Redux store to the component props.
+ * 
+ * @param {Object} state - The current state.
+ * @returns {Object} The mapped props.
+ */
 const mapStateToProps = (state) => {
   return {
     datasets: state.datasetList,
@@ -401,6 +424,12 @@ const mapStateToProps = (state) => {
   };
 };
 
+/**
+ * Maps the dispatch functions to the component props.
+ * 
+ * @param {Function} dispatch - The dispatch function.
+ * @returns {Object} The mapped props.
+ */
 function mapDispatchToProps(dispatch) {
   return {
     updateDatasets: (datasets) => dispatch(setDatasetList(datasets)),

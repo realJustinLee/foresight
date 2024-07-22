@@ -16,7 +16,11 @@ const arcsData = [...Array(N).keys()].map(() => ({
   ],
 }));
 
-// Set window dimensions //
+/**
+ * Returns window dimensions with adjustments for screen size.
+ * 
+ * @returns {Object} Adjusted width and height.
+ */
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
   
@@ -39,6 +43,11 @@ function getWindowDimensions() {
   };
 }
 
+/**
+ * Custom hook to get and update window dimensions on resize.
+ * 
+ * @returns {Object} Current window dimensions.
+ */
 export function useWindowDimensions() {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
@@ -54,6 +63,11 @@ export function useWindowDimensions() {
   return windowDimensions;
 }
 
+/**
+ * Home component. The main page of Foresight.
+ * 
+ * @returns {ReactElement} The rendered component.
+ */
 function Home() {
   const globeElement = React.useRef();
   const { height, width } = useWindowDimensions();

@@ -4,12 +4,12 @@ import mapLandmarkThumbnail from "../assets/img/icon_map_landmark.svg";
 import mapChoroplethThumbnail from "../assets/img/icon_map_choropleth.svg";
 import SidebarExperiment from "./SidebarExperiment.jsx";
 import { connect } from "react-redux";
-import MapPoint from "./maps/MapPoint";
+//import MapPoint from "./maps/MapPoint";
 import MapChoropleth from "./maps/MapChoropleth";
 import World from "./globes/World";
 
 /* Import example Data */
-import countryData from "./maps/data/countryData.js"
+//import countryData from "./maps/data/countryData.js"
 import usstateData from "./maps/data/uststateData.js"
 
 function Globes({ open, toggleOpen }) {

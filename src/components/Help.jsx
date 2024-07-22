@@ -3,6 +3,11 @@ import { Container, Row } from "react-bootstrap";
 import { FiMail, FiAlertCircle, FiMessageCircle } from "react-icons/fi";
 import styles from './css/Help.module.css';
 
+/**
+ * Help component. Accessible through the help icon on the top dashbar.
+ * 
+ * @returns {ReactElement} The rendered component.
+ */
 function Help() {
   return (
     <div className="body-page help-page">

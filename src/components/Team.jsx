@@ -50,6 +50,11 @@ const teamMembers = [
   },
 ];
 
+/**
+ * Team component. Can be accessed through the main dashbar.
+ * 
+ * @returns {ReactElement} The rendered component.
+ */
 const Team = () => {
   return (
     <div className="body-page teams-page">

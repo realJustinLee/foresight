@@ -87,7 +87,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
     updateListHash("scenarios", index, scenario);
     OpenScenarios.at(index).title = scenario;
     let newScenarios = [...OpenScenarios];
-    updateScenerios(index, scenario, newScenarios);
+    updateScenerios(newScenarios);
   }
 
 
@@ -227,7 +227,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     updateSelection: (openGuage) => dispatch(setdashboardSelection(openGuage)),
-    updateScenerios: (newIndex, newTitle, openScenerio) => dispatch(setScenerios(newIndex, newTitle, openScenerio)),
+    updateScenerios: (openScenerio) => dispatch(setScenerios(openScenerio)),
     updateGuages: (guages) => dispatch(setdashboardGuages(guages)),
     dashDate: (date) => dispatch(setDashDate(date)),
     dashReg: (reg) => dispatch(setDashReg(reg)),

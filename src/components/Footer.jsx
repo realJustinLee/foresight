@@ -1,6 +1,12 @@
 import React from "react";
 import { FaExclamation } from "react-icons/fa";
 
+/**
+ * Footer component. Displayed at the bottom of every page to
+ * communicate the citation disclaimer.
+ * 
+ * @returns {ReactElement} The rendered component.
+ */
 function Footer() {
   return (
     <footer className="footer">

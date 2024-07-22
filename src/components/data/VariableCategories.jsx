@@ -5,11 +5,26 @@ import { FaTruckMoving } from "react-icons/fa";
 
 export const iconTypes = ["energy", "transport", "buildings", "industry", "water", "electricity", "socioeconomic - gdp", "socioeconomic - population", "agriculture", "livestock", "land", "emissions", "climate", "hydrogen", "other"];
 
+/**
+ * Returns the icon coresponding to a specific parameter name.
+ * 
+ * @param {string} param - The given parameter.
+ * @param {Object[]} guages - All current parameters. 
+ * @returns {IconType} The icon for display.
+ */
 export const getIconParam = (param, guages) => {
   const found = guages.find(gauge => gauge.title === param);
   const guageCategory = found ? found.group : "error"
   return getIcon(guageCategory, false);
 }
+
+/**
+ * Returns the icon for a given parameter category for display.
+ * 
+ * @param {string} category - The parameter category.
+ * @param {boolean} custom - Whether the parameter was user uploaded or not. 
+ * @returns {IconType} The icon for display.
+ */
 export const getIcon = (category, custom) => {
   switch(category) {
     case "energy":

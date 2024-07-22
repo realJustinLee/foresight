@@ -11,7 +11,15 @@ import { Container, Row, Col } from "react-bootstrap";
 Amplify.configure(awsconfig);
 Chart.register(CategoryScale);
 
-function Water({ open, toggleOpen }) {
+/**
+ * Water component. A subdashboard that will be accessed through the 
+ * dashboard sidebar. Currently in development.
+ * 
+ * @param {Object} props - The component props.
+ * @param {boolean} props.open - State indicating if the sidebar is open.
+ * @returns {ReactElement} The rendered component.
+ */
+function Water({ open }) {
   const [highlightedScenario, setHighlightedScenario] = useState(null);
 
   const data = {
@@ -110,16 +118,16 @@ function Water({ open, toggleOpen }) {
   );
 }
 
+/**
+ * Maps the state from the Redux store to the component props.
+ * 
+ * @param {Object} state - The current state.
+ * @returns {Object} The mapped props.
+ */
 function mapStateToProps(state) {
   return {
     open: state.open,
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleOpen: () => dispatch({ type: "toggleOpen" }),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Water);
+export default connect(mapStateToProps)(Water);

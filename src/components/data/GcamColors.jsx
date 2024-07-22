@@ -3,6 +3,14 @@ import { getScenerio, filterSubcat } from './DataManager';
 
 export const pal_green = ["#FFFFE5","#F7FCB9","#D9F0A3","#ADDD8E","#78C679","#41AB5D","#238443","#006837","#004529","#003300"]
 
+/**
+ * Gets the colors to display for each subcategory in the bar chart.
+ * 
+ * @param {Object[]} data - The bar data.
+ * @param {string} data - The scenario to filter by.
+ * @param {string} guages - The parameter list to get the parameter category from.
+ * @returns {string[]} The colors to display.
+ */
 export const getBarColors = (data, scenerio, guages) => {
     let category = guages ? guages : 'default';
     let counter = 0;
@@ -13,6 +21,12 @@ export const getBarColors = (data, scenerio, guages) => {
     return colors;
 }
 
+/**
+ * Returns the list of JGCRIColors (https://github.com/JGCRI/jgcricolors) for a specific palette.
+ * 
+ * @param {string} palette - The palette name.
+ * @returns {Object} The color to display.
+ */
 export const getColorsFromPalette = (palette) => {
     let colors = [];
     switch(palette.toLowerCase()) {
@@ -65,6 +79,14 @@ export const getColorsFromPalette = (palette) => {
     return colors;
 }
 
+/**
+ * Returns the JGCRIColor (https://github.com/JGCRI/jgcricolors) for a given parameter.
+ * 
+ * @param {string} param - The parameter name.
+ * @param {boolean} counter - Which color 0-15 in the backup pal_16 color palette to use.
+ * @param {boolean} category - Which categorical type to get color from for data with no subcategories.
+ * @returns {string} The color to display.
+ */
 const getColorJson = (param, counter, category) => {
     param = param.toLowerCase().trim().replace(/[^a-z0-9]/g, '');
     let color = "";

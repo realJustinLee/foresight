@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+// eslint-disable-next-line
 import L from 'leaflet'; //This must be here to allow the leaflet sync to work correctly. Do not remove!
 import "leaflet.sync";
 import {

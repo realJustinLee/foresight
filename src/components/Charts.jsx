@@ -14,7 +14,16 @@ import { connect } from "react-redux";
 import './css/Experiment.css';
 import ScenerioGuage from "./guages/ScenerioGuage";
 
-function Charts({ open, toggleOpen }) {
+/**
+ * SidebarExperiment component. Is displayed on the left side of the experiments
+ * page giving access to the subpages with specific types of visualizations.
+ * Currently unused.
+ * 
+ * @param {Object} props - The component props.
+ * @param {boolean} props.open - State indicating if the sidebar is open.
+ * @returns {ReactElement} The rendered component.
+ */
+function Charts({ open }) {
   const images = [
     {
       originalClass: "chart-container-experiment", // Add custom CSS class to the slide container
@@ -92,10 +101,4 @@ function mapStateToProps(state) {
   };
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleOpen: () => dispatch({ type: "toggleOpen" }),
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Charts);
+export default connect(mapStateToProps)(Charts);

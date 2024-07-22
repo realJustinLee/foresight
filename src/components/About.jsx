@@ -12,7 +12,11 @@ const scrollHandler = (event) => {
   }
 };
 
-
+/**
+ * About component. Can be accessed through the main dashbar.
+ * 
+ * @returns {ReactElement} The rendered component.
+ */
 function About() {
   return (
     <div className="body-page about-page " onScroll={scrollHandler}>

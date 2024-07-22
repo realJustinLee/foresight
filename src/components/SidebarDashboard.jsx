@@ -9,7 +9,16 @@ import { GiWaterDrop } from "react-icons/gi";
 import { CiWheat } from "react-icons/ci"
 import { setOpen } from "./Store";
 
-
+/**
+ * SidebarDashboard component. Is displayed on the left side of the dashboard
+ * giving access to the subdashboards.
+ * 
+ * @param {Object} props - The component props.
+ * @param {boolean} props.open - State indicating if the sidebar is open.
+ * @param {(dataset: any) => any} props.toggleOpen - Toggle whether the sidebar is open.
+ * @param {(dataset: any) => any} props.setOpen - Set the current open state.
+ * @returns {ReactElement} The rendered component.
+ */
 function SidebarDashboard({ open, toggleOpen, setOpen }) {
   if (open === 2) {
     if (window.innerWidth < 700)
@@ -53,12 +62,24 @@ function SidebarDashboard({ open, toggleOpen, setOpen }) {
   );
 }
 
+/**
+ * Maps the state from the Redux store to the component props.
+ * 
+ * @param {Object} state - The current state.
+ * @returns {Object} The mapped props.
+ */
 function mapStateToProps(state) {
   return {
     open: state.open,
   };
 }
 
+/**
+ * Maps the dispatch functions to the component props.
+ * 
+ * @param {Function} dispatch - The dispatch function.
+ * @returns {Object} The mapped props.
+ */
 function mapDispatchToProps(dispatch) {
   return {
     toggleOpen: () => dispatch({ type: 'toggleOpen' }),

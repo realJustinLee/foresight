@@ -7,11 +7,65 @@ import Line from './charts/Line';
 import BarCountryControl from './dropdowns/BarCountryControl';
 import { setDashDate, setDashReg, setDashSubs } from './Store';
 import LeafletSync from "./maps/LeafletSync";
-import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits } from './data/DataManager';
+import { choroplethReduce, filterSubcat, lineGraphReduce, getUnits } from 
+'./data/DataManager';
 import { getBarColors } from './data/GcamColors';
 import { datasets } from './data/Scenarios';
 
-function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear, region, subcat, lineData, guageData, choroplethData, barData, aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, dataset, datasetInfo }) {
+/**
+ * DashboardGraphs component is responsible for rendering the three data 
+ * visualizations (currently a line chart, choropleth, and bar chart) based on
+ * the selected scenarios, parameter, and the user selected date, region, and 
+ * subcategory. This is rendered below the DashboardFloater.
+ * 
+ * @param {Object} props - The component props.
+ * @param {Object[]} props.openedScenerios - State indicating the currently 
+ * selected scenarios.
+ * @param {string} props.selectedGuage - State indicating the currently
+ * selected guage.
+ * @param {Object[]} props.openedGuages - State indicating the currently
+ * open guages.
+ * @param {Number} props.curYear - State indicating the currently
+ * selected year.
+ * @param {string} props.region - State indicating the currently
+ * selected region.
+ * @param {string} props.subcat - State indicating the currently
+ * selected subcategory.
+ * @param {Object[]} props.lineData - Dataset containing data required
+ * for the line chart.
+ * @param {Object[]} props.guageData - Dataset containing data required
+ * for the guage display.
+ * @param {Object[]} props.choroplethData - Dataset containing data required
+ * for the choropleth Leaflet.
+ * @param {Object[]} props.barData - Dataset containing data required
+ * for the bar chart.
+ * @param {Object[]} props.aggSub - Dataset containing data with global
+ * regions.
+ * @param {(date: Number) => any} props.setDashboardDate - Function setting the
+ * date value .
+ * @param {(reg: string) => any} props.setDashboardReg - Function setting the
+ * region value .
+ * @param {(subs: string) => any} props.setDashboardSubs - Function setting the
+ * subsector value .
+ * @param {string} props.choroplethColorPalette - The current choropleth color 
+ * palette selection.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.setChoroplethColorPalette - 
+ * Function that sets the current choropleth color palette.
+ * @param {string} props.choroplethInterpolation - The current choropleth 
+ * interpolation selection.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.setInterpolation - 
+ * Function that sets the current choropleth interpolation.
+ * @param {string} props.dataset - State indicating the current dataset.
+ * @param {Object} props.datasetInfo - State indicating the dataset headers
+ * for user-uploaded datasets.
+ * @returns {ReactElement} The rendered component.
+ */
+function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, 
+  curYear, region, subcat, lineData, guageData, choroplethData, barData, 
+  aggSub, setDashboardDate, setDashboardReg, setDashboardSubs, 
+  choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, 
+  setInterpolation, dataset, datasetInfo }) {
+
   const [width, setWidth] = useState(window.innerWidth);
 
   const [dashYear, setYear] = useState(curYear);
@@ -47,7 +101,8 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
     };
   }, []);
 
-  const Scenerios = (openedScenerios && openedScenerios.length > 1) ? openedScenerios : [{ title: "" }, { title: "" }];
+  const Scenerios = (openedScenerios && openedScenerios.length > 1) ? 
+  openedScenerios : [{ title: "" }, { title: "" }];
 
 
   // Display label text. Setting default display text for aggregates.
@@ -67,12 +122,14 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
 
 
   // Labels
-  let lineChartLabel = (<div className="text-centered">{regionDisplay} {subcatDisplay} Trends</div>)
+  let lineChartLabel = 
+  (<div className="text-centered">{regionDisplay} {subcatDisplay} Trends</div>)
   let choroplethLabel = (<div className="text-centered">
     <div>Spatial Composition {"(" + curYear + subcatDisplay + ")"}</div>
     <div>{Scenerios.at(0).title} vs. {Scenerios.at(1).title}</div>
   </div>)
-  let barChartLabel = (<div className="text-centered"> Top 10 Countries {"(" + curYear + ")"} -- By Subsector</div>)
+  let barChartLabel = (<div className="text-centered"> Top 10 Countries 
+  {"(" + curYear + ")"} -- By Subsector</div>)
   //console.log(lineData);
   // Line Chart Visualization
   const lineChart = (lineData === 'i') ? (
@@ -80,7 +137,8 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
       Loading Dataset...
     </div>
   ) : (
-    <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, dashSubcategory)} unit={units} date={dashYear} setDate={setYear} />
+    <Line data={lineGraphReduce(lineData, selectedGuage, Scenerios, 
+      dashSubcategory)} unit={units} date={dashYear} setDate={setYear} />
   )
 
   const getRegion = () => {
@@ -106,8 +164,10 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
       choroplethData={choroplethData}
       Scenerios={Scenerios}
       mapRegion={getRegion()} //.find(param => param.title === selectedGuage).region
-      data={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, choroplethData, Scenerios.at(0).title)}
-      data2={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 8, choroplethData, Scenerios.at(1).title)}
+      data={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 
+        8, choroplethData, Scenerios.at(0).title)}
+      data2={choroplethReduce(choroplethColorPalette, choroplethInterpolation, 
+        8, choroplethData, Scenerios.at(1).title)}
       uniqueValue={"Dashboard_Big"}
       choroplethColorPalette={choroplethColorPalette}
       setChoroplethColorPalette={setChoroplethColorPalette}
@@ -124,9 +184,21 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
     </div>
   ) : (
     <div className='bar-grid grid-border'>
-      <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} scenerio2={Scenerios.at(1).title} year={dashYear} className="choropleth-control" />
-      <BarHorizontal csv={barData} color={openedGuages ? getBarColors(barData, Scenerios.at(0).title, openedGuages.find(guage => guage.title === selectedGuage).group) : ["#666666"]} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} setdashboardSub={setSubcategory} left={true} selectedGuage = {selectedGuage}/>
-      <BarHorizontal csv={barData} color={openedGuages ? getBarColors(barData, Scenerios.at(0).title, openedGuages.find(guage => guage.title === selectedGuage).group) : ["#666666"]} listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} setdashboardSub={setSubcategory} left={false} selectedGuage = {selectedGuage}/>
+      <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} 
+      scenerio2={Scenerios.at(1).title} year={dashYear} 
+      className="choropleth-control" />
+      <BarHorizontal csv={barData} color={openedGuages ? 
+        getBarColors(barData, Scenerios.at(0).title, 
+        openedGuages.find(guage => guage.title === selectedGuage).group) : ["#666666"]} 
+        listKeys={filterSubcat(barData)} scenerio={Scenerios.at(0).title} 
+        setdashboardSub={setSubcategory} left={true} 
+        selectedGuage = {selectedGuage}/>
+      <BarHorizontal csv={barData} color={openedGuages ? 
+        getBarColors(barData, Scenerios.at(0).title, 
+        openedGuages.find(guage => guage.title === selectedGuage).group) : ["#666666"]} 
+        listKeys={filterSubcat(barData)} scenerio={Scenerios.at(1).title} 
+        setdashboardSub={setSubcategory} left={false} 
+        selectedGuage = {selectedGuage}/>
     </div>
   )
 
@@ -154,7 +226,12 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages, curYear
     ));
 }
 
-
+/**
+ * Maps the state from the Redux store to the component props.
+ * 
+ * @param {Object} state - The current state.
+ * @returns {Object} The mapped props.
+ */
 function mapStateToProps(state) {
   return {
     openedScenerios: state.scenerios,
@@ -169,6 +246,12 @@ function mapStateToProps(state) {
   };
 }
 
+/**
+ * Maps the dispatch functions to the component props.
+ * 
+ * @param {Function} dispatch - The dispatch function.
+ * @returns {Object} The mapped props.
+ */
 function mapDispatchToProps(dispatch) {
   return {
     setDashboardDate: (date) => dispatch(setDashDate(date)),
