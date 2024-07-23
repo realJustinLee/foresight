@@ -169,7 +169,7 @@ const checkParamURL = (urlLoaded, params, guages) => {
   let scenarioOutput = [];
   if (!urlLoaded && searchParams.has("params") && searchParams.get("params").toString().split(",").every((guage) => params ? params.map(param => param ? param.title : "error").includes(guage) : false)) {
     //console.log([... new Set(searchParams.get("params").toString().split(","))].map(title => params ? params.find(param => param.title === title) : "error"));
-    paramList = [... new Set(searchParams.get("params").toString().split(","))].map(title => params ? params.find(param => param.title === title) : "error");
+    paramList = [...new Set(searchParams.get("params").toString().split(","))].map(title => params ? params.find(param => param.title === title) : "error");
   }
   else
    updateHash("params", guages.map(guage => guage.title).toString());

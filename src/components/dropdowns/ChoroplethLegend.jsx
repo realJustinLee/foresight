@@ -35,7 +35,7 @@ export default function ChoroplethLegend({ data, data2, mapRegion, color, divisi
     let min = 0;
     rowHTML.push(opened ? (<MdArrowDownward className="choropleth-legend-arrow-closed" onClick={() => setOpened(false)} />) : (<MdArrowUpward key={"choroplethlegend01"} className="choropleth-legend-arrow" onClick={() => setOpened(true)} />))
     rowHTML.push(opened ? (<div className="choropleth-legend-text-closed" onClick={() => setOpened(false)}> Legend </div>) : (<div className="choropleth-legend-text-closed" onClick={() => setOpened(true)}> Legend </div>))
-    if (mapRegion === 'region'  && data.length < 32 || (mapRegion === 'glu' || mapRegion === 'basin') && data.length < 235) {
+    if ((mapRegion === 'region' && data.length < 32) || ((mapRegion === 'glu' || mapRegion === 'basin') && data.length < 235)) {
       rowHTML.push(<div className={opened ? "choropleth-legend-color" : "choropleth-legend-closed"} style={{ backgroundColor: "#666666" }}></div>);
       rowHTML.push(<div className={opened ? "choropleth-legend-text" : "choropleth-legend-closed"}> <strong>No Data</strong> </div>);
     }
