@@ -145,11 +145,14 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages,
     if(datasets.find(obj => obj.dataset === dataset)) {
       if(!(datasets.find(obj => obj.dataset === dataset).params) || 
       !(datasets.find(obj => obj.dataset === dataset).params)[selectedGuage])
-        return 'Global'
+        return 'Global';
       //console.log("!!", datasets.find(obj => obj.dataset === dataset))
       return (datasets.find(obj => obj.dataset === dataset).params)[selectedGuage].region;
     }
     else if(datasetInfo.find(obj => obj.dataset === dataset)) {
+      if(!(datasetInfo.find(obj => obj.dataset === dataset).params) || 
+      !(datasetInfo.find(obj => obj.dataset === dataset).params)[selectedGuage])
+        return 'Global';
       //console.log("!!", datasetInfo.find(obj => obj.dataset === dataset).params[selectedGuage].region, selectedGuage)
       return (datasetInfo.find(obj => obj.dataset === dataset).params)[selectedGuage].region;
     }
