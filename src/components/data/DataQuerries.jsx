@@ -251,9 +251,9 @@ query BarQuery($date: Int!, $nextToken: String, $id: String!) {
 /**
  * DataQuerries queries and modifies AWS data into the data needed for the various guages and visualizations.
  * 
- * @param {Object} props - The component props.
+ * @param {object} props - The component props.
  * @param {string} props.dataset - State of the current dataset
- * @param {Object[]} props.scenerios - State of the currently open scenarios
+ * @param {object[]} props.scenerios - State of the currently open scenarios
  * @param {number} props.start - State of the current start date
  * @param {number} props.end - State of the current end date
  * @param {string} props.parameter - State of the currently selected parameter
@@ -514,7 +514,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
 /**
  * Maps the state from the Redux store to the component props.
  * 
- * @param {Object} state - The current state.
+ * @param {object} state - The current state.
  * @returns {Object} The mapped props.
  */
 function mapStateToProps(state) {

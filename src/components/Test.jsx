@@ -39,7 +39,7 @@ const countryData = [
  * dashboard sidebar. Currently in development but will be renamed
  * in alter versions.
  * 
- * @param {Object} props - The component props.
+ * @param {object} props - The component props.
  * @param {boolean} props.open - State indicating if the sidebar is open.
  * @returns {ReactElement} The rendered component.
  */
@@ -74,8 +74,8 @@ function Test({ open }) {
 /**
  * Maps the state from the Redux store to the component props.
  * 
- * @param {Object} state - The current state.
- * @returns {Object} The mapped props.
+ * @param {object} state - The current state.
+ * @returns {object} The mapped props.
  */
 function mapStateToProps(state) {
   return {

@@ -44,7 +44,7 @@ export const updateListHash = (name, index, value) => {
 /**
  * Loads data and updates the dashboard based on the URL parameters.
  * 
- * @param {Object[]} result - Dataset with subsector and regions aggregated.
+ * @param {object[]} result - Dataset with subsector and regions aggregated.
  * @param {(scenarios: Object[]) => any} setAllScenarios - Function to set all scenarios.
  * @param {(scenarios: Object[]) => any} setScenariosTotal - Function to set currently selected scenarios.
  * @param {(guages: string[]) => any} setGuagesTotal - Function to set total gauges.
@@ -134,7 +134,7 @@ const checkDatasetURL = (urlLoaded, updateDataset, datasetList, dataset) => {
  * 
  * @param {boolean} urlLoaded - Flag indicating if URL is loaded.
  * @param {string[]} scenarios - List of available scenarios.
- * @returns {Object[]} The current scenarios after checking for data validity and the URL.
+ * @returns {object[]} The current scenarios after checking for data validity and the URL.
  */
 const checkScenarioURL = (urlLoaded, scenarios) => {
   if (scenarios.length < 2) return "Error: Not Enough Scenarios in this Dataset to load in the Dashboard.";
@@ -157,9 +157,9 @@ const checkScenarioURL = (urlLoaded, scenarios) => {
  * Checks and updates the parameters based on the URL parameter.
  * 
  * @param {boolean} urlLoaded - Flag indicating if URL is loaded.
- * @param {Object[]} params - List of all available parameters.
- * @param {Object[]} guages - List of currently selected parameters.
- * @returns {Object[]} The final currently selected 
+ * @param {object[]} params - List of all available parameters.
+ * @param {object[]} guages - List of currently selected parameters.
+ * @returns {object[]} The final currently selected 
  * parameters after checking the URL.
  */
 const checkParamURL = (urlLoaded, params, guages) => {
@@ -185,7 +185,7 @@ const checkParamURL = (urlLoaded, params, guages) => {
  * Checks and updates the selected guage based on the URL parameter.
  * 
  * @param {boolean} urlLoaded - Flag indicating if the URL is loaded.
- * @param {Object[]} guageData - Dataset containing all necessary guage data.
+ * @param {object[]} guageData - Dataset containing all necessary guage data.
  * @param {string} title - Name of the URL field to modify.
  * @returns {string} The final currently selected guage after checking
  * for data validity and for a given URL.
@@ -206,8 +206,8 @@ const checkGuageURL = (urlLoaded, guageData, title) => {
  * Checks and updates the selected date based on the URL parameter.
  * 
  * @param {boolean} urlLoaded - Flag indicating if the URL is loaded.
- * @param {Object[]} dateData - Dataset containing all necessary date data.
- * @param {Object[]} params - List of all parameters in the dataset.
+ * @param {object[]} dateData - Dataset containing all necessary date data.
+ * @param {object[]} params - List of all parameters in the dataset.
  * @param {string} title - Name of the URL field to modify.
  * @param {Number} def - The target date to set the URL.
  * @returns {Number} The final date after checking for the URL input

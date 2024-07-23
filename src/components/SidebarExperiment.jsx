@@ -11,7 +11,7 @@ import { BsBarChartFill } from "react-icons/bs"
  * page giving access to the subpages with specific types of visualizations.
  * Currently unused.
  * 
- * @param {Object} props - The component props.
+ * @param {object} props - The component props.
  * @param {boolean} props.open - State indicating if the sidebar is open.
  * @param {(dataset: any) => any} props.toggleOpen - Toggle whether the sidebar is open.
  * @returns {ReactElement} The rendered component.
@@ -46,8 +46,8 @@ function SidebarExperiment({open, toggleOpen}) {
 /**
  * Maps the state from the Redux store to the component props.
  * 
- * @param {Object} state - The current state.
- * @returns {Object} The mapped props.
+ * @param {object} state - The current state.
+ * @returns {object} The mapped props.
  */
 function mapStateToProps(state) {
   return {
@@ -59,7 +59,7 @@ function mapStateToProps(state) {
  * Maps the dispatch functions to the component props.
  * 
  * @param {Function} dispatch - The dispatch function.
- * @returns {Object} The mapped props.
+ * @returns {object} The mapped props.
  */
 function mapDispatchToProps(dispatch) {
   return {

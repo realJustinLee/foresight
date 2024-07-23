@@ -3,53 +3,53 @@ import { getColorsFromPalette } from "./GcamColors";
 /**
  * Filters a dataset by the specified parameter.
  * 
- * @param {Object[]} data - The dataset to filter.
+ * @param {object[]} data - The dataset to filter.
  * @param {string} param - The parameter to filter by.
- * @returns {Object[]} The filtered dataset.
+ * @returns {object[]} The filtered dataset.
  */
 export const getParam = (data, param) => data.filter(item => item.param === param);
 
 /**
  * Filters a dataset by the specified subcategory.
  * 
- * @param {Object[]} data - The dataset to filter.
+ * @param {object[]} data - The dataset to filter.
  * @param {string} subcat - The subcategory to filter by.
- * @returns {Object[]} The filtered dataset.
+ * @returns {object[]} The filtered dataset.
  */
 export const getSubcat = (data, subcat) => data.filter(item => item.class === subcat);
 
 /**
  * Filters a dataset by the specified region.
  * 
- * @param {Object[]} data - The dataset to filter.
+ * @param {object[]} data - The dataset to filter.
  * @param {string} region - The region to filter by.
- * @returns {Object[]} The filtered dataset.
+ * @returns {object[]} The filtered dataset.
  */
 export const getRegion = (data, region) => data.filter(item => item.region === region);
 
 /**
  * Filters a dataset by the specified scenario.
  * 
- * @param {Object[]} data - The dataset to filter.
+ * @param {object[]} data - The dataset to filter.
  * @param {string} scenario - The scenario to filter by.
- * @returns {Object[]} The filtered dataset.
+ * @returns {object[]} The filtered dataset.
  */
 export const getScenerio = (data, scenario) => data.filter(item => item.scenario === scenario);
 
 /**
  * Filters a dataset by two specified scenarios.
  * 
- * @param {Object[]} data - The dataset to filter.
+ * @param {object[]} data - The dataset to filter.
  * @param {string} scenario1 - The first scenario to filter by.
  * @param {string} scenario2 - The second scenario to filter by.
- * @returns {Object[]} The filtered dataset sorted by date.
+ * @returns {object[]} The filtered dataset sorted by date.
  */
 export const getScenerios = (data, scenario1, scenario2) => data.filter(item => item.scenario === scenario1 || item.scenario === scenario2).sort((a, b) => a.x - b.x);
 
 /**
  * Gets the units of a parameter for dashboard display.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @param {string} param - The parameter to find units for.
  * @returns {string} The units of the parameter.
  */
@@ -65,7 +65,7 @@ export const getUnits = (data, param) => {
 /**
  * Checks if a parameter is valid in the dataset.
  * 
- * @param {Object[]} data - The dataset to check.
+ * @param {object[]} data - The dataset to check.
  * @param {string} param - The parameter to check.
  * @returns {boolean} True if the parameter is valid, false otherwise.
  */
@@ -74,7 +74,7 @@ export const isValidParam = (data, param) => data.some(item => item.param === pa
 /**
  * Checks if multiple parameters are valid in the dataset.
  * 
- * @param {Object[]} data - The dataset to check.
+ * @param {object[]} data - The dataset to check.
  * @param {string[]} params - The parameters to check.
  * @returns {boolean} True if the parameters are valid, false otherwise.
  */
@@ -83,8 +83,8 @@ export const isValidParams = (data, params) => data.some(item => params.includes
 /**
  * Checks if a list of scenarios is valid in the dataset.
  * 
- * @param {Object[]} list - The list of scenarios to check.
- * @param {Object[]} objectList - The list of valid scenario objects.
+ * @param {object[]} list - The list of scenarios to check.
+ * @param {object[]} objectList - The list of valid scenario objects.
  * @returns {boolean} True if all scenarios are valid, false otherwise.
  */
 export const isValidFromObject = (list, objectList) => list.every(scenario => objectList.some(scenarioObj => scenarioObj.title === scenario));
@@ -92,7 +92,7 @@ export const isValidFromObject = (list, objectList) => list.every(scenario => ob
 /**
  * Gets the first parameter in the dataset.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @returns {string} The first parameter or an error message.
  */
 export const getFirstParam = (data) => (data[0]?.param || "ERROR: NO PARAMETERS");
@@ -100,7 +100,7 @@ export const getFirstParam = (data) => (data[0]?.param || "ERROR: NO PARAMETERS"
 /**
  * Checks if a date is valid for the parameter in the dataset.
  * 
- * @param {Object[]} data - The dataset to check.
+ * @param {object[]} data - The dataset to check.
  * @param {number} date - The date to check.
  * @returns {boolean} True if the date is valid, false otherwise.
  */
@@ -110,7 +110,7 @@ export const isValidDate = (data, date) => data.some(item => Number(item.x) === 
 /**
  * Filters a dataset between two provided dates.
  * 
- * @param {Object[]} data - The dataset to filter.
+ * @param {object[]} data - The dataset to filter.
  * @param {number} start - The start date.
  * @param {number} end - The end date.
  * @returns {Object[]} The filtered dataset.
@@ -120,7 +120,7 @@ export const filterDateRange = (data, start, end) => data.filter(item => item.x 
 /**
  * Returns the first date in the dataset.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @returns {Date} The first date.
  */
 export const getFirstDate = (data) => new Date(Number(data[0]?.x || 0));
@@ -128,7 +128,7 @@ export const getFirstDate = (data) => new Date(Number(data[0]?.x || 0));
 /**
  * Returns the last date in the dataset.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @returns {Date} The last date.
  */
 export const getLastDate = (data) => new Date(Number(data[data.length - 1]?.x || 0));
@@ -136,7 +136,7 @@ export const getLastDate = (data) => new Date(Number(data[data.length - 1]?.x ||
 /**
  * Gets the data value for a specific scenario, parameter, and date.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @param {string} scenario - The scenario to search for.
  * @param {string} param - The parameter to search for.
  * @param {number} date - The date to search for.
@@ -150,7 +150,7 @@ export const getDataDate = (data, scenario, param, date) => {
 /**
  * Finds the units by title in an object array.
  * 
- * @param {Object[]} objectsArray - The array of objects to search.
+ * @param {object[]} objectsArray - The array of objects to search.
  * @param {string} titleToFind - The title to search for.
  * @returns {string} The units or an error message.
  */
@@ -163,8 +163,8 @@ export const findUnitsByTitle = (objectsArray, titleToFind) => {
 /**
  * Checks if a date is present in all parameters in the dataset.
  * 
- * @param {Object[]} data - The dataset to check.
- * @param {Object[]} params - The parameters to check.
+ * @param {object[]} data - The dataset to check.
+ * @param {object[]} params - The parameters to check.
  * @param {number} date - The date to check.
  * @returns {boolean} True if the date is present in all parameters, false otherwise.
  */
@@ -179,8 +179,8 @@ export const dateInAllParams = (data, params, date) => {
 /**
  * Finds the closest date to the target date in the dataset for all parameters.
  * 
- * @param {Object[]} data - The dataset to search.
- * @param {Object[]} params - The parameters to search.
+ * @param {object[]} data - The dataset to search.
+ * @param {object[]} params - The parameters to search.
  * @param {number} targetDate - The target date.
  * @returns {number} The closest date.
  */
@@ -197,7 +197,7 @@ export const findClosestDateAllParamsAbove = (data, params, targetDate) => {
 /**
  * Finds the closest date to the target date in the dataset.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @param {number} targetDate - The target date.
  * @returns {number} The closest date.
  */
@@ -211,7 +211,7 @@ export const findClosestDate = (data, targetDate) => {
 /**
  * Gets the percentage change for gauges.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @param {string} scenario - The scenario to search for.
  * @param {string} param - The parameter to search for.
  * @param {number} start - The start date.
@@ -235,10 +235,10 @@ export const getGuage = (data, scenario, param, start, end) => {
 /**
  * Gets the most aggregated dataset for a specific date, region, and subcategory.
  * 
- * @param {Object[]} data - Unaggregated Dataset.
- * @param {Object[]} dataaggr - Aggregated dataset by region.
- * @param {Object[]} dataaggs - Aggregated dataset by subcategory.
- * @param {Object[]} dataaggrs - Aggregated dataset by region and subcategory.
+ * @param {object[]} data - Unaggregated Dataset.
+ * @param {object[]} dataaggr - Aggregated dataset by region.
+ * @param {object[]} dataaggs - Aggregated dataset by subcategory.
+ * @param {object[]} dataaggrs - Aggregated dataset by region and subcategory.
  * @param {string} date - The date to search for.
  * @param {string} region - The region to search for.
  * @param {string} subcat - The subcategory to search for.
@@ -251,10 +251,10 @@ export const getDataset = (data, dataaggr, dataaggs, dataaggrs, date, region, su
 /**
  * Gets the individual data point for a specific date, region, subcategory, and scenario.
  * 
- * @param {Object[]} datad - Unaggregated Dataset.
- * @param {Object[]} dataaggr - Aggregated dataset by region.
- * @param {Object[]} dataaggs - Aggregated dataset by subcategory.
- * @param {Object[]} dataaggrs - Aggregated dataset by region and subcategory.
+ * @param {object[]} datad - Unaggregated Dataset.
+ * @param {object[]} dataaggr - Aggregated dataset by region.
+ * @param {object[]} dataaggs - Aggregated dataset by subcategory.
+ * @param {object[]} dataaggrs - Aggregated dataset by region and subcategory.
  * @param {number} date - The date to search for.
  * @param {string} region - The region to search for.
  * @param {string} subcat - The subcategory to search for.
@@ -270,7 +270,7 @@ export const getDataPoint = (datad, dataaggr, dataaggs, dataaggrs, date, region,
 /**
  * Gets the largest value from a dataset for choropleth shading.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @returns {number} The largest value.
  */
 export const getLargestChoropleth = (data) => data.reduce((max, item) => Math.max(max, item.value), 0);
@@ -278,7 +278,7 @@ export const getLargestChoropleth = (data) => data.reduce((max, item) => Math.ma
 /**
  * Gets the smallest value from a dataset for choropleth shading.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @returns {number} The smallest value.
  */
 export const getSmallestChoropleth = (data) => data.reduce((min, item) => Math.min(min, item.value), data[0].value);
@@ -286,7 +286,7 @@ export const getSmallestChoropleth = (data) => data.reduce((min, item) => Math.m
 /**
  * Gets the value for a choropleth region with the specified ID.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @param {string} id - The ID of the region.
  * @returns {number} The value of the region.
  */
@@ -298,7 +298,7 @@ export const getChoroplethValue = (data, id) => {
 /**
  * Reduces the dataset by region and sorts it by the 'x' property.
  * 
- * @param {Object[]} data - The dataset to reduce.
+ * @param {object[]} data - The dataset to reduce.
  * @param {string} region - The region to filter by.
  */
 export const reduceRegion = (data, region) => {
@@ -308,7 +308,7 @@ export const reduceRegion = (data, region) => {
 /**
  * Creates a list of all subcategories for the dataset.
  * 
- * @param {Object[]} data - The dataset to filter.
+ * @param {object[]} data - The dataset to filter.
  * @returns {Object[]} The list of subcategories.
  */
 export const filterSubcat = (data) => {
@@ -320,7 +320,7 @@ export const filterSubcat = (data) => {
 /**
  * Reduces the dataset by subcategory and sorts it by date.
  * 
- * @param {Object[]} data - The dataset to reduce.
+ * @param {object[]} data - The dataset to reduce.
  * @param {string} subcat - The subcategory to filter by.
  * @returns {Object[]} The reduced dataset.
  */
@@ -334,7 +334,7 @@ export const reduceSubcat = (data, subcat) => {
  * Filters the dataset by a list of countries.
  * 
  * @param {string[]} countries - The list of countries to filter by.
- * @param {Object[]} data - The dataset to filter.
+ * @param {object[]} data - The dataset to filter.
  * @returns {Object[]} The filtered dataset.
  */
 export const getRegions = (countries, data) => {
@@ -345,7 +345,7 @@ export const getRegions = (countries, data) => {
  * Filters and sorts the dataset by a list of countries.
  * 
  * @param {string[]} countries - The list of countries to filter by.
- * @param {Object[]} data - The dataset to filter.
+ * @param {object[]} data - The dataset to filter.
  * @returns {Object[]} The sorted list of regions.
  */
 export const getRegionsSorted = (countries, data) => {
@@ -357,7 +357,7 @@ export const getRegionsSorted = (countries, data) => {
 /**
  * Creates a list of all regions for the dataset.
  * 
- * @param {Object[]} data - The dataset to filter.
+ * @param {object[]} data - The dataset to filter.
  * @returns {Object[]} The list of regions.
  */
 export const filterRegion = (data) => {
@@ -371,7 +371,7 @@ export const filterRegion = (data) => {
 /**
  * Lists all regions in the dataset.
  * 
- * @param {Object[]} data - The dataset to filter.
+ * @param {object[]} data - The dataset to filter.
  * @returns {Object[]} The list of regions.
  */
 export const listRegions = (data) => {
@@ -431,7 +431,7 @@ function getScaleValuesTest(choroplethColorPalette, choroplethInterpolation, div
  * Gets the relative data value for a country.
  * 
  * @param {number} countryValue - The value for the country.
- * @param {Object[]} data - The dataset to compare.
+ * @param {object[]} data - The dataset to compare.
  * @returns {number} The relative data value.
  */
 function getRelativeDataValue(countryValue, data) {
@@ -443,7 +443,7 @@ function getRelativeDataValue(countryValue, data) {
 /**
  * Gets the rank of a country in the dataset.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @param {string} country - The country to find.
  * @returns {number} The rank of the country.
  */
@@ -462,7 +462,7 @@ function getRank(data, country) {
  * @param {string} choroplethInterpolation - The interpolation method.
  * @param {number} divisions - The number of divisions.
  * @param {number} value - The data value.
- * @param {Object[]} data - The dataset to compare.
+ * @param {object[]} data - The dataset to compare.
  * @param {string} country - The country to find.
  * @returns {string} The color value.
  */
@@ -476,7 +476,7 @@ function getDataColor(choroplethColorPalette, choroplethInterpolation, divisions
  * @param {string} choroplethColorPalette - The color palette.
  * @param {string} choroplethInterpolation - The interpolation method.
  * @param {number} divisions - The number of divisions.
- * @param {Object[]} data - The dataset to reduce.
+ * @param {object[]} data - The dataset to reduce.
  * @param {string} scenario - The scenario to filter by.
  * @returns {Object[]} The reduced dataset.
  */
@@ -493,9 +493,9 @@ export const choroplethReduce = (choroplethColorPalette, choroplethInterpolation
 /**
  * Gets the total bar data for the specified parameters and scenarios.
  * 
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} data - The dataset to search.
  * @param {string} param - The parameter to search for.
- * @param {Object[]} scenarios - The list of scenarios.
+ * @param {object[]} scenarios - The list of scenarios.
  * @returns {Object[]} The total bar data.
  */
 export const getBarTotal = (data, param, scenarios) => {
@@ -512,10 +512,10 @@ export const getBarTotal = (data, param, scenarios) => {
 /**
  * Gets the horizontal bar data for the specified countries and scenario.
  * 
- * @param {Object[]} countries - The list of countries.
- * @param {Object[]} data - The dataset to search.
+ * @param {object[]} countries - The list of countries.
+ * @param {object[]} data - The dataset to search.
  * @param {string} scenario - The scenario to search for.
- * @returns {Object[]} The horizontal bar data.
+ * @returns {object[]} The horizontal bar data.
  */
 export const getBarHorizontal = (countries, data, scenerio) => {
     let output = [];
@@ -542,11 +542,11 @@ export const getBarHorizontal = (countries, data, scenerio) => {
 /**
  * Creates the dataset needed for line graph visualization.
  * 
- * @param {Object[]} data - The dataset to reduce.
+ * @param {object[]} data - The dataset to reduce.
  * @param {string} param - The parameter to filter by.
- * @param {Object[]} scenarios - The list of scenarios.
+ * @param {object[]} scenarios - The list of scenarios.
  * @param {string} subcat - The subcategory to filter by.
- * @returns {Object[]} The reduced dataset.
+ * @returns {object[]} The reduced dataset.
  */
 export const lineGraphReduce = (data, param, scenarios, subcat) =>
     scenarios.map(scenario => ({
@@ -557,10 +557,10 @@ export const lineGraphReduce = (data, param, scenarios, subcat) =>
 /**
  * Reduces the dataset to the format required for the line graph.
  * 
- * @param {Object[]} data - The dataset to reduce.
+ * @param {object[]} data - The dataset to reduce.
  * @param {string} param - The parameter to filter by.
  * @param {string} subcat - The subcategory to filter by.
- * @returns {Object[]} The reduced dataset in line graph format.
+ * @returns {object[]} The reduced dataset in line graph format.
  */
 export const getLineGraphReduce = (data, param, subcat) => {
     if (param === "landAlloc" && subcat === "Aggregate of Subsectors") {

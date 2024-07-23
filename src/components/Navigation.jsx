@@ -19,7 +19,7 @@ import { updateHash } from "./sharing/DashboardUrl";
  * Navigation component. Used for testing different maps
  * under the Experiments page. Currently unused.
  * 
- * @param {Object} props - The component props.
+ * @param {object} props - The component props.
  * @param {string} props.dataset - State indicating the current dataset.
  * @param {string[]} props.datasets - State indicating all datasets.
  * @param {(dataset: any) => any} props.updateDataset - Updates the current dataset.
@@ -148,8 +148,8 @@ function Navigation({ dataset, datasets, updateDataset }) {
 /**
  * Maps the state from the Redux store to the component props.
  * 
- * @param {Object} state - The current state.
- * @returns {Object} The mapped props.
+ * @param {object} state - The current state.
+ * @returns {object} The mapped props.
  */
 const mapStateToProps = (state) => {
   return {
@@ -162,7 +162,7 @@ const mapStateToProps = (state) => {
  * Maps the dispatch functions to the component props.
  * 
  * @param {Function} dispatch - The dispatch function.
- * @returns {Object} The mapped props.
+ * @returns {object} The mapped props.
  */
 function mapDispatchToProps(dispatch) {
   return {

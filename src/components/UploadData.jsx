@@ -11,16 +11,16 @@ import { iconTypes, getIcon } from "./data/VariableCategories";
  * UploadData component. Is accessed through the main dashbar. 
  * This icon is displayed next to the gauges and the selection.
  * 
- * @param {Object} props - The component props.
+ * @param {object} props - The component props.
  * @param {string[]} props.datasets - State indicating all current datasets.
  * @param {(datasets: string[]) => any} props.updateDatasets - Function to update the 
  * list of all datasets.
- * @param {Object} props.userUploadedData - State containing all user uploaded datasets.
- * @param {(data: Object) => any} props.loadDataToStore - Function to 
+ * @param {object} props.userUploadedData - State containing all user uploaded datasets.
+ * @param {(data: object) => any} props.loadDataToStore - Function to 
  * update the stored user-uploaded data.
- * @param {(data: Object) => any} props.setDatasetInfo - Function to 
+ * @param {(data: object) => any} props.setDatasetInfo - Function to 
  * update the stored user-uploaded data headers.
- * @param {Object} props.userUploadedDataInfo - State containing all user uploaded 
+ * @param {object} props.userUploadedDataInfo - State containing all user uploaded 
  * dataset headers.
  * @returns {ReactElement} The icon component for the specified category.
  */
@@ -327,7 +327,7 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
                 </ul>
               </li>
               <li>All values must be in the proper units with no NaN values.</li>
-              <li>Once the data is uplaoded, it can be accessed by the datasets dropdown in the navigation bar.</li>
+              <li>Once the data is uploaded, it can be accessed by the datasets dropdown in the navigation bar.</li>
             </ul>
           </div>
         </Row>
@@ -413,8 +413,8 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
 /**
  * Maps the state from the Redux store to the component props.
  * 
- * @param {Object} state - The current state.
- * @returns {Object} The mapped props.
+ * @param {object} state - The current state.
+ * @returns {object} The mapped props.
  */
 const mapStateToProps = (state) => {
   return {
@@ -428,7 +428,7 @@ const mapStateToProps = (state) => {
  * Maps the dispatch functions to the component props.
  * 
  * @param {Function} dispatch - The dispatch function.
- * @returns {Object} The mapped props.
+ * @returns {object} The mapped props.
  */
 function mapDispatchToProps(dispatch) {
   return {

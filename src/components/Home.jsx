@@ -19,7 +19,7 @@ const arcsData = [...Array(N).keys()].map(() => ({
 /**
  * Returns window dimensions with adjustments for screen size.
  * 
- * @returns {Object} Adjusted width and height.
+ * @returns {object} Adjusted width and height.
  */
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
@@ -46,7 +46,7 @@ function getWindowDimensions() {
 /**
  * Custom hook to get and update window dimensions on resize.
  * 
- * @returns {Object} Current window dimensions.
+ * @returns {object} Current window dimensions.
  */
 export function useWindowDimensions() {
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());

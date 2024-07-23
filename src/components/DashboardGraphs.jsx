@@ -18,12 +18,12 @@ import { datasets } from './data/Scenarios';
  * the selected scenarios, parameter, and the user selected date, region, and 
  * subcategory. This is rendered below the DashboardFloater.
  * 
- * @param {Object} props - The component props.
- * @param {Object[]} props.openedScenerios - State indicating the currently 
+ * @param {object} props - The component props.
+ * @param {object[]} props.openedScenerios - State indicating the currently 
  * selected scenarios.
  * @param {string} props.selectedGuage - State indicating the currently
  * selected guage.
- * @param {Object[]} props.openedGuages - State indicating the currently
+ * @param {object[]} props.openedGuages - State indicating the currently
  * open guages.
  * @param {Number} props.curYear - State indicating the currently
  * selected year.
@@ -31,15 +31,15 @@ import { datasets } from './data/Scenarios';
  * selected region.
  * @param {string} props.subcat - State indicating the currently
  * selected subcategory.
- * @param {Object[]} props.lineData - Dataset containing data required
+ * @param {object[]} props.lineData - Dataset containing data required
  * for the line chart.
- * @param {Object[]} props.guageData - Dataset containing data required
+ * @param {object[]} props.guageData - Dataset containing data required
  * for the guage display.
- * @param {Object[]} props.choroplethData - Dataset containing data required
+ * @param {object[]} props.choroplethData - Dataset containing data required
  * for the choropleth Leaflet.
- * @param {Object[]} props.barData - Dataset containing data required
+ * @param {object[]} props.barData - Dataset containing data required
  * for the bar chart.
- * @param {Object[]} props.aggSub - Dataset containing data with global
+ * @param {object[]} props.aggSub - Dataset containing data with global
  * regions.
  * @param {(date: Number) => any} props.setDashboardDate - Function setting the
  * date value .
@@ -56,7 +56,7 @@ import { datasets } from './data/Scenarios';
  * @param {React.Dispatch<React.SetStateAction<string>>} props.setInterpolation - 
  * Function that sets the current choropleth interpolation.
  * @param {string} props.dataset - State indicating the current dataset.
- * @param {Object} props.datasetInfo - State indicating the dataset headers
+ * @param {object} props.datasetInfo - State indicating the dataset headers
  * for user-uploaded datasets.
  * @returns {ReactElement} The rendered component.
  */
@@ -185,7 +185,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages,
   ) : (
     <div className='bar-grid grid-border'>
       <BarCountryControl csv={aggSub} scenario={Scenerios.at(0).title} 
-      scenerio2={Scenerios.at(1).title} year={dashYear} 
+      scenerio2={Scenerios.at(1).title} 
       className="choropleth-control" />
       <BarHorizontal csv={barData} color={openedGuages ? 
         getBarColors(barData, Scenerios.at(0).title, 
@@ -229,8 +229,8 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages,
 /**
  * Maps the state from the Redux store to the component props.
  * 
- * @param {Object} state - The current state.
- * @returns {Object} The mapped props.
+ * @param {object} state - The current state.
+ * @returns {object} The mapped props.
  */
 function mapStateToProps(state) {
   return {
@@ -250,7 +250,7 @@ function mapStateToProps(state) {
  * Maps the dispatch functions to the component props.
  * 
  * @param {Function} dispatch - The dispatch function.
- * @returns {Object} The mapped props.
+ * @returns {object} The mapped props.
  */
 function mapDispatchToProps(dispatch) {
   return {

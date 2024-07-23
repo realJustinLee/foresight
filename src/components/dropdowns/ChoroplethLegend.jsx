@@ -2,6 +2,17 @@ import { MdArrowDownward, MdArrowUpward } from 'react-icons/md';
 import { useState } from 'react';
 import { getColorsFromPalette } from '../data/GcamColors';
 
+/**
+ * An expandable legend on the bottom-left of the choropleth.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Choropleth data for the first scenario.
+ * @param {object[]} props.data2 - Choropleth data for the second scenario.
+ * @param {string} props.color - Name of the currently selected color palette.
+ * @param {number} props.divisions - The number of colors currently shown.
+ * The default is an 8 group split.
+ * @returns {ReactElement} The rendered component.
+ */
 export default function ChoroplethLegend({ data, data2, color, divisions }) {
   const [opened, setOpened] = useState(true);
   function getColorValues(color, number, n) {

@@ -9,7 +9,7 @@ export const iconTypes = ["energy", "transport", "buildings", "industry", "water
  * Returns the icon coresponding to a specific parameter name.
  * 
  * @param {string} param - The given parameter.
- * @param {Object[]} guages - All current parameters. 
+ * @param {object[]} guages - All current parameters. 
  * @returns {IconType} The icon for display.
  */
 export const getIconParam = (param, guages) => {

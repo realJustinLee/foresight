@@ -6,7 +6,7 @@ export const pal_green = ["#FFFFE5","#F7FCB9","#D9F0A3","#ADDD8E","#78C679","#41
 /**
  * Gets the colors to display for each subcategory in the bar chart.
  * 
- * @param {Object[]} data - The bar data.
+ * @param {object[]} data - The bar data.
  * @param {string} data - The scenario to filter by.
  * @param {string} guages - The parameter list to get the parameter category from.
  * @returns {string[]} The colors to display.

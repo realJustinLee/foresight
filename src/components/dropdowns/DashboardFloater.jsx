@@ -145,6 +145,13 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
         </>
     );
 }
+
+/**
+ * Maps the state from the Redux store to the component props.
+ * 
+ * @param {object} state - The current state.
+ * @returns {object} The mapped props.
+ */
 function mapDispatchToProps(dispatch) {
     return {
         updateGuage: (newSelectedGuage) => dispatch(setdashboardSelection(newSelectedGuage)),
@@ -154,6 +161,12 @@ function mapDispatchToProps(dispatch) {
     };
 }
 
+/**
+ * Maps the dispatch functions to the component props.
+ * 
+ * @param {Function} dispatch - The dispatch function.
+ * @returns {object} The mapped props.
+ */
 function mapStateToProps(state) {
     return {
         selection: state.dashboardSelection,

@@ -2,6 +2,18 @@ import Dropdown from 'react-bootstrap/Dropdown';
 
 import { MdSettings } from "react-icons/md";
 
+/**
+ * A dropdown menu for Choropleth settings.
+ * 
+ * @param {object} props - The component props.
+ * @param {string} props.palette - Currently selected color palette.
+ * @param {string} props.interpolation - Currently selected interpolation.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.changePalette - Function 
+ * modifying the current color palette.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.changeInterpolation - Function 
+ * modifying the current interpolation.
+ * @returns {ReactElement} The rendered component.
+ */
 function ChoroplethControl({palette, interpolation, changePalette, changeInterpolation}) {
   //console.log(color, scale);
   const colorList = ["pal_16", "pal_spectral", "pal_basic", "pal_hot", "pal_wet", "pal_green", "pal_div_wet", "pal_div_BlRd", "pal_div_RdBl", "pal_div_BrGn", "pal_div_GnBr", "pal_div_BluRd", "pal_div_RdBlu"];

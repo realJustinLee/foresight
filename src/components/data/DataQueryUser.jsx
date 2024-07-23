@@ -7,13 +7,13 @@ import { filterRegion, findClosestDateAllParamsAbove, getScenerio, listRegions }
 /**
  * DataQueryUser modifies stored user data into the data needed for the various guages and visualizations.
  * 
- * @param {Object} props - The component props.
+ * @param {object} props - The component props.
  * @param {string} props.dataset - State of the current dataset
- * @param {Object[]} props.userUploadedData - Dataset of 
+ * @param {object[]} props.userUploadedData - Dataset of 
  * all user uploaded data
- * @param {Object[]} props.userUploadedInfo - Dataset of 
+ * @param {object[]} props.userUploadedInfo - Dataset of 
  * the headers of all user uploaded data
- * @param {Object[]} props.scenerios - State of the currently open scenarios
+ * @param {object[]} props.scenerios - State of the currently open scenarios
  * @param {(scenarios: Object[]) => any} props.setAllScenarios - Function to 
  * set the list of all scenarios.
  * @param {(scenarios: Object[]) => any} props.setScenariosTotal - Function to 
@@ -243,7 +243,7 @@ function DataQueryUser({ dataset, userUploadedData, userUploadedInfo, scenerios,
 /**
  * Maps the state from the Redux store to the component props.
  * 
- * @param {Object} state - The current state.
+ * @param {object} state - The current state.
  * @returns {Object} The mapped props.
  */
 function mapStateToProps(state) {
