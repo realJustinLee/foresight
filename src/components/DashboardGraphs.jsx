@@ -143,6 +143,9 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages,
 
   const getRegion = () => {
     if(datasets.find(obj => obj.dataset === dataset)) {
+      if(!(datasets.find(obj => obj.dataset === dataset).params) || 
+      !(datasets.find(obj => obj.dataset === dataset).params)[selectedGuage])
+        return 'Global'
       //console.log("!!", datasets.find(obj => obj.dataset === dataset))
       return (datasets.find(obj => obj.dataset === dataset).params)[selectedGuage].region;
     }
@@ -150,7 +153,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages,
       //console.log("!!", datasetInfo.find(obj => obj.dataset === dataset).params[selectedGuage].region, selectedGuage)
       return (datasetInfo.find(obj => obj.dataset === dataset).params)[selectedGuage].region;
     }
-    return "region";
+    return "Global";
   };
 
   // Choropleth Visualization

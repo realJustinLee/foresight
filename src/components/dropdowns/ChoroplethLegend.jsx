@@ -8,12 +8,13 @@ import { getColorsFromPalette } from '../data/GcamColors';
  * @param {object} props - The component props.
  * @param {object[]} props.data - Choropleth data for the first scenario.
  * @param {object[]} props.data2 - Choropleth data for the second scenario.
+ * @param {string} props.mapRegion - Map region type.
  * @param {string} props.color - Name of the currently selected color palette.
  * @param {number} props.divisions - The number of colors currently shown.
  * The default is an 8 group split.
  * @returns {ReactElement} The rendered component.
  */
-export default function ChoroplethLegend({ data, data2, color, divisions }) {
+export default function ChoroplethLegend({ data, data2, mapRegion, color, divisions }) {
   const [opened, setOpened] = useState(true);
   function getColorValues(color, number, n) {
     const colors = getColorsFromPalette(color);
@@ -34,7 +35,7 @@ export default function ChoroplethLegend({ data, data2, color, divisions }) {
     let min = 0;
     rowHTML.push(opened ? (<MdArrowDownward className="choropleth-legend-arrow-closed" onClick={() => setOpened(false)} />) : (<MdArrowUpward key={"choroplethlegend01"} className="choropleth-legend-arrow" onClick={() => setOpened(true)} />))
     rowHTML.push(opened ? (<div className="choropleth-legend-text-closed" onClick={() => setOpened(false)}> Legend </div>) : (<div className="choropleth-legend-text-closed" onClick={() => setOpened(true)}> Legend </div>))
-    if (data.length < 31) {
+    if (mapRegion === 'region'  && data.length < 32 || (mapRegion === 'glu' || mapRegion === 'basin') && data.length < 235) {
       rowHTML.push(<div className={opened ? "choropleth-legend-color" : "choropleth-legend-closed"} style={{ backgroundColor: "#666666" }}></div>);
       rowHTML.push(<div className={opened ? "choropleth-legend-text" : "choropleth-legend-closed"}> <strong>No Data</strong> </div>);
     }
