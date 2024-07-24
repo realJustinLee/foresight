@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { API, graphqlOperation } from "aws-amplify";
 import { connect } from 'react-redux';
-import { setAllScenarios, setSceneriosNoUpdate, setGuageList, setdashboardGuages, setdashboardSelection, setStartDate, setEndDate, setDashDate, setBarCountries, setDataset } from '../Store';
-import { loadDataURL } from '../sharing/DashboardUrl';
+import { setAllScenarios, setSceneriosNoUpdate, setGuageList, setdashboardGuages, setdashboardSelection, setStartDate, setEndDate, setDashDate, setBarCountries, setDataset, setDashReg, setDashSubs } from '../Store';
+import { checkRegionURL, checkSubcatURL, loadDataURL } from '../sharing/DashboardUrl';
 import { getScenerio, filterRegion, listRegions, filterSubcat } from './DataManager';
 
 export const lineQuery = `
@@ -313,7 +313,7 @@ query BarQuery($date: Int!, $nextToken: String, $id: String!) {
  * if the URL is loaded.
  * @returns {ReactElement} The rendered component.
  */
-function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList }) {
+function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, setSubcat, setRegion, URLLoaded, toggleURLLoaded, updateDataset, datasetList }) {
   const [scenarios, setScenarios] = useState("i");
 
   useEffect(() => {
@@ -361,7 +361,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   }, [dataset]);
 
   const fetchLine = useCallback(async () => {
-    if (scenarios !== "i" && scenarios.length > 1) {
+    if (region !== "" && subcat !== "" && scenarios !== "i" && scenarios.length > 1) {
       const queries = [];
       if (subcat === "Aggregate of Subsectors" || subcat === "class1") {
         if (region === "Global") {
@@ -437,16 +437,20 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
       queries.push([aggSubQuery, { date: year.toString()  + "|" , id: dataset + "|" + scenarios[1] + "|" + parameter }]);
       const result = await fetchParallel(queries);
       setAggSub(result);
+      if(region === "")
+        checkRegionURL(new Set(result.map(obj => obj.region)), setRegion);
       setCountries(filterRegion(getScenerio(result, scenarios[0])));
     }
-  }, [dataset, scenarios, parameter, year, setAggSub, setCountries, fetchParallel]);
+  }, [dataset, scenarios, parameter, year, setAggSub, setCountries, setRegion, fetchParallel]);
 
   const fetchAggReg = useCallback(async () => {
     if (scenarios !== "i" && scenarios.length > 1) {
       const result = await fetchParallel([[aggRegQuery, { date: year, id: dataset + "|" + scenarios[0] + "|" + parameter }]]);
+      if(subcat === "")
+        checkSubcatURL(result.map(obj => obj.class), setSubcat);
       setSubcategories(filterSubcat(result));
     }
-  }, [dataset, scenarios, parameter, year, setSubcategories, fetchParallel]);
+  }, [dataset, scenarios, parameter, year, setSubcategories, setSubcat, fetchParallel]);
 
   useEffect(() => {
     setScenarios("i");
@@ -551,6 +555,8 @@ function mapDispatchToProps(dispatch) {
     setCountries: (countryList) => dispatch(setBarCountries(countryList)),
     toggleURLLoaded: () => dispatch({ type: 'toggleURLLoaded' }),
     updateDataset: (dataset) => dispatch(setDataset(dataset)),
+    setSubcat: (subcat) => dispatch(setDashSubs(subcat)),
+    setRegion: (region) => dispatch(setDashReg(region)),
   };
 }
 

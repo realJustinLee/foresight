@@ -3,6 +3,7 @@ import { ResponsiveBar } from '@nivo/bar'
 import { connect } from 'react-redux';
 import { BarTooltip } from "./NivoTooltips.tsx";
 import { getBarHorizontal } from "../data/DataManager.jsx";
+import { updateHash } from "../sharing/DashboardUrl.jsx";
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
@@ -68,6 +69,7 @@ const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left
                         setdashboardSub(
                             `${data["id"]}`
                         );
+                        updateHash("sub", `${data["id"]}`);
                     }
                 }}
                 axisLeft={{

@@ -221,3 +221,25 @@ const checkDateURL = (urlLoaded, dataDate, params, title, def) => {
   updateHash(title, findClosestDateAllParamsAbove(dataDate, params, def));
   return findClosestDateAllParamsAbove(dataDate, params, def);
 }
+
+export const checkRegionURL = (regionData, setRegions) => {
+  let searchParams = new URLSearchParams(window.location.hash.substring(1));
+  let region = 'Global';
+  if (searchParams.has('reg') && regionData.has(searchParams.get('reg')))
+    region = searchParams.get('reg');
+  else
+    updateHash("reg", 'Global');
+  console.log("REG !!!");
+  setRegions(region);
+}
+
+export const checkSubcatURL = (subcatData, setSubcat) => {
+  let searchParams = new URLSearchParams(window.location.hash.substring(1));
+  let subcat = 'Aggregate of Subsectors';
+  if (searchParams.has('sub') && subcatData.includes(searchParams.get('sub')))
+    subcat = searchParams.get('sub');
+  else
+    updateHash("sub", 'Aggregate of Subsectors');
+  console.log("SUB !!!");
+  setSubcat(subcat);
+}

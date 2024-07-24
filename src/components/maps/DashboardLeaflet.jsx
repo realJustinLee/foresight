@@ -6,6 +6,7 @@ import global from "./data/global.json"
 import glu from "./data/glu.json"
 import regions_glu from "./data/regions_glu.json"
 import { getChoroplethValue } from '../data/DataManager';
+import { updateHash } from '../sharing/DashboardUrl';
 
 const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
   const mapData = data;
@@ -120,6 +121,7 @@ const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapIn
 
   function setCountry(e) {
     setRegion(e.sourceTarget.feature.id);
+    updateHash("reg", e.sourceTarget.feature.id);
   }
 
   function onEachFeature(feature, layer) {
