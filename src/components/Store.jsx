@@ -10,7 +10,7 @@ const initialState = {
   datasetInfo: [],
   startDate: 2015,
   endDate: 2100,
-  dashboardSelection: "watWithdrawBySec",
+  dashboardSelection: "emissCO2ByAggSector",
   dashboardYear: 2020,
   dashboardRegion: "Global",
   dashboardSubsector: "Aggregate of Subsectors",

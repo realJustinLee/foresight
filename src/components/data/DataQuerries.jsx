@@ -317,7 +317,6 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   const [scenarios, setScenarios] = useState("i");
 
   useEffect(() => {
-    console.log("Change Scenarios:", scenerios)
     setScenarios(scenerios.map(obj => obj.title));
   }, [scenerios]);
 
@@ -356,8 +355,8 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
 
   const fetchDashboard = useCallback(async () => {
     const result = await fetchParallel([[queryDataset, { dataset: dataset }]]);
-    //console.log(result);
-    loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList, dataset);
+    console.log(result);
+    loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList, dataset, start, end, year, parameter);
     // eslint-disable-next-line
   }, [dataset]);
 

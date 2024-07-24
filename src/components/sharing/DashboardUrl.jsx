@@ -59,7 +59,7 @@ export const updateListHash = (name, index, value) => {
  * @param {string[]} datasetList - List of available datasets.
  * @param {string} dataset - The current dataset.
  */
-export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded, updateDataset, datasetList, dataset) => {
+export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded, updateDataset, datasetList, dataset, startdate, enddate, yeardate, parameter) => {
   //Check and handle selected dataset. URL reset if dataset not currently loaded.
   checkDatasetURL(urlLoaded, updateDataset, datasetList, dataset);
   //Prepare total scenarios
@@ -91,13 +91,13 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   setGuagesCurrent(selectedGuages);
   // Prepared selected guage
   //console.log(urlLoaded, currentGuages);
-  const selectedGuage = checkGuageURL(urlLoaded, selectedGuages, "selectedParam");
+  const selectedGuage = checkGuageURL(urlLoaded, parameter, selectedGuages, "selectedParam");
   //console.log("STORE SELECTED GUAGE:", selectedGuage);
   setGuageSelected(selectedGuage);
 
-  const start = checkDateURL(urlLoaded, result, params, "start", 2015);
-  const end = checkDateURL(urlLoaded, result, params, "end", 2100);
-  const dashboardDate = checkDateURL(urlLoaded, result, params, "year", 2020);
+  const start = checkDateURL(urlLoaded, result, params, "start", startdate);
+  const end = checkDateURL(urlLoaded, result, params, "end", enddate);
+  const dashboardDate = checkDateURL(urlLoaded, result, params, "year", yeardate);
   //console.log("START DATE:", start);
   setStart(start);
   //console.log("END DATE:", end);
@@ -177,7 +177,6 @@ const checkParamURL = (urlLoaded, params, guages) => {
   paramList.forEach((guage) => {
     scenarioOutput.push(guage);
   });
-  console.log(paramList, scenarioOutput);
   return scenarioOutput;
 }
 
@@ -190,11 +189,13 @@ const checkParamURL = (urlLoaded, params, guages) => {
  * @returns {string} The final currently selected guage after checking
  * for data validity and for a given URL.
  */
-const checkGuageURL = (urlLoaded, guageData, title) => {
+const checkGuageURL = (urlLoaded, parameter, guageData, title) => {
   let searchParams = new URLSearchParams(window.location.hash.substring(1));
   let guageList = guageData ? guageData.map(guage => guage ? guage.title : "") : [];
   if (!urlLoaded && searchParams.has(title) && guageList.includes(searchParams.get(title)))
     return searchParams.get(title);
+  if(guageList.includes(parameter))
+    return parameter;
   if (guageList.length > 0) {
     updateHash(title, guageList[0]);
     return guageList[0];
