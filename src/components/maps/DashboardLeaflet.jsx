@@ -26,7 +26,7 @@ const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapIn
 
   function style(feature) {
     return {
-      fillColor: data ? data.find(obj => obj.id === feature.id).color : '#333333',
+      fillColor: data && data.find(obj => obj.id === feature.id) ? data.find(obj => obj.id === feature.id).color : '#333333',
       weight: 2,
       opacity: 1,
       color: 'white',
