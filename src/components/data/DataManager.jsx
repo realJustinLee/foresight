@@ -402,7 +402,7 @@ function getColorValues(color, number, n) {
  * @param {number} dataLength - The length of the dataset.
  * @returns {string} The color value.
  */
-function getScaleValuesTest(choroplethColorPalette, choroplethInterpolation, divisions, value, placement, dataLength) {
+function getScaleValuesTest(choroplethColorPalette, choroplethInterpolation, divisions, value, placement, dataLength, negative) {
     let bracket = 0;
     switch (choroplethInterpolation) {
         case "VALUE - LINEAR":
@@ -424,6 +424,8 @@ function getScaleValuesTest(choroplethColorPalette, choroplethInterpolation, div
             bracket = divisions - Math.round(divisions * (-1 * Math.exp(-5 * (value)) + 1));
             break;
     }
+    if (negative)
+        bracket = divisions - bracket;
     return getColorValues(choroplethColorPalette, Math.min(Math.abs(bracket), divisions), divisions);
 }
 
@@ -467,7 +469,9 @@ function getRank(data, country) {
  * @returns {string} The color value.
  */
 function getDataColor(choroplethColorPalette, choroplethInterpolation, divisions, value, data, country) {
-    return value ? getScaleValuesTest(choroplethColorPalette, choroplethInterpolation, divisions, getRelativeDataValue(value, data), getRank(data, country), Object.keys(data).length) : "#333333";
+    return value ? getScaleValuesTest(choroplethColorPalette, choroplethInterpolation, 
+        divisions, getRelativeDataValue(value, data), getRank(data, country), 
+        Object.keys(data).length, Math.max(...(data.map(obj => obj.value))) < 0) : "#333333";
 }
 
 /**

@@ -67,7 +67,10 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     const region_links = uniqueRegions !== "i" ? Array.from(uniqueRegions).map((listedRegion) => (
         (listedRegion && listedRegion !== "global") ? (<div key={listedRegion}>
             <Dropdown.Item as="button" active={region === listedRegion ? true : false}
-                onClick={() => dashReg(listedRegion)}>
+                onClick={() => {
+                    updateHash("reg", listedRegion);
+                    dashReg(listedRegion);
+                }}>
                 {listedRegion}
             </Dropdown.Item>
         </div >) : <div></div>
@@ -77,7 +80,10 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
     const subcat_links = uniqueSubcats !== "i" ? Array.from(uniqueSubcats).map((listedSubcat) => (
         (listedSubcat && listedSubcat !== "class1") ? (<div key={listedSubcat}>
             <Dropdown.Item as="button" active={subsector === listedSubcat ? true : false}
-                onClick={() => dashSubs(listedSubcat)}>
+                onClick={() => {
+                    updateHash("sub", listedSubcat);
+                    dashSubs(listedSubcat);
+                }}>
                 {listedSubcat.charAt(0).toUpperCase() + listedSubcat.slice(1).trim()}
             </Dropdown.Item>
         </div >) : <div></div>

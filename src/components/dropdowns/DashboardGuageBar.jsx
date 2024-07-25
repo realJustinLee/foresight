@@ -161,7 +161,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   const guageSelectionCol = () => {
     return (
       OpenScenarios.map((scenario, index) => (
-        <DropdownButton className="dashboard-scenerio-button" variant="outline-light" title={<MdOutlineLibraryAdd />}>
+        <DropdownButton className="guage-scenerio-button dashboard-scenerio-button" variant="outline-light" title={<MdOutlineLibraryAdd />}>
           {paramDropdownList(index)}
         </DropdownButton>
       ))
