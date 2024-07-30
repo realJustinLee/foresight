@@ -400,6 +400,7 @@ function getColorValues(color, number, n) {
  * @param {number} value - The value to scale.
  * @param {number} placement - The placement in the dataset.
  * @param {number} dataLength - The length of the dataset.
+ * @param {boolean} negative - Whether the dataset is comprised solely of negative values.
  * @returns {string} The color value.
  */
 function getScaleValuesTest(choroplethColorPalette, choroplethInterpolation, divisions, value, placement, dataLength, negative) {

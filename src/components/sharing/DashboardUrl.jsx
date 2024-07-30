@@ -58,6 +58,10 @@ export const updateListHash = (name, index, value) => {
  * @param {(dataset: string) => any} updateDataset - Function to update the dataset.
  * @param {string[]} datasetList - List of available datasets.
  * @param {string} dataset - The current dataset.
+ * @param {number} startdate - The currently stored start date.
+ * @param {number} enddate - The currently stored end date.
+ * @param {number} yeardate - The currently stored year date.
+ * @param {string} parameter - The currently stored selected guage.
  */
 export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded, updateDataset, datasetList, dataset, startdate, enddate, yeardate, parameter) => {
   //Check and handle selected dataset. URL reset if dataset not currently loaded.

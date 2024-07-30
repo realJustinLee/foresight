@@ -303,14 +303,18 @@ query BarQuery($date: Int!, $nextToken: String, $id: String!) {
  * to set the end year.
  * @param {(current: number) => any} props.setCurrentDate - Function 
  * to set the current year.
+ * @param {(subcat: string) => any} props.setSubcat - Function 
+ * to set the current subcategory.
+ * @param {(region: string) => any} props.setRegion - Function 
+ * to set the current region.
+ * @param {boolean} props.URLLoaded - Flag indicating 
+ * if the URL is loaded.
  * @param {() -> any} props.toggleURLLoaded - Function to 
  * toggle URL loading flag.
  * @param {(dataset: string) => any} props.updateDataset - Function to 
  * change the currently selected dataset.
  * @param {string[]} props.datasetList - State of the current 
  * list of datasets
- * @param {boolean} props.URLLoaded - Flag indicating 
- * if the URL is loaded.
  * @returns {ReactElement} The rendered component.
  */
 function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, setSubcat, setRegion, URLLoaded, toggleURLLoaded, updateDataset, datasetList }) {

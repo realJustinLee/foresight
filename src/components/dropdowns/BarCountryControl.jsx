@@ -7,6 +7,7 @@ import { setBarCountries } from '../Store';
 import { connect } from 'react-redux';
 import Form from 'react-bootstrap/Form';
 import { getRegionsSorted, getScenerio, listRegions } from '../data/DataManager';
+import { DropdownSearchBar } from './DropdownSearchBar';
 
 /**
  * A dropdown menu for Bar Chart settings.
@@ -59,7 +60,7 @@ function BarChartControl({ csv, scenario, setCountries, countries }) {
         <MdSettings />
       </Dropdown.Toggle>
 
-      <Dropdown.Menu>
+      <Dropdown.Menu as={DropdownSearchBar}>
         <Dropdown.Header>Region Selection</Dropdown.Header>
         {colors}
       </Dropdown.Menu>
