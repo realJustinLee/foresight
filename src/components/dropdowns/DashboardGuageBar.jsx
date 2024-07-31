@@ -10,6 +10,7 @@ import { DropdownButton } from 'react-bootstrap';
 import { MdOutlineLibraryAdd } from "react-icons/md";
 import Form from 'react-bootstrap/Form';
 import { getIconParam, iconTypes } from '../data/VariableCategories';
+import { DropdownSearchBar } from './DropdownSearchBar';
 
 function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameters, SelectedParameter, startDate, endDate, data, updateSelection, updateScenerios, updateGuages, dashDate, dashReg, dashSubs, reset }) {
 
@@ -161,9 +162,14 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   const guageSelectionCol = () => {
     return (
       OpenScenarios.map((scenario, index) => (
-        <DropdownButton className="guage-scenerio-button dashboard-scenerio-button" variant="outline-light" title={<MdOutlineLibraryAdd />}>
-          {paramDropdownList(index)}
-        </DropdownButton>
+        <Dropdown>
+          <Dropdown.Toggle className="guage-scenerio-button dashboard-scenerio-button" variant="outline-light">
+            <MdOutlineLibraryAdd />
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            {paramDropdownList(index)}
+          </Dropdown.Menu>
+        </Dropdown>
       ))
     )
   };

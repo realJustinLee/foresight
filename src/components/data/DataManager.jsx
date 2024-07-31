@@ -157,7 +157,7 @@ export const getDataDate = (data, scenario, param, date) => {
 export const findUnitsByTitle = (objectsArray, titleToFind) => {
     const foundObject = objectsArray.find(obj => obj.title === titleToFind);
     //console.log(foundObject)
-    return foundObject ? foundObject.units : "ERROR";
+    return foundObject ? foundObject.units : "Loading...";
 }
 
 /**
