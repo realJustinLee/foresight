@@ -10,7 +10,6 @@ import { updateHash } from '../sharing/DashboardUrl';
 
 const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
   const mapData = data;
-  console.log(mapData);
   const getJson = (data) => {
     if (!data || !data[0] || !data[0].id || data === 'i') return landcells;
     if (mapRegion === 'global')
@@ -102,7 +101,6 @@ const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapIn
       dashArray: '',
       fillOpacity: 0.7
     });
-
     layer.bringToFront();
   }
 

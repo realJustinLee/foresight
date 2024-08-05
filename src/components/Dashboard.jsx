@@ -146,6 +146,8 @@ function Dashboard({ open, dataset, scenarios }) {
           />
           <Row title="Selected data information." className="selection-divider">
             <DashboardFloater
+              dataset={dataset}
+              scenarios={scenarios}
               dates={datesData}
               regions={regionList}
               subcats={subcategoriesList}

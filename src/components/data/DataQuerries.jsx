@@ -359,7 +359,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
 
   const fetchDashboard = useCallback(async () => {
     const result = await fetchParallel([[queryDataset, { dataset: dataset }]]);
-    console.log(result);
+    //console.log(result);
     loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList, dataset, start, end, year, parameter);
     // eslint-disable-next-line
   }, [dataset]);

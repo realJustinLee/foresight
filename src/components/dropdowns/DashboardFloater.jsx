@@ -8,8 +8,10 @@ import { DropdownButton } from "react-bootstrap";
 import { getIconParam } from "../data/VariableCategories";
 import { updateHash } from "../sharing/DashboardUrl";
 import { findUnitsByTitle } from "../data/DataManager";
+import { DropdownSearchBar } from "./DropdownSearchBar";
+import DashboardDataDownload from "../sharing/DashboardDataDownload";
 
-function DashboardFloater({ updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions }) {
+function DashboardFloater({ dataset, scenarios, updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions }) {
     const [width, setWidth] = useState(window.innerWidth);
     useEffect(() => {
         const handleResize = () => {
@@ -102,18 +104,38 @@ function DashboardFloater({ updateGuage, selection, openGuages, year, region, su
                         {links}
                     </Dropdown.Menu>
                 </Dropdown>
+                <DashboardDataDownload
+                    dataset={dataset}
+                    scenarios={scenarios}
+                    parameter={selection}
+                />
             </div>
             {(width >= 875) ? (
                 <div title="Change selected year, region, and subsector">
-                    <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Year: " + year}>
-                        {date_links}
-                    </DropdownButton>
-                    <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Region: " + region}>
-                        {region_links}
-                    </DropdownButton>
-                    <DropdownButton variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button" title={"Subsector: " + subsector.trim()}>
-                        {subcat_links}
-                    </DropdownButton>
+                    <Dropdown>
+                        <Dropdown.Toggle variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button">
+                            {"Year: " + year}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu as={DropdownSearchBar}>
+                            {date_links}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <Dropdown>
+                        <Dropdown.Toggle variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button">
+                            {"Region: " + region}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu as={DropdownSearchBar}>
+                            {region_links}
+                        </Dropdown.Menu>
+                    </Dropdown>
+                    <Dropdown>
+                        <Dropdown.Toggle variant="outline-light" className="dashboard-scenerio-button dashboard-floater-button">
+                            {"Subsector: " + subsector.trim()}
+                        </Dropdown.Toggle>
+                        <Dropdown.Menu as={DropdownSearchBar}>
+                            {subcat_links}
+                        </Dropdown.Menu>
+                    </Dropdown>
                     <Button
                         title="Reset all data selections"
                         className="floater-button"
@@ -182,4 +204,5 @@ function mapStateToProps(state) {
         subsector: state.dashboardSubsector,
     };
 }
+
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardFloater);

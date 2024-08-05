@@ -163,10 +163,10 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
     return (
       OpenScenarios.map((scenario, index) => (
         <Dropdown>
-          <Dropdown.Toggle className="guage-scenerio-button dashboard-scenerio-button" variant="outline-light">
+          <Dropdown.Toggle className="dashboard-scenerio-button" variant="outline-light">
             <MdOutlineLibraryAdd />
           </Dropdown.Toggle>
-          <Dropdown.Menu>
+          <Dropdown.Menu className="guage-scenerio-button">
             {paramDropdownList(index)}
           </Dropdown.Menu>
         </Dropdown>

@@ -199,8 +199,8 @@
   overflow-y: scroll;
 }
 
-.guage-scenerio-button .dropdown-menu {
-  width: min(700%, 90vw);
+.guage-scenerio-button{
+  width: min(800%, 90vw);
 }
 
 .dashboard-floater-button {
@@ -208,7 +208,7 @@
   padding-left: 20px;
   padding-right: 20px;
   position: relative;
-  font-weight: 900;
+  font-weight: 700;
 }
 
 .dashboard-guage-grid {
@@ -346,7 +346,7 @@
   position: relative;
   text-align: center;
   padding-top: 8px;
-  padding-bottom: 8px;
+  padding-bottom: 15px;
   margin: 0;
   border-radius: 9px;
   background-color: black;
