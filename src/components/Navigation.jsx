@@ -11,7 +11,7 @@ import { BsFillInfoCircleFill, BsFillDatabaseFill } from "react-icons/bs";
 import { RiTeamFill } from "react-icons/ri";
 import { MdFileUpload, MdHelp } from "react-icons/md";
 import { connect } from "react-redux";
-import { setDataset } from "./Store";
+import { setDashDate, setDashReg, setDashSubs, setDataset } from "./Store";
 import './css/Navigation.css';
 import { updateHash } from "./sharing/DashboardUrl";
 
@@ -25,11 +25,17 @@ import { updateHash } from "./sharing/DashboardUrl";
  * @param {(dataset: any) => any} props.updateDataset - Updates the current dataset.
  * @returns {ReactElement} The rendered component.
  */
-function Navigation({ dataset, datasets, updateDataset }) {
+function Navigation({ dataset, datasets, updateDataset, dashDate, dashReg, dashSubs }) {
   const handleDatasetChange = (selectedDataset) => {
     //console.log("Selected dataset:", selectedDataset);
     // Call updateDataset to dispatch the action
     updateDataset(selectedDataset.data);
+    dashDate(2020);
+    dashReg("Global");
+    dashSubs("Aggregate of Subsectors");
+    updateHash("year", 2020);
+    updateHash("reg", "Global");
+    updateHash("sub", "Aggregate of Subsectors");
     updateHash("dataset", selectedDataset.data);
   };
 
@@ -167,6 +173,9 @@ const mapStateToProps = (state) => {
 function mapDispatchToProps(dispatch) {
   return {
     updateDataset: (dataset) => dispatch(setDataset(dataset)),
+    dashDate: (date) => dispatch(setDashDate(date)),
+    dashReg: (date) => dispatch(setDashReg(date)),
+    dashSubs: (date) => dispatch(setDashSubs(date)),
   };
 }
 
