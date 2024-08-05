@@ -3,9 +3,14 @@ import { Form } from 'react-bootstrap';
 
 export const DropdownSearchBar = React.forwardRef(
   ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
-    console.log(children, children[0], children[1]);
     const [value, setValue] = useState('');
-
+    const dropdown = (children[0].key) ? (children.filter(
+      (child) =>
+        !value || !child.key || child.key.toLowerCase().startsWith(value.toLowerCase())
+    )) : (children[1].filter(
+      (child) =>
+        !value || !child.key || child.key.toLowerCase().startsWith(value.toLowerCase())
+    ))
     return (
       <div
         ref={ref}
@@ -21,13 +26,7 @@ export const DropdownSearchBar = React.forwardRef(
           value={value}
         />
         <ul className="list-unstyled">
-          {(children[0].key) ? (children.filter(
-            (child) =>
-              !value || !child.key || child.key.toLowerCase().startsWith(value.toLowerCase())
-          )) : (children[1].filter(
-            (child) =>
-              !value || !child.key || child.key.toLowerCase().startsWith(value.toLowerCase())
-          ))}
+          {(children && children[0]) ? dropdown : ""}
         </ul>
       </div>
     );

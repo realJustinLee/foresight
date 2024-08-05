@@ -11,7 +11,7 @@ import { findUnitsByTitle } from "../data/DataManager";
 import { DropdownSearchBar } from "./DropdownSearchBar";
 import DashboardDataDownload from "../sharing/DashboardDataDownload";
 
-function DashboardFloater({ dataset, scenarios, updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions }) {
+function DashboardFloater({ dataset, scenarios, updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions, datasetData }) {
     const [width, setWidth] = useState(window.innerWidth);
     useEffect(() => {
         const handleResize = () => {
@@ -108,6 +108,7 @@ function DashboardFloater({ dataset, scenarios, updateGuage, selection, openGuag
                     dataset={dataset}
                     scenarios={scenarios}
                     parameter={selection}
+                    datasetData={datasetData}
                 />
             </div>
             {(width >= 875) ? (
@@ -202,6 +203,7 @@ function mapStateToProps(state) {
         year: state.dashboardYear,
         region: state.dashboardRegion,
         subsector: state.dashboardSubsector,
+        datasetData: state.datasetData,
     };
 }
 
