@@ -5,20 +5,21 @@ export const DropdownSearchBar = React.forwardRef(
   ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
     const [value, setValue] = useState('');
     const getItems = () => {
-      if ((children && children.length === 1)|| (children && children.length === 2 && children[1].key))
-        return children;
+      console.log(children);
       if (!children || !children[0] || !children[1])
         return "";
+      if (Array.isArray(children[1]))
+        return children[1].filter(
+          (child) =>
+            !value || !child.key || child.key.toLowerCase().startsWith(value.toLowerCase())
+        )
+      if ((children && children.length === 1) || (children && children.length === 2 && children[1].key))
+        return children;
       if (children[0].key)
         return children.filter(
           (child) =>
             !value || !child.key || child.key.toLowerCase().startsWith(value.toLowerCase())
         );
-      if (children[1].key)
-        return children[1].filter(
-          (child) =>
-            !value || !child.key || child.key.toLowerCase().startsWith(value.toLowerCase())
-        )
       return "";
     };
     return (

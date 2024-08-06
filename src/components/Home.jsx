@@ -3,6 +3,8 @@ import Globe from "react-globe.gl";
 import './css/Home.css';
 import background from "../assets/img/globe_stars_medium.jpg";
 import earth from "../assets/img/globe_earth_night.jpg";
+import { NavLink } from "react-router-dom";
+import { Nav } from "react-bootstrap";
 
 const N = 50;
 const arcsData = [...Array(N).keys()].map(() => ({
@@ -23,10 +25,10 @@ const arcsData = [...Array(N).keys()].map(() => ({
  */
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
-  
+
   let adjustedWidth = width;
   let adjustedHeight = height;
-  
+
   if (width > 900) {
     // Adjust for large screens
     adjustedWidth *= 2;
@@ -36,7 +38,7 @@ function getWindowDimensions() {
     adjustedWidth *= 1.1;
     adjustedHeight *= 1.1;
   }
-  
+
   return {
     width: adjustedWidth,
     height: adjustedHeight
@@ -103,10 +105,14 @@ function Home() {
           backgroundImageUrl={background}
         />
       </div>
-      <div className="home-title">Foresight
-      <div className="home-subtitle">Global Change Analytics</div>
-      </div>
-      
+      <Nav defaultActiveKey="/home">
+        <Nav.Link href="/dashboard">
+          <div className="home-title">
+            Foresight
+            <div className="home-subtitle">Global Change Analytics</div>
+          </div>
+        </Nav.Link>
+      </Nav>
     </div>
   );
 }
