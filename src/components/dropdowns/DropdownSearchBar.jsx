@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { Form } from 'react-bootstrap';
 
+/**
+ * The component that handles data downloading. Contains seperate pipelines for both user-uploaded and cloud-hosted data.
+ */
 export const DropdownSearchBar = React.forwardRef(
   ({ children, style, className, 'aria-labelledby': labeledBy }, ref) => {
     const [value, setValue] = useState('');
     const getItems = () => {
-      console.log(children);
       if (!children || !children[0] || !children[1])
         return "";
       if (Array.isArray(children[1]))

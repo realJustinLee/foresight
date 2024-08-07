@@ -252,14 +252,15 @@ query BarQuery($date: Int!, $nextToken: String, $id: String!) {
  * DataQuerries queries and modifies AWS data into the data needed for the various guages and visualizations.
  * 
  * @param {object} props - The component props.
- * @param {string} props.dataset - State of the current dataset
- * @param {object[]} props.scenerios - State of the currently open scenarios
- * @param {number} props.start - State of the current start date
- * @param {number} props.end - State of the current end date
- * @param {string} props.parameter - State of the currently selected parameter
- * @param {number} props.year - State of the current year
- * @param {string} props.region - State of the current region
- * @param {string} props.subcat - State of the current subcategory
+ * @param {string} props.dataset - State of the current dataset.
+ * @param {object[]} props.scenerios - State of the currently open scenarios.
+ * @param {number} props.start - State of the current start date.
+ * @param {number} props.end - State of the current end date.
+ * @param {string} props.parameter - State of the currently selected parameter.
+ * @param {object[]} props.parameters - State of the currently displayed parameters.
+ * @param {number} props.year - State of the current year.
+ * @param {string} props.region - State of the current region.
+ * @param {string} props.subcat - State of the current subcategory.
  * @param {React.Dispatch<React.SetStateAction<string>> | 
  * React.Dispatch<React.SetStateAction<Object[]>>} props.setGuage - Function
  * to change the data for guage displays.
@@ -314,10 +315,10 @@ query BarQuery($date: Int!, $nextToken: String, $id: String!) {
  * @param {(dataset: string) => any} props.updateDataset - Function to 
  * change the currently selected dataset.
  * @param {string[]} props.datasetList - State of the current 
- * list of datasets
+ * list of datasets.
  * @returns {ReactElement} The rendered component.
  */
-function DataQuerries({ dataset, scenerios, start, end, parameter, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, setSubcat, setRegion, URLLoaded, toggleURLLoaded, updateDataset, datasetList }) {
+function DataQuerries({ dataset, scenerios, start, end, parameter, parameters, year, region, subcat, setGuage, setDates, setLine, setChoropleth, setBar, setAggSub, setCountries, setRegions, setSubcategories, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, setSubcat, setRegion, URLLoaded, toggleURLLoaded, updateDataset, datasetList }) {
   const [scenarios, setScenarios] = useState("i");
 
   useEffect(() => {
@@ -360,7 +361,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
   const fetchDashboard = useCallback(async () => {
     const result = await fetchParallel([[queryDataset, { dataset: dataset }]]);
     //console.log(result);
-    loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList, dataset, start, end, year, parameter);
+    loadDataURL(result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, URLLoaded, toggleURLLoaded, updateDataset, datasetList, dataset, start, end, year, parameter, parameters);
     // eslint-disable-next-line
   }, [dataset]);
 
@@ -445,6 +446,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
         checkRegionURL(new Set(result.map(obj => obj.region)), setRegion);
       setCountries(filterRegion(getScenerio(result, scenarios[0])));
     }
+    // eslint-disable-next-line
   }, [dataset, scenarios, parameter, year, setAggSub, setCountries, setRegion, fetchParallel]);
 
   const fetchAggReg = useCallback(async () => {
@@ -454,6 +456,7 @@ function DataQuerries({ dataset, scenerios, start, end, parameter, year, region,
         checkSubcatURL(result.map(obj => obj.class), setSubcat);
       setSubcategories(filterSubcat(result));
     }
+    // eslint-disable-next-line
   }, [dataset, scenarios, parameter, year, setSubcategories, setSubcat, fetchParallel]);
 
   useEffect(() => {
@@ -533,6 +536,7 @@ function mapStateToProps(state) {
     end: parseInt(state.endDate),
     scenerios: state.scenerios,
     parameter: state.dashboardSelection,
+    parameters: state.guages,
     year: state.dashboardYear,
     region: state.dashboardRegion,
     subcat: state.dashboardSubsector,

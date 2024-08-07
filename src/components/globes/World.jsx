@@ -9,7 +9,11 @@ const gData = [...Array(N).keys()].map(() => ({
   color: ["red", "white", "blue", "green"][Math.round(Math.random() * 3)],
 }));
 
-// Set window dimensions //
+/**
+ * Gets the width and height of the current window element.
+ * 
+ * @returns {{width: number; height: number;}} The window width and height.
+ */
 function getWindowDimensions() {
   const { innerWidth: width, innerHeight: height } = window;
   return {
@@ -18,6 +22,11 @@ function getWindowDimensions() {
   };
 }
 
+/**
+ * Listens for changes in window dimensions and updates the windowDimensions parameter.
+ * 
+ * @returns {{width: number; height: number;}} The window width and height.
+ */
 export function useWindowDimensions() {
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
@@ -35,9 +44,14 @@ export function useWindowDimensions() {
   return windowDimensions;
 }
 
+/**
+ * A simple Globe component with random markers, fixed dimensions and rotation speed for testing.
+ * 
+ * @returns {ReactElement} The rendered component.
+ */
 function World() {
   const globeElement = React.useRef();
-  const { height, width } = useWindowDimensions();
+  //const { height, width } = useWindowDimensions();
 
   React.useEffect(() => {
     // Auto-rotate

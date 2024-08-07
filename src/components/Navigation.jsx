@@ -23,6 +23,9 @@ import { updateHash } from "./sharing/DashboardUrl";
  * @param {string} props.dataset - State indicating the current dataset.
  * @param {string[]} props.datasets - State indicating all datasets.
  * @param {(dataset: any) => any} props.updateDataset - Updates the current dataset.
+ * @param {(date: number) => any} props.dashDate - Updates the current dashboard date.
+ * @param {(reg: string) => any} props.dashReg - Updates the current dashboard region.
+ * @param {(sub: string) => any} props.dashSubs - Updates the current dashboard subcategory.
  * @returns {ReactElement} The rendered component.
  */
 function Navigation({ dataset, datasets, updateDataset, dashDate, dashReg, dashSubs }) {
@@ -174,8 +177,8 @@ function mapDispatchToProps(dispatch) {
   return {
     updateDataset: (dataset) => dispatch(setDataset(dataset)),
     dashDate: (date) => dispatch(setDashDate(date)),
-    dashReg: (date) => dispatch(setDashReg(date)),
-    dashSubs: (date) => dispatch(setDashSubs(date)),
+    dashReg: (reg) => dispatch(setDashReg(reg)),
+    dashSubs: (sub) => dispatch(setDashSubs(sub)),
   };
 }
 

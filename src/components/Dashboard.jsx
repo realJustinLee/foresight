@@ -4,10 +4,6 @@ import SidebarDashboard from "./SidebarDashboard.jsx";
 import { connect } from "react-redux";
 import DateDropdown from "./dropdowns/DashboardDate";
 import DashboardGraphs from "./DashboardGraphs.jsx";
-import { MdError, MdElectricBolt, MdGroups, MdFilterHdr, MdOutlineWindPower } from "react-icons/md";
-import { GiCorn, GiFactory, GiWaterDrop, GiCow } from "react-icons/gi";
-import { TbCoins } from "react-icons/tb";
-import { FaTruckMoving } from "react-icons/fa";
 import { setdashboardSelection, setStartDate, setEndDate } from "./Store";
 import './css/Dashboard.css';
 import DashboardFloater from "./dropdowns/DashboardFloater.jsx";
@@ -15,44 +11,6 @@ import DashboardGuageBar from "./dropdowns/DashboardGuageBar.jsx";
 import DataQuerries from "./data/DataQuerries.jsx";
 import { datasets } from "./data/Scenarios.jsx";
 import DataQueryUser from "./data/DataQueryUser.jsx";
-
-/**
- * Gets the icon for each category by name. 
- * This icon is displayed next to the gauges and the selection.
- * 
- * @param {string} selection - The selected category name.
- * @param {string[]} openGuages - List of open gauges.
- * @returns {ReactElement} The icon component for the specified category.
- */
-export const getIcon = (selection, openGuages) => {
-  const found = openGuages.find(gauge => gauge.title === selection);
-  const guageCategory = found ? found.group : "error"
-
-  switch (guageCategory) {
-    case "socioeconomics":
-      return <TbCoins />;
-    case "population":
-      return <MdGroups />;
-    case "transport":
-      return <FaTruckMoving />;
-    case "water":
-      return <GiWaterDrop />;
-    case "agriculture":
-      return <GiCorn />;
-    case "livestock":
-      return <GiCow />;
-    case "land":
-      return <MdFilterHdr />
-    case "emissions":
-      return <GiFactory />;
-    case "electricity":
-      return <MdElectricBolt />;
-    case "energy":
-      return <MdOutlineWindPower />;
-    default:
-      return <MdError />;
-  }
-}
 
 /**
  * Main Dashboard component.

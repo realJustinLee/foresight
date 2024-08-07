@@ -1,6 +1,14 @@
 import React, { useEffect } from "react";
 import Gauge from "justgage";
 
+/**
+ * A justgage object for a positive guage displayed in the dashboard guage bar.
+ * 
+ * @param {object} props - The component props.
+ * @param {string} props.guageText - Title of the guage.
+ * @param {number} props.guageValue - Guage number value.
+ * @returns {ReactElement} The rendered component.
+ */
 const ScenerioGuage = ({ guageText, guageValue }) => {
     const Text = guageText;
     const Value = guageValue;

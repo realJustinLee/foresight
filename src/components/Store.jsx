@@ -131,7 +131,7 @@ export function setDashSubs(subsector) {
 }
 
 /**
- * Updates the currently selected gauge.
+ * Updates the currently selected data variables.
  * 
  * @param {string} param - The selected parameter.
  * @returns {object} The action.
@@ -142,9 +142,9 @@ export function setdashboardSelection(param) {
 }
 
 /**
- * Updates the list of gauges for the dashboard.
+ * Updates the list of currently chosen data variables for the dashboard.
  * 
- * @param {Array} guages - The list of gauges.
+ * @param {Array} guages - The list of currently chosen data variables.
  * @returns {object} The action.
  */
 export function setdashboardGuages(guages) {
@@ -153,9 +153,9 @@ export function setdashboardGuages(guages) {
 }
 
 /**
- * Updates the gauge list.
+ * Updates the list of all data variables.
  * 
- * @param {Array} guages - The gauge list.
+ * @param {Array} guages - The data variables list.
  * @returns {object} The action.
  */
 export function setGuageList(guages) {

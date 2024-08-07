@@ -29,6 +29,16 @@ query BarQuery($nextToken: String, $id: String!) {
 `;
 
 
+/**
+ * Converts the currently displayed dataset into a csv file and downloads it.
+ * 
+ * @param {object} props - The component props.
+ * @param {string} props.dataset - Currently selected dataset.
+ * @param {object[]} props.scenarios - Array containing currently selected scenarios.
+ * @param {string} props.parameter - Name of the currently selected data variable.
+ * @param {object[]} props.datasetData - Dataset including all user uploaded data.
+ * @returns {ReactElement} The rendered component.
+ */
 export default function DashboardDataDownload({ dataset, scenarios, parameter, datasetData }) {
   const fetchData = async (query, variables) => {
     let nextToken = null;

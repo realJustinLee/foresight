@@ -11,6 +11,35 @@ import { findUnitsByTitle } from "../data/DataManager";
 import { DropdownSearchBar } from "./DropdownSearchBar";
 import DashboardDataDownload from "../sharing/DashboardDataDownload";
 
+/**
+ * The floater component displayed between the guages and the charts on the dashboard. 
+ * Functions as a menu for user selection of parameters, regions, dates, and subcategories.
+ * 
+ * @param {object} props - The component props.
+ * @param {boolean} props.dataset - Name of the currently selected dataset.
+ * @param {object[]} props.scenarios - Array of selected scenarios.
+ * @param {(newSelectedGuage: string) => any} props.updateGuage - Updates the
+ * currently selected guage.
+ * @param {string} props.selection - Name of the currently selected guage.
+ * @param {object[]} props.openGuages - Name of the currently open guages.
+ * @param {number} props.year - Currently selected year. 
+ * @param {string} props.region - Currently selected region.
+ * @param {string} props.subsector - Currently selected subsector.
+ * @param {(date: number) => any} props.dashDate - Updates the
+ * currently selected date.
+ * @param {(reg: string) => any} props.dashReg - Updates the
+ * currently selected region.
+ * @param {(subs: string) => any} props.dashSubs - Updates the
+ * currently selected subcategory.
+ * @param {object[]} props.dates - Data containing all valid dates for the 
+ * current selection.
+ * @param {object[]} props.subcats - Data containing all valid subcategories for the 
+ * current selection.
+ * @param {object[]} props.regions - Data containing all valid regions for the 
+ * current selection.
+ * @param {object[]} props.datasetData - Object containing all user-uploaded data.
+ * @returns {ReactElement} The rendered component.
+ */
 function DashboardFloater({ dataset, scenarios, updateGuage, selection, openGuages, year, region, subsector, dashDate, dashReg, dashSubs, dates, subcats, regions, datasetData }) {
     const [width, setWidth] = useState(window.innerWidth);
     useEffect(() => {
@@ -185,8 +214,8 @@ function mapDispatchToProps(dispatch) {
     return {
         updateGuage: (newSelectedGuage) => dispatch(setdashboardSelection(newSelectedGuage)),
         dashDate: (date) => dispatch(setDashDate(date)),
-        dashReg: (date) => dispatch(setDashReg(date)),
-        dashSubs: (date) => dispatch(setDashSubs(date))
+        dashReg: (reg) => dispatch(setDashReg(reg)),
+        dashSubs: (subs) => dispatch(setDashSubs(subs))
     };
 }
 

@@ -1,6 +1,14 @@
 import React, { useEffect } from "react";
 import Gauge from "justgage";
 
+/**
+ * A justgage guage for testing.
+ * 
+ * @param {object} props - The component props.
+ * @param {string} props.guageText - Text to be displayed below the guage.
+ * @param {number} props.guageValue - Value to be displayed within the guage.
+ * @returns {ReactElement} The rendered component.
+ */
 const CustomGuage = ({ guageText, guageValue }) => {
   const Text = guageText;
   const Value = guageValue;

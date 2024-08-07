@@ -2,6 +2,9 @@ import React from "react";
 import { ResponsiveChoropleth } from "@nivo/geo";
 import countries from "./world_countries.json";
 
+/**
+ * Dummy data for the Nivo choropleth.
+ */
 const data = [
   {
     id: "AFG",
@@ -689,6 +692,13 @@ const data = [
   },
 ];
 
+/**
+ * A Nivo choropleth with dummy data for testing.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Data for the bump chart.
+ * @returns {ReactElement} The rendered component.
+ */
 const MyChart = ({ data }) => (
   <ResponsiveChoropleth
     data={data}
@@ -787,6 +797,11 @@ const MyChart = ({ data }) => (
   />
 );
 
+/**
+ * A container for the test Nivo choropleth.
+ * 
+ * @returns {ReactElement} The rendered component.
+ */
 function Choropleth() {
   return (
     <div className="choropleth chart">

@@ -3,6 +3,11 @@ import { MapContainer, TileLayer, GeoJSON, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
+/**
+ * Returns color values for a specific dummy dataset region.
+ * 
+ * @returns {string} The color to shade a region.
+ */
 function getColor(density) {
   return density > 1000
     ? "#800026"
@@ -21,6 +26,11 @@ function getColor(density) {
     : "#FFEDA0";
 }
 
+/**
+ * Creates a legend which is displayed at the bottom right of the MapChoropleth component.
+ * 
+ * @returns {ReactElement} The rendered component.
+ */
 function LegendControl() {
   const map = useMap();
 
@@ -53,9 +63,17 @@ function LegendControl() {
   return null;
 }
 
+/**
+ * A standard non-synced React-Leaflet choropleth currently not displayed and used for testing purposes.
+ * 
+ * @param {object} props - The component props.
+ * @param {string | number | undefined} props.width - Choropleth Width.
+ * @param {string | number | undefined} props.height - Choropleth Height.
+ * @param {object[]} props.data - Geojson data to be displayed.
+ * @returns {ReactElement} The rendered component.
+ */
 function MapChoropleth({ width, height, data}) {
   const [highlightedFeature, setHighlightedFeature] = useState(null);
-
   const geoJSONStyle = (feature) => {
     const density = feature.properties.density;
 

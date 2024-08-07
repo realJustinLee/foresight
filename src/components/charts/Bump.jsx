@@ -1,11 +1,13 @@
 import React from "react";
 import { ResponsiveBump } from '@nivo/bump'
 
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
+/**
+ * A Nivo responsive bump chart with dummy data for testing.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Data for the bump chart.
+ * @returns {ReactElement} The rendered component.
+ */
 const MyResponsiveBump = ({ data }) => (
     <div className="nivo-wrapper">
         <ResponsiveBump

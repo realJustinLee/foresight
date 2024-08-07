@@ -1,6 +1,9 @@
 import React from "react";
 import { ResponsiveFunnel } from "@nivo/funnel";
 
+/**
+ * Dummy data for the Nivo funnel. 
+ */
 const data = [
   {
     id: "step_sent",
@@ -29,6 +32,13 @@ const data = [
   },
 ];
 
+/**
+ * A Nivo funnel chart for testing with dummy data.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Data for the bump chart.
+ * @returns {ReactElement} The rendered component.
+ */
 const MyChart = ({ data }) => (
   <ResponsiveFunnel
     data={data}
@@ -50,6 +60,11 @@ const MyChart = ({ data }) => (
   />
 );
 
+/**
+ * A container for the nivo funnel chart.
+ * 
+ * @returns {ReactElement} The rendered component.
+ */
 function Funnel() {
   return (
     <div className="funnel chart">

@@ -12,6 +12,21 @@ import DashboardLeaflet from './DashboardLeaflet';
 import { getSmallestChoropleth, getLargestChoropleth } from '../data/DataManager';
 import { getColorsFromPalette } from '../data/GcamColors';
 
+/**
+ * A Leaflet choropleth to be synced and displayed in the LeafletSync component.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.mapRegion - Name of the geojson region type.
+ * @param {string} props.choroplethColorPalette - Selected choropleth color palette.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.setChoroplethColorPalette - Update the current color palette.
+ * @param {string} props.choroplethInterpolation - Selected choropleth interpolation.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.setInterpolation - Updates the currently selected interpolation.
+ * @param {object[]} props.data - Dataset for the first scenario.
+ * @param {object[]} props.data2 - Dataset for the second scenario.
+ * @param {string} props.uniqueValue - Unique value to title the senario.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.setRegion - Update the currently selected country.
+ * @returns {ReactElement} The rendered component.
+ */
 const LeafletSync = ({ mapRegion, choroplethColorPalette, setChoroplethColorPalette, choroplethInterpolation, setInterpolation, data, data2, uniqueValue, setRegion }) => {
   //Map Instances
   const [mapInstance, setMapInstance] = useState(null);

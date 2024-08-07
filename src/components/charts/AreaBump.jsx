@@ -1,6 +1,13 @@
 import React from "react";
 import { ResponsiveAreaBump } from "@nivo/bump";
 
+/**
+ * A Nivo bump chart for testing showing the rankings of different regions over time.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Data for the bump chart.
+ * @returns {ReactElement} The rendered component.
+ */
 const AreaBump = ({data}) => (
   <ResponsiveAreaBump
     data={data}

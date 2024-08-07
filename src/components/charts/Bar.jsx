@@ -1,6 +1,13 @@
 import React from "react";
 import { ResponsiveBar } from "@nivo/bar";
 
+/**
+ * A Nivo bar chart with dummy data for testing.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Data for the bar chart.
+ * @returns {ReactElement} The rendered component.
+ */
 const Bar = ({data}) => (
     <ResponsiveBar
     data = {data}

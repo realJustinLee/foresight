@@ -8,7 +8,27 @@ import regions_glu from "./data/regions_glu.json"
 import { getChoroplethValue } from '../data/DataManager';
 import { updateHash } from '../sharing/DashboardUrl';
 
-const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, getColor, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
+
+/**
+ * A Leaflet choropleth to be synced and displayed in the LeafletSync component.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Choropleth Data.
+ * @param {string} props.mapRegion - Geojson type for map regions.
+ * @param {boolean} props.displayLegend - Whether the map legend is currently displayed.
+ * @param {string} props.id - Unique map id.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.setRegion - Updates the currently selecetd region.
+ * @param {L.Map} props.mapInstance - Current instance of the map.
+ * @param {React.Dispatch<React.SetStateAction<L.Map>>} props.setMapInstance - Update the current instance of the map.
+ * @param {React.CSSProperties} props.mapStyles - CSS style of the current map.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.setCountryDisplay - Update the currently selected country.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.setCountryDisplayValue - Update the current country value saved.
+ * @param {string} props.choroplethColorPalette - Name of the chosen choropleth color palette.
+ * @param {string} props.choroplethInterpolation - Name of the chosen choropleth interpolation.
+ * @param {number} props.divisions - Maximum number of color divisions in the map.
+ * @returns {ReactElement} The rendered component.
+ */
+const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapInstance, setMapInstance, mapStyles, setCountryDisplay, setCountryDisplayValue, choroplethColorPalette, choroplethInterpolation, divisions }) => {
   const mapData = data;
   const getJson = (data) => {
     if (!data || !data[0] || !data[0].id || data === 'i') return landcells;
@@ -66,6 +86,7 @@ const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapIn
       mapRef.current = L.map(id, mapParams);
       setMapInstance(mapRef.current);
     }
+    // eslint-disable-next-line
   }, [id, mapInstance, setMapInstance]);
 
   // If you want to use the mapInstance in a useEffect hook,
@@ -89,7 +110,8 @@ const DashboardLeaflet = ({ data, mapRegion, displayLegend, id, setRegion, mapIn
     map_base.addTo(mapInstance);
     L.geoJSON(mapJson, { style: style, onEachFeature: onEachFeature }).addTo(mapInstance);
     //setMapInstance(mapInstance);
-  }, [mapInstance, mapData, choroplethColorPalette, choroplethInterpolation]);
+    // eslint-disable-next-line
+  }, [mapInstance, mapData, mapJson, choroplethColorPalette, choroplethInterpolation]);
 
   function highlightFeature(e) {
     var layer = e.target;

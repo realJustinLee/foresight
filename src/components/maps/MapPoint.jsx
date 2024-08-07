@@ -3,6 +3,15 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { Icon } from 'leaflet';
 import customMarkerIconPng from "./images/marker-icon-2x.png";
 
+/**
+ * A simple react-leaflet component with a custom marker for testing purposes..
+ * 
+ * @param {object} props - The component props.
+ * @param {string | number | undefined} props.width - Leaflet Width.
+ * @param {string | number | undefined} props.height - Leaflet Height.
+ * @param {object[]} props.data - Geojson data to be displayed.
+ * @returns {ReactElement} The rendered component.
+ */
 function MapPoint({ width, height, data }) {
 
   const customIcon = new Icon({

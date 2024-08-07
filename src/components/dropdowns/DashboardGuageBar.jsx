@@ -10,8 +10,29 @@ import { DropdownButton } from 'react-bootstrap';
 import { MdOutlineLibraryAdd } from "react-icons/md";
 import Form from 'react-bootstrap/Form';
 import { getIconParam, iconTypes } from '../data/VariableCategories';
-import { DropdownSearchBar } from './DropdownSearchBar';
 
+/**
+ * The floater component displayed between the guages and the charts on the dashboard. 
+ * Functions as a menu for user selection of parameters, regions, dates, and subcategories.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.Scenarios - All total available scenarios.
+ * @param {object[]} props.OpenScenarios - All currently open scenarios.
+ * @param {object[]} props.Parameters - All total available guages.
+ * @param {object[]} props.OpenParameters - All currently open guages.
+ * @param {string} props.SelectedParameter - Currently selected guage.
+ * @param {number} props.startDate - Guage start date.
+ * @param {number} props.endDate - Guage end date.
+ * @param {object[]} props.data - Data for loading the guages.
+ * @param {(openGuage: object[]) => any} props.updateSelection - Updates the currently selected guage.
+ * @param {(openScenerio: object[]) => any} props.updateScenerios - Updates the current scenarios.
+ * @param {(guages: object[]) => any} props.updateGuages - Updates the currently opened guages.
+ * @param {(date: number) => any} props.dashDate - Updates the currently selected date.
+ * @param {(reg: string) => any} props.dashReg - Updates the currently selected region.
+ * @param {(subs: string) => any} props.dashSubs - Updates the currently selected subsector.
+ * @param {() => void} props.reset - Function that forces a re-query of all data.
+ * @returns {ReactElement} The rendered component.
+ */
 function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameters, SelectedParameter, startDate, endDate, data, updateSelection, updateScenerios, updateGuages, dashDate, dashReg, dashSubs, reset }) {
 
   const paramDropdownList = () => {

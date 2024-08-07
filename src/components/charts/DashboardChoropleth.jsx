@@ -2,12 +2,16 @@ import React from "react";
 import { ResponsiveChoropleth } from "@nivo/geo";
 import countries from "./geopolitical_regions.json";
 
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
-//<div style={isLeft?{textAlign:'left'}:{textAlign:'right'}}>{scenarioTitle}</div>
+/**
+ * A container for the nivo choropleth previously used for display on the dashboard. 
+ * Currently disused and superceded by the LeafletSync.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Region data for the choropleth.
+ * @param {number} props.min - Minimum value within the dataset.
+ * @param {number} props.max - Maximum value within the dataset.
+ * @returns {ReactElement} The rendered component.
+ */
 const DashboardChoropleth = ({ data, min, max }) => (
     <>
         

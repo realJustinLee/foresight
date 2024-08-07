@@ -62,8 +62,9 @@ export const updateListHash = (name, index, value) => {
  * @param {number} enddate - The currently stored end date.
  * @param {number} yeardate - The currently stored year date.
  * @param {string} parameter - The currently stored selected guage.
+ * @param {object[]} parameters - The currently stored displayed guages.
  */
-export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded, updateDataset, datasetList, dataset, startdate, enddate, yeardate, parameter) => {
+export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded, updateDataset, datasetList, dataset, startdate, enddate, yeardate, parameter, parameters) => {
   //Check and handle selected dataset. URL reset if dataset not currently loaded.
   checkDatasetURL(urlLoaded, updateDataset, datasetList, dataset);
   //Prepare total scenarios
@@ -91,7 +92,7 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   //console.log(datasets.find(obj => obj.dataset === dataset))
   datasets.find(obj => obj.dataset === dataset).defaults.forEach(defaultGuage => currentGuages.push(guages.filter(guage => guage ? guage.title === defaultGuage : false)[0]));
   //console.log("STORE CURRENT GUAGES:", guages, currentGuages);
-  const selectedGuages = checkParamURL(urlLoaded, guages, currentGuages);
+  const selectedGuages = checkParamURL(urlLoaded, guages, parameters, currentGuages);
   setGuagesCurrent(selectedGuages);
   // Prepared selected guage
   //console.log(urlLoaded, currentGuages);
@@ -111,6 +112,7 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   if (!urlLoaded)
     toggleURLLoaded();
 }
+
 
 /**
  * Checks and updates the dataset based on the URL parameter.
@@ -132,6 +134,7 @@ const checkDatasetURL = (urlLoaded, updateDataset, datasetList, dataset) => {
   else
     updateHash("dataset", dataset);
 }
+
 
 /**
  * Checks and updates the scenario based on the URL parameter.
@@ -157,20 +160,25 @@ const checkScenarioURL = (urlLoaded, scenarios) => {
   return scenarioOutput;
 }
 
+
 /**
  * Checks and updates the parameters based on the URL parameter.
  * 
  * @param {boolean} urlLoaded - Flag indicating if URL is loaded.
  * @param {object[]} params - List of all available parameters.
- * @param {object[]} guages - List of currently selected parameters.
+ * @param {object[]} selection - List of all currently selected parameters.
+ * @param {object[]} guages - List of default selected parameters from data.
  * @returns {object[]} The final currently selected 
  * parameters after checking the URL.
  */
-const checkParamURL = (urlLoaded, params, guages) => {
+const checkParamURL = (urlLoaded, params, selection, guages) => {
   if (!params || params.length < 1 || !guages || guages.length < 1 || !guages.at(0).title) return "Error: Not Enough Params in this Dataset to load in the Dashboard.";
   let searchParams = new URLSearchParams(window.location.hash.substring(1));
   let paramList = guages;
   let scenarioOutput = [];
+  console.log(selection);
+  if(selection && selection.length > 0 && selection.every(param => params.map(guage => guage ? guage.title : "").includes(param.title)))
+    return selection;
   if (!urlLoaded && searchParams.has("params") && searchParams.get("params").toString().split(",").every((guage) => params ? params.map(param => param ? param.title : "error").includes(guage) : false)) {
     //console.log([... new Set(searchParams.get("params").toString().split(","))].map(title => params ? params.find(param => param.title === title) : "error"));
     paramList = [...new Set(searchParams.get("params").toString().split(","))].map(title => params ? params.find(param => param.title === title) : "error");
@@ -183,6 +191,7 @@ const checkParamURL = (urlLoaded, params, guages) => {
   });
   return scenarioOutput;
 }
+
 
 /**
  * Checks and updates the selected guage based on the URL parameter.
@@ -207,6 +216,7 @@ const checkGuageURL = (urlLoaded, parameter, guageData, title) => {
   return "Error: Data Variables not loaded.";
 }
 
+
 /**
  * Checks and updates the selected date based on the URL parameter.
  * 
@@ -226,6 +236,17 @@ const checkDateURL = (urlLoaded, dataDate, params, title, def) => {
   return findClosestDateAllParamsAbove(dataDate, params, def);
 }
 
+
+/**
+ * Checks and updates the selected region based on the URL parameter.
+ * Called seperately from other URL checks once the region data is loaded.
+ * 
+ * @param {object[]} regionData - Dataset containing all necessary region data.
+ * @param {(region: string) => any} setRegions - Function 
+ * to set the current region.
+ * @returns {string} The region for display after checking for the URL input
+ * and the region's validity in the given dataset.
+ */
 export const checkRegionURL = (regionData, setRegions) => {
   let searchParams = new URLSearchParams(window.location.hash.substring(1));
   let region = 'Global';
@@ -233,10 +254,21 @@ export const checkRegionURL = (regionData, setRegions) => {
     region = searchParams.get('reg');
   else
     updateHash("reg", 'Global');
-  console.log("REG !!!");
+  //console.log("REG !!!");
   setRegions(region);
 }
 
+
+/**
+ * Checks and updates the selected subcategory based on the URL parameter.
+ * Called seperately from other URL checks once the subcategory data is loaded.
+ * 
+ * @param {object[]} subcatData - Dataset containing all necessary subcategory data.
+ * @param {(subcat: string) => any} setSubcat - Function 
+ * to set the current subcategory.
+ * @returns {string} The subcategory for display after checking for the URL input
+ * and the subcategory's validity in the given dataset.
+ */
 export const checkSubcatURL = (subcatData, setSubcat) => {
   let searchParams = new URLSearchParams(window.location.hash.substring(1));
   let subcat = 'Aggregate of Subsectors';
@@ -244,6 +276,6 @@ export const checkSubcatURL = (subcatData, setSubcat) => {
     subcat = searchParams.get('sub');
   else
     updateHash("sub", 'Aggregate of Subsectors');
-  console.log("SUB !!!");
+  //console.log("SUB !!!");
   setSubcat(subcat);
 }
