@@ -104,7 +104,7 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
     }, {}));
     //console.log('Aggregate by Scenario, Param, X:', aggregateByScenarioParamX);
     newData.aggParam_global = aggParam_global;
-    console.log(newData)
+    //console.log(newData)
 
     // 7. aggClass1_region
     newData.aggClass1_regions = file;
@@ -116,7 +116,7 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
       params: parameters,
       defaults: parameters.slice(0, 5)
     }
-    console.log(dataInfo);
+    //console.log(dataInfo);
     setDataInfoStore(dataInfo);
   }
 
@@ -181,7 +181,7 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
     if (regex.test(value) && value.length > 0) {
       let temp = structuredClone(tempDataInfoStore);
       temp.params[param].units = value;
-      console.log(value, temp);
+      //console.log(value, temp);
       setDataInfoStore(temp);
     }
   };
@@ -199,7 +199,7 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
   }
 
   const getUniqueName = (datasetName, flag) => {
-    console.log(datasets.includes(datasetName), datasetName, flag)
+    //console.log(datasets.includes(datasetName), datasetName, flag)
     if(!datasets.includes(datasetName))
       return datasetName;
     if (flag) {
@@ -211,7 +211,7 @@ function UploadData({ datasets, updateDatasets, userUploadedData, loadDataToStor
     if (!e || e.target.files.length === 0) {
       return;
     }
-    console.log(e);
+    //console.log(e);
     setInput1(e.target.files[0].name.replace(".csv", ""));
     const uploadedFile = e.target.files[0];
     if (uploadedFile) {

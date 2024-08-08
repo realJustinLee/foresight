@@ -5,6 +5,16 @@ import {
   ReactCompareSliderImage,
 } from "react-compare-slider";
 
+/**
+ * An unused react compare slider comparing two images.
+ * 
+ * @param {object} props - The component props.
+ * @param {string} props.firstImage - Path to the first image.
+ * @param {string} props.secondImage - Path to the second image.
+ * @param {string} props.href - Link for image citation.
+ * @param {string} props.linkText - Text for the image citation.
+ * @returns {ReactElement} The rendered component.
+ */
 function Imageslider({ firstImage, secondImage, href, linkText }) {
   return (
     <div className="slider">

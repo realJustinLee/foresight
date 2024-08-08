@@ -1,18 +1,26 @@
 import React, { useEffect, useState } from "react";
 import { ResponsiveBar } from '@nivo/bar'
 import { connect } from 'react-redux';
-import { BarTooltip } from "./NivoTooltips.tsx";
 import { getBarHorizontal } from "../data/DataManager.jsx";
 import { updateHash } from "../sharing/DashboardUrl.jsx";
 
-// make sure parent container have a defined height when using
-// responsive component, otherwise height will be 0 and
-// no chart will be rendered.
-// website examples showcase many properties,
-// you'll often use just a few of them.
-
+/**
+ * Unused test Nivo TreeMap component.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.csv - Dataset to generate the BarHorizontal.
+ * @param {string[]} props.color - List of colors in hex.
+ * @param {string[]} props.listKeys - List of all possible subcategories.
+ * @param {string} props.scenerio - Current scenario.
+ * @param {React.Dispatch<React.SetStateAction<string>>} props.setdashboardSub - Updates the selected subsector.
+ * @param {boolean} props.left - Boolean value of whether the bar should be displayed on the left.
+ * @param {string[]} props.countries - List of currently selected countries.
+ * @param {string} props.subcat - Stored subcategory value.
+ * @param {string} props.selectedGuage - Currently selected data variable.
+ * @returns {ReactElement} The rendered component.
+ */
 const MyResponsiveBar = ({ csv, color, listKeys, scenerio, setdashboardSub, left, countries, subcat, selectedGuage }) => {
-    //console.log("!!!!", csv, listKeys); 
+    //console.log("!!!!", csv, color, listKeys, scenerio, setdashboardSub, left, countries, subcat, selectedGuage); 
     const [scenerioName, setScenerio] = useState(scenerio);
     const [barData, setData] = useState(getBarHorizontal(countries, csv, scenerio));
     useEffect(() => {

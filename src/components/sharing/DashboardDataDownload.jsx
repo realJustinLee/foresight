@@ -75,12 +75,12 @@ export default function DashboardDataDownload({ dataset, scenarios, parameter, d
 
   const fetchDownloadableData = useCallback(async () => {
     if (dataset && scenarios !== "i" && scenarios.length > 1) {
-      console.log(dataset, scenarios[0], parameter);
+      //console.log(dataset, scenarios[0], parameter);
       const queries = [];
       queries.push([dataDownloadQuery, { id: dataset + "|" + scenarios[0].title + "|" + parameter}]);
       queries.push([dataDownloadQuery, { id: dataset + "|" + scenarios[1].title + "|" + parameter}]);
       const result = await fetchParallel(queries);
-      console.log(result);
+      //console.log(result);
       const csv = Papa.unparse(result);
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       saveAs(blob, dataset + '_data.csv');

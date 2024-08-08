@@ -77,7 +77,7 @@ function DataQueryUser({ dataset, userUploadedData, userUploadedInfo, scenerios,
   }, [scenerios]);
 
   const setData = () => {
-    console.log("i");
+    //console.log("i");
     //Prepare Scenarios
     //console.log(data, dataInfo, dataset);
     //console.log("STORE SCENARIOS:", dataInfo.scenarios);

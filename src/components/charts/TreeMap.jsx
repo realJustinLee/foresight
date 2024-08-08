@@ -1,6 +1,9 @@
 import React from "react";
 import { ResponsiveTreeMap } from '@nivo/treemap'
 
+/**
+ * Dummy data for the TreeMap
+ */
 const data = {
         "name": "nivo",
         "color": "hsl(96, 70%, 50%)",
@@ -423,7 +426,13 @@ const data = {
         ]
       };
 
-
+/**
+ * Unused test Nivo TreeMap component.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Dataset to generate the TreeMap.
+ * @returns {ReactElement} The rendered component.
+ */
 const MyChart = ({ data }) => (
 <ResponsiveTreeMap
         data={data}
@@ -463,6 +472,13 @@ const MyChart = ({ data }) => (
     />
 );
 
+/**
+ * Nivo TreeMap container.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Dataset to generate the TreeMap.
+ * @returns {ReactElement} The rendered component.
+ */
 function TreeMap() {
   return (
     <div className="treemap chart">

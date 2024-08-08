@@ -1,6 +1,9 @@
 import React from "react";
 import { ResponsivePie } from '@nivo/pie'
 
+/**
+ * Dummy data for the pie chart.
+ */
 const data = [
     {
       "id": "haskell",
@@ -34,7 +37,13 @@ const data = [
     }
   ];
 
-
+/**
+ * Unused test Nivo pie chart.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Data for the bump chart.
+ * @returns {ReactElement} The rendered component.
+ */
 const MyChart = ({ data }) => (
     <ResponsivePie
         data={data}
@@ -165,6 +174,11 @@ const MyChart = ({ data }) => (
     />
 );
 
+/**
+ * Unused test Nivo pie chart wrapper.
+ * 
+ * @returns {ReactElement} The rendered component.
+ */
 function Pie() {
   return (
     <div className="pie chart">

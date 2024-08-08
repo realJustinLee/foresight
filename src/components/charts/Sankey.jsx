@@ -1,6 +1,9 @@
 import React from "react";
 import { ResponsiveSankey } from "@nivo/sankey";
 
+/**
+ * Sankey dummy data.
+ */
 const data = {
   nodes: [
     { id: "Brazil" },
@@ -70,7 +73,9 @@ const data = {
   ]
 };
 
-
+/**
+ * Theming for the nivo sankey.
+ */
 const theme = {
   fontFamily: "Arial, sans-serif",
   fontSize: 16,
@@ -83,6 +88,15 @@ const theme = {
   }
 };
 
+/**
+ * Unused test Nivo pie chart.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Data for the sankey.
+ * @param {object[]} props.width - Width of the sankey.
+ * @param {object[]} props.height - Height of the sankey.
+ * @returns {ReactElement} The rendered component.
+ */
 const MyChart = ({ data, width=640, height=320 }) => (
   <div style={{ minWidth: '640px', minHeight: '300px', width, height }}>
     <ResponsiveSankey
@@ -110,6 +124,14 @@ const MyChart = ({ data, width=640, height=320 }) => (
   </div>
 );
 
+/**
+ * Container for a Nivo sankey.
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.width - Width of the sankey.
+ * @param {object[]} props.height - Height of the sankey.
+ * @returns {ReactElement} The rendered component.
+ */
 function Sankey({ width, height }) {
   return (
     <div className="chart-container">

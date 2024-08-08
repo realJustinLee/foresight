@@ -50,7 +50,7 @@ function Energy({ open, toggleOpen }) {
   const fetchParamOptions = useCallback(async () => {
     try {
       const { data } = await API.graphql(graphqlOperation(queryParamOptions));
-      console.log("Param options response:", data); // Print the response data
+      //console.log("Param options response:", data); // Print the response data
       const uniqueOptions = [
         ...new Set(
           data.listGcamDataTableAggParamGlobals.items.map((item) => item.param)
@@ -58,7 +58,7 @@ function Energy({ open, toggleOpen }) {
       ];
       setParamOptions(uniqueOptions);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }, []);
 
@@ -69,10 +69,10 @@ function Energy({ open, toggleOpen }) {
           param: selectedParam,
         })
       );
-      console.log("Foresight data response:", data); // Print the response data
+      //console.log("Foresight data response:", data); // Print the response data
       setForesightData(data.listGcamDataTableAggParamGlobals.items);
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   }, [selectedParam]);
 

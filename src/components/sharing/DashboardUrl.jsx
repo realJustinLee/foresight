@@ -64,7 +64,7 @@ export const updateListHash = (name, index, value) => {
  * @param {string} parameter - The currently stored selected guage.
  * @param {object[]} parameters - The currently stored displayed guages.
  */
-export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded, updateDataset, datasetList, dataset, startdate, enddate, yeardate, parameter, parameters) => {
+export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuagesTotal, setGuagesCurrent, setGuageSelected, setStart, setEnd, setCurrentDate, urlLoaded, toggleURLLoaded, updateDataset, datasetList, dataset, startdate, enddate, yeardate, parameter, parameters, storedScenarios) => {
   //Check and handle selected dataset. URL reset if dataset not currently loaded.
   checkDatasetURL(urlLoaded, updateDataset, datasetList, dataset);
   //Prepare total scenarios
@@ -75,7 +75,7 @@ export const loadDataURL = (result, setAllScenarios, setScenariosTotal, setGuage
   setAllScenarios(scenarios.map(obj => ({ title: obj })));
 
   //Prepare opened scenarios
-  const currentScenarios = checkScenarioURL(urlLoaded, scenarios);
+  const currentScenarios = checkScenarioURL(urlLoaded, scenarios, storedScenarios);
   //console.log("STORE CURRENT SCENARIOS:", currentScenarios);
   setScenariosTotal(currentScenarios);
 
@@ -143,12 +143,18 @@ const checkDatasetURL = (urlLoaded, updateDataset, datasetList, dataset) => {
  * @param {string[]} scenarios - List of available scenarios.
  * @returns {object[]} The current scenarios after checking for data validity and the URL.
  */
-const checkScenarioURL = (urlLoaded, scenarios) => {
-  if (scenarios.length < 2) return "Error: Not Enough Scenarios in this Dataset to load in the Dashboard.";
+const checkScenarioURL = (urlLoaded, scenarios, storedScenarios) => {
+  if (scenarios.length < 2) {
+    console.error("Error: Not Enough Scenarios in this Dataset to load in the Dashboard.");
+    return "i";
+  }
   let searchParams = new URLSearchParams(window.location.hash.substring(1));
   let scenarioList = scenarios.filter(scenario => scenario === 'GCAM_SSP2' || scenario === 'GCAM_SSP3').length === 2 ? scenarios.filter(scenario => scenario === 'GCAM_SSP2' || scenario === 'GCAM_SSP3') : scenarios.slice(0, 2);
   let scenarioOutput = [];
-  if (!urlLoaded && searchParams.has("scenarios") && searchParams.get("scenarios").toString().split(",").every((scenario) => scenarios.includes(scenario)))
+  //console.log(scenarioList, storedScenarios)
+  if(storedScenarios.length > 0 && storedScenarios.every(s => scenarios.includes(s.title)))
+    scenarioList = storedScenarios.map(obj => obj.title);
+  else if(!urlLoaded && searchParams.has("scenarios") && searchParams.get("scenarios").toString().split(",").every((scenario) => scenarios.includes(scenario)))
     scenarioList = searchParams.get("scenarios").toString().split(",");
   else
     updateHash("scenarios", scenarios.filter(scenario => scenario === 'GCAM_SSP2' || scenario === 'GCAM_SSP3').length === 2 ? scenarios.filter(scenario => scenario === 'GCAM_SSP2' || scenario === 'GCAM_SSP3').toString() : scenarios.slice(0, 2).toString());
@@ -176,7 +182,7 @@ const checkParamURL = (urlLoaded, params, selection, guages) => {
   let searchParams = new URLSearchParams(window.location.hash.substring(1));
   let paramList = guages;
   let scenarioOutput = [];
-  console.log(selection);
+  //console.log(selection);
   if(selection && selection.length > 0 && selection.every(param => params.map(guage => guage ? guage.title : "").includes(param.title)))
     return selection;
   if (!urlLoaded && searchParams.has("params") && searchParams.get("params").toString().split(",").every((guage) => params ? params.map(param => param ? param.title : "error").includes(guage) : false)) {

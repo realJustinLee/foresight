@@ -2,6 +2,16 @@ import React from "react";
 import { ResponsiveLine } from '@nivo/line'
 import { MdOutlineWarning } from "react-icons/md";
 import { updateHash } from "../sharing/DashboardUrl";
+
+/**
+ * Nivo line chart component .
+ * 
+ * @param {object} props - The component props.
+ * @param {object[]} props.data - Line chart dataset.
+ * @param {React.Dispatch<React.SetStateAction<number>>} props.setDate - Update the dashboard selected date.
+ * @param {string} props.unit - String containing the units description.
+ * @returns {ReactElement} The rendered component.
+ */
 const Line = ({ data, setDate, unit }) => (
     <div className="line_container">
         <div className="nivo-wrapper grid-border">
