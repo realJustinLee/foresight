@@ -568,7 +568,7 @@ export const lineGraphReduce = (data, param, scenarios, subcat) =>
  * @returns {object[]} The reduced dataset in line graph format.
  */
 export const getLineGraphReduce = (data, param, subcat) => {
-    if (param === "landAlloc" && subcat === "Aggregate of Subsectors") {
+    if (param === "landAlloc" && subcat === "") {
         return data.map(item => ({
             x: parseFloat(item.x),
             y: parseInt(item.value)

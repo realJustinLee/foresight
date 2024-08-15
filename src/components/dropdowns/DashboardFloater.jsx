@@ -122,7 +122,7 @@ function DashboardFloater({ dataset, scenarios, updateGuage, selection, openGuag
     return (
         <>
             <div title="Change selected data variable">
-                SELECTED:    {findUnitsByTitle(openGuages, selection).toUpperCase()}   {<div className='floater-icon'>{getIconParam(selection, openGuages)}</div>}
+                SELECTED:    {findUnitsByTitle(openGuages, selection)}   {<div className='floater-icon'>{getIconParam(selection, openGuages)}</div>}
                 <Dropdown as={ButtonGroup}>
                     <Dropdown.Toggle
                         split

@@ -130,7 +130,7 @@ function DashboardGraphs({ openedScenerios, selectedGuage, openedGuages,
   </div>)
   let barChartLabel = (<div className="text-centered"> Top 10 Countries 
   {"(" + curYear + ")"} -- By Subsector</div>)
-  //console.log(lineData);
+
   // Line Chart Visualization
   const lineChart = (lineData === 'i') ? (
     <div className="grid-border-hidden text-centered">

@@ -74,7 +74,7 @@ function DashboardGuageBar({ Scenarios, OpenScenarios, Parameters, OpenParameter
   }
 
   const handleParamChange = (checked, param) => {
-    console.log(OpenParameters, Parameters, param);
+    //console.log(OpenParameters, Parameters, param);
     let newParameters = structuredClone(OpenParameters);
     if (checked) //Add Guage
       newParameters.push(param);
